@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class HarvestPage extends StatelessWidget {
+  const HarvestPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       bottomNavigationBar: CustomAppFooter(),
     );
   }
