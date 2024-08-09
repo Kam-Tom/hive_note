@@ -5,6 +5,10 @@ import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/navigation/models/hive.dart';
 import 'package:hive_note/navigation/models/todo.dart';
+import 'package:hive_note/navigation/presentation/pages/apiary.dart';
+import 'package:hive_note/navigation/presentation/pages/calendar.dart';
+import 'package:hive_note/navigation/presentation/pages/records.dart';
+import 'package:hive_note/navigation/presentation/pages/statistics.dart';
 import 'package:hive_note/navigation/presentation/widgets/inspection_card.dart';
 import 'package:hive_note/navigation/presentation/widgets/menu_button.dart';
 import 'package:hive_note/navigation/presentation/widgets/todo_card.dart';
@@ -13,7 +17,7 @@ import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({super.key});
-
+  
   // Dummy data for Hives
   final List<Hive> _hives = [
     Hive(id: 1, name: 'Białystok', count: 10),
@@ -109,14 +113,14 @@ class DashboardPage extends StatelessWidget {
           children: [
             _buildMenuButtonRow(
               buttons: [
-                _buildMenuButton(AppVectors.apiary, 'Apiary'),
-                _buildMenuButton(AppVectors.statistics, 'Statistics'),
+                _buildMenuButton(AppVectors.apiary, 'Apiary', const ApiaryPage()),
+                _buildMenuButton(AppVectors.statistics, 'Statistics', const StatisticsPage()),
               ],
             ),
             _buildMenuButtonRow(
               buttons: [
-                _buildMenuButton(AppVectors.calendar, 'ToDo'),
-                _buildMenuButton(AppVectors.note, 'Records'),
+                _buildMenuButton(AppVectors.calendar, 'ToDo', const CalendarPage()),
+                _buildMenuButton(AppVectors.note, 'Records', const RecordsPage()),
               ],
             ),
           ],
@@ -132,11 +136,14 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuButton(String asset, String label) {
+  Widget _buildMenuButton(String asset, String label, Widget newPage) {
     return MenuButton(
-      onPressed: () {},
+      newPage: newPage,
       icon: SvgPicture.asset(asset, width: 50),
       text: Text(label),
+      
     );
   }
+
+  
 }
