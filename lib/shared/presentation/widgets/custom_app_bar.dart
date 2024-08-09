@@ -8,6 +8,7 @@ class CustomAppBar extends AppBar {
   CustomAppBar({super.key, this.isRound = true, this.isFirstScreen = false})
       : super(
           backgroundColor: AppColors.primary,
+          surfaceTintColor: AppColors.primary,
           shape: isRound
               ? const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
