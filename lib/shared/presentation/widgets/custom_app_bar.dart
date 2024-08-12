@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
-import 'package:hive_note/navigation/presentation/pages/settings.dart';
+import 'package:hive_note/settings/presentation/settings.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isRound;

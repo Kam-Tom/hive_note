@@ -78,7 +78,9 @@ class DashboardPage extends StatelessWidget {
           enlargeCenterPage: true,
         ),
         itemCount: _toDos.length,
+        
         itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+          
           final toDo = _toDos[itemIndex];
           return ToDoCard(
             toDo: toDo,

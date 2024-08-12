@@ -39,6 +39,9 @@ dependencies:
   gradient_borders:
   google_fonts:
   flutter_svg:
+  bloc:
+  equatable:
+  flutter_bloc:
 
 dev_dependencies:
   flutter_test:
