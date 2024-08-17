@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/settings/bloc/bottom_navigation_cubit.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
+import 'package:hive_note/sync/presentation/pages/sync.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -19,7 +20,7 @@ class SettingsPage extends StatelessWidget {
               builder: (context) {
                 switch (state) {
                   case 0:
-                    return Container(color: Colors.red,);
+                    return const SyncPage();
                   case 1:
                     return Container(color: Colors.green,);
                   case 2:

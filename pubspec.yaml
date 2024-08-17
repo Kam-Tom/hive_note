@@ -40,8 +40,8 @@ dependencies:
   google_fonts:
   flutter_svg:
   bloc:
-  equatable:
   flutter_bloc:
+  equatable:
 
 dev_dependencies:
   flutter_test:
