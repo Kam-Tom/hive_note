@@ -1,7 +1,16 @@
-/// {@template db_api}
-/// The interface and models for an API providing access to database.
-/// {@endtemplate}
-abstract class DbApi {
-  /// {@macro db_api}
-  const DbApi();
+import 'package:db_api/src/interfaces/interfaces.dart';
+
+abstract class DbApi implements
+  NumericEntryDbApi, 
+  HiveDbApi, 
+  RaportDbApi,
+  QueenDbApi,
+  BooleanEntryDbApi,
+  TextEntryDbApi,
+  ApiaryDbApi,
+  HistoryLogDbApi {
+
+  Future<void> init();
+  Future<void> close();
+  
 }
