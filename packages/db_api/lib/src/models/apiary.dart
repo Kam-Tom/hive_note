@@ -15,8 +15,9 @@ class Apiary extends Equatable {
     required this.name,
     this.latitude,
     this.longitude,
-    required this.createdAt,
-  }) : id = id ?? Uuid().v4();
+    required DateTime createdAt,
+  })  : id = id ?? Uuid().v4(),
+        createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Apiary copyWith({
     String? name,
@@ -32,10 +33,7 @@ class Apiary extends Equatable {
       createdAt: createdAt ?? this.createdAt,
     );
   }
-  
+
   @override
-  List<Object?> get props => [id, name, latitude, longitude, createdAt];
+  List<Object?> get props => [id, name, latitude, longitude];
 }
-
-
-

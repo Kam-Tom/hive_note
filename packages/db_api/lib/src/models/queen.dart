@@ -14,16 +14,17 @@ class Queen extends Equatable {
     String? id,
     required this.breed,
     required this.origin,
-    required this.birthDate,
     required this.isAlive,
-  }) : id = id ?? Uuid().v4();
+    required DateTime birthDate,
+  })  : id = id ?? Uuid().v4(),
+        birthDate = birthDate.copyWith(millisecond: 0, microsecond: 0);
 
   Queen copyWith({
     String? breed,
     String? origin,
     DateTime? birthDate,
     bool? isAlive,
-    }) {
+  }) {
     return Queen(
       id: this.id,
       breed: breed ?? this.breed,
@@ -34,5 +35,5 @@ class Queen extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, breed, origin, birthDate, isAlive];
+  List<Object?> get props => [id, breed, origin, isAlive, birthDate];
 }

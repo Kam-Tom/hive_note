@@ -6,20 +6,21 @@ import 'package:uuid/uuid.dart';
 @immutable
 class Hive extends Equatable {
   final String id;
-  final DateTime createdAt;
   final Queen? queen;
   final String type; //Langstroth, Top Bar, Warre
   final String name;
   final int order; //order in apiary
+  final DateTime createdAt;
 
   Hive({
     String? id,
     this.queen,
-    required this.createdAt,
     required this.type,
     required this.name,
     required this.order,
-  }) : id = id ?? Uuid().v4();
+    required DateTime createdAt,
+  })  : id = id ?? Uuid().v4(),
+        createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Hive copyWith({
     Queen? queen,

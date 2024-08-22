@@ -15,8 +15,9 @@ class HistoryLog extends Equatable {
     required this.referenceId,
     required this.tableType,
     required this.actionType,
-    required this.createdAt,
-  }) : id = id ?? Uuid().v4();
+    required DateTime createdAt,
+  }) : id = id ?? Uuid().v4(),
+  createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   HistoryLog copyWith({
     String? referenceId,

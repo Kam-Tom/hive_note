@@ -12,8 +12,9 @@ class Raport extends Equatable {
   Raport({
     String? id,
     this.hive,
-    required this.createdAt,
-  }) : id = id ?? Uuid().v4();
+    required DateTime createdAt,
+  })  : id = id ?? Uuid().v4(),
+        createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Raport copyWith({
     Hive? hive,
