@@ -40,6 +40,9 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
   @override
   int get schemaVersion => 1;
 
+  // Named constructor for creating in-memory database
+  DriftDbApi.forTesting(super.e);
+
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'hive_note_database');
   }
@@ -50,11 +53,8 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
         await customStatement('PRAGMA foreign_keys = ON');
       });
 
-  @override
-  Future<void> deleteApiary(Apiary apiary) {
-    // TODO: implement deleteApiary
-    throw UnimplementedError();
-  }
+
+
 
   @override
   Future<void> deleteBooleanEntry(BooleanEntry booleanEntry) {
@@ -99,16 +99,18 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
   }
 
   @override
-  Future<List<Apiary>> getApiaries() {
-    // TODO: implement getApiaries
-    throw UnimplementedError();
-  }
-
+  Future<Apiary> getApiary(String id) => apiaryDao.getApiary(id);
   @override
-  Future<Apiary> getApiary(String id) {
-    // TODO: implement getApiary
-    throw UnimplementedError();
-  }
+  Future<List<Apiary>> getApiaries() => apiaryDao.getApiaries();
+  @override
+  Stream<List<Apiary>> watchApiaries() => apiaryDao.watchApiaries();
+  @override
+  Future<void> insertApiary(Apiary apiary) => apiaryDao.insertApiary(apiary);
+  @override
+  Future<void> updateApiary(Apiary apiary) => apiaryDao.updateApiary(apiary);
+  @override
+  Future<void> deleteApiary(Apiary apiary) => apiaryDao.deleteApiary(apiary);
+
 
   @override
   Future<List<BooleanEntry>> getBooleanEntries() {
@@ -201,12 +203,6 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
   }
 
   @override
-  Future<void> insertApiary(Apiary apiary) {
-    // TODO: implement insertApiary
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> insertBooleanEntry(BooleanEntry booleanEntry) {
     // TODO: implement insertBooleanEntry
     throw UnimplementedError();
@@ -248,11 +244,7 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
     throw UnimplementedError();
   }
 
-  @override
-  Future<void> updateApiary(Apiary apiary) {
-    // TODO: implement updateApiary
-    throw UnimplementedError();
-  }
+
 
   @override
   Future<void> updateBooleanEntry(BooleanEntry booleanEntry) {
@@ -287,12 +279,6 @@ class DriftDbApi extends _$DriftDbApi implements DbApi {
   @override
   Future<void> updateTextEntry(TextEntry textEntry) {
     // TODO: implement updateTextEntry
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<List<Apiary>> watchApiaries() {
-    // TODO: implement watchApiaries
     throw UnimplementedError();
   }
 

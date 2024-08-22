@@ -14,4 +14,79 @@ class ApiaryDao extends DatabaseAccessor<DriftDbApi> with _$ApiaryDaoMixin {
   // of this object.
   ApiaryDao(DriftDbApi db) : super(db);
   
+  Future<Apiary> getApiary(String id) async {
+    final apiaryQuery = select(apiaryTable)..where((item) => item.id.equals(id));
+
+    final apiary = await apiaryQuery.getSingle().onError((error, stackTrace) {
+      throw ResourceNotFoundException('Apiary with id $id not found');
+    });
+
+    return Apiary(
+      id: apiary.id,
+      name: apiary.name,
+      latitude: apiary.latitude,
+      longitude: apiary.longitude,
+      createdAt: apiary.createdAt,
+    );
+  }
+
+  Stream<List<Apiary>> watchApiaries() {
+    final apiaryQuery = select(apiaryTable);
+    return apiaryQuery.map((row) => Apiary(
+      id: row.id,
+      name: row.name,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      createdAt: row.createdAt,
+    )).watch();
+  }
+
+  Future<List<Apiary>> getApiaries() async {
+    final apiaryQuery = select(apiaryTable);
+    final apiaries = await apiaryQuery.get();
+    return apiaries.map((row) => Apiary(
+      id: row.id,
+      name: row.name,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      createdAt: row.createdAt,
+    )).toList();
+  }
+
+  Future<void> insertApiary(Apiary apiary) async {
+    final companion = ApiaryTableCompanion(
+      id: Value(apiary.id),
+      name: Value(apiary.name),
+      latitude: Value(apiary.latitude),
+      longitude: Value(apiary.longitude),
+      createdAt: Value(apiary.createdAt),
+    );
+    await into(apiaryTable).insert(companion).onError(
+      (error, stackTrace) {
+        throw ResourceAlreadyExistsException('Apiary with id ${apiary.id} already exists');
+      },
+    );
+  }
+
+  Future<void> updateApiary(Apiary apiary) async {
+    final companion = ApiaryTableCompanion(
+      id: Value(apiary.id),
+      name: Value(apiary.name),
+      latitude: Value(apiary.latitude),
+      longitude: Value(apiary.longitude),
+      createdAt: Value(apiary.createdAt),
+    );
+
+    bool replaced = await update(apiaryTable).replace(companion);
+    if(!replaced){
+      throw ResourceNotFoundException('Apiary with id ${apiary.id} not found');
+    };
+  }
+
+  Future<void> deleteApiary(Apiary apiary) async {
+    final rows = await (delete(apiaryTable)..where((item) => item.id.equals(apiary.id))).go();
+    if(rows == 0) {
+      throw ResourceNotFoundException('Apiary with id ${apiary.id} not found');
+    }
+  }
 }
