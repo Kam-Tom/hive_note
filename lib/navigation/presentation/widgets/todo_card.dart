@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/navigation/models/todo.dart';
 
@@ -25,24 +24,8 @@ class ToDoCard extends StatelessWidget {
         ),
         padding: EdgeInsets.zero,
       ),
-      child: Container(
-        decoration: const BoxDecoration(
-          border: GradientBoxBorder(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(150, 255, 255, 255),
-                Color.fromARGB(0, 255, 255, 255),
-                Color.fromARGB(150, 255, 255, 255),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            width: 3,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -52,7 +35,7 @@ class ToDoCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      
     );
   }
 
