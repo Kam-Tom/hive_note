@@ -1587,6 +1587,247 @@ class NumericEntryTableCompanion extends UpdateCompanion<NumericEntry> {
   }
 }
 
+class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ToDoTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _locationMeta =
+      const VerificationMeta('location');
+  @override
+  late final GeneratedColumn<String> location = GeneratedColumn<String>(
+      'location', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 128),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _categoryTypeMeta =
+      const VerificationMeta('categoryType');
+  @override
+  late final GeneratedColumnWithTypeConverter<CategoryType, int> categoryType =
+      GeneratedColumn<int>('category_type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<CategoryType>($ToDoTableTable.$convertercategoryType);
+  static const VerificationMeta _dueToMeta = const VerificationMeta('dueTo');
+  @override
+  late final GeneratedColumn<DateTime> dueTo = GeneratedColumn<DateTime>(
+      'due_to', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _isCompletedMeta =
+      const VerificationMeta('isCompleted');
+  @override
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+      'is_completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_completed" IN (0, 1))'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, location, description, categoryType, dueTo, isCompleted];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'to_do_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ToDo> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('location')) {
+      context.handle(_locationMeta,
+          location.isAcceptableOrUnknown(data['location']!, _locationMeta));
+    } else if (isInserting) {
+      context.missing(_locationMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    context.handle(_categoryTypeMeta, const VerificationResult.success());
+    if (data.containsKey('due_to')) {
+      context.handle(
+          _dueToMeta, dueTo.isAcceptableOrUnknown(data['due_to']!, _dueToMeta));
+    } else if (isInserting) {
+      context.missing(_dueToMeta);
+    }
+    if (data.containsKey('is_completed')) {
+      context.handle(
+          _isCompletedMeta,
+          isCompleted.isAcceptableOrUnknown(
+              data['is_completed']!, _isCompletedMeta));
+    } else if (isInserting) {
+      context.missing(_isCompletedMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ToDo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ToDo(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      location: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}location'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      categoryType: $ToDoTableTable.$convertercategoryType.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.int, data['${effectivePrefix}category_type'])!),
+      isCompleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_completed'])!,
+      dueTo: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}due_to'])!,
+    );
+  }
+
+  @override
+  $ToDoTableTable createAlias(String alias) {
+    return $ToDoTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<CategoryType, int, int> $convertercategoryType =
+      const EnumIndexConverter<CategoryType>(CategoryType.values);
+}
+
+class ToDoTableCompanion extends UpdateCompanion<ToDo> {
+  final Value<String> id;
+  final Value<String> location;
+  final Value<String> description;
+  final Value<CategoryType> categoryType;
+  final Value<DateTime> dueTo;
+  final Value<bool> isCompleted;
+  final Value<int> rowid;
+  const ToDoTableCompanion({
+    this.id = const Value.absent(),
+    this.location = const Value.absent(),
+    this.description = const Value.absent(),
+    this.categoryType = const Value.absent(),
+    this.dueTo = const Value.absent(),
+    this.isCompleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ToDoTableCompanion.insert({
+    required String id,
+    required String location,
+    required String description,
+    required CategoryType categoryType,
+    required DateTime dueTo,
+    required bool isCompleted,
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        location = Value(location),
+        description = Value(description),
+        categoryType = Value(categoryType),
+        dueTo = Value(dueTo),
+        isCompleted = Value(isCompleted);
+  static Insertable<ToDo> custom({
+    Expression<String>? id,
+    Expression<String>? location,
+    Expression<String>? description,
+    Expression<int>? categoryType,
+    Expression<DateTime>? dueTo,
+    Expression<bool>? isCompleted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (location != null) 'location': location,
+      if (description != null) 'description': description,
+      if (categoryType != null) 'category_type': categoryType,
+      if (dueTo != null) 'due_to': dueTo,
+      if (isCompleted != null) 'is_completed': isCompleted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ToDoTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? location,
+      Value<String>? description,
+      Value<CategoryType>? categoryType,
+      Value<DateTime>? dueTo,
+      Value<bool>? isCompleted,
+      Value<int>? rowid}) {
+    return ToDoTableCompanion(
+      id: id ?? this.id,
+      location: location ?? this.location,
+      description: description ?? this.description,
+      categoryType: categoryType ?? this.categoryType,
+      dueTo: dueTo ?? this.dueTo,
+      isCompleted: isCompleted ?? this.isCompleted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (location.present) {
+      map['location'] = Variable<String>(location.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (categoryType.present) {
+      map['category_type'] = Variable<int>(
+          $ToDoTableTable.$convertercategoryType.toSql(categoryType.value));
+    }
+    if (dueTo.present) {
+      map['due_to'] = Variable<DateTime>(dueTo.value);
+    }
+    if (isCompleted.present) {
+      map['is_completed'] = Variable<bool>(isCompleted.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ToDoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('location: $location, ')
+          ..write('description: $description, ')
+          ..write('categoryType: $categoryType, ')
+          ..write('dueTo: $dueTo, ')
+          ..write('isCompleted: $isCompleted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $HistoryLogTableTable extends HistoryLogTable
     with TableInfo<$HistoryLogTableTable, HistoryLog> {
   @override
@@ -1810,6 +2051,7 @@ abstract class _$DriftDbApi extends GeneratedDatabase {
   late final $TextEntryTableTable textEntryTable = $TextEntryTableTable(this);
   late final $NumericEntryTableTable numericEntryTable =
       $NumericEntryTableTable(this);
+  late final $ToDoTableTable toDoTable = $ToDoTableTable(this);
   late final $HistoryLogTableTable historyLogTable =
       $HistoryLogTableTable(this);
   @override
@@ -1825,6 +2067,7 @@ abstract class _$DriftDbApi extends GeneratedDatabase {
         booleanEntryTable,
         textEntryTable,
         numericEntryTable,
+        toDoTable,
         historyLogTable
       ];
 }
@@ -3957,6 +4200,168 @@ typedef $$NumericEntryTableTableProcessedTableManager = ProcessedTableManager<
     (NumericEntry, $$NumericEntryTableTableReferences),
     NumericEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
+typedef $$ToDoTableTableCreateCompanionBuilder = ToDoTableCompanion Function({
+  required String id,
+  required String location,
+  required String description,
+  required CategoryType categoryType,
+  required DateTime dueTo,
+  required bool isCompleted,
+  Value<int> rowid,
+});
+typedef $$ToDoTableTableUpdateCompanionBuilder = ToDoTableCompanion Function({
+  Value<String> id,
+  Value<String> location,
+  Value<String> description,
+  Value<CategoryType> categoryType,
+  Value<DateTime> dueTo,
+  Value<bool> isCompleted,
+  Value<int> rowid,
+});
+
+class $$ToDoTableTableFilterComposer
+    extends FilterComposer<_$DriftDbApi, $ToDoTableTable> {
+  $$ToDoTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get location => $state.composableBuilder(
+      column: $state.table.location,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<CategoryType, CategoryType, int>
+      get categoryType => $state.composableBuilder(
+          column: $state.table.categoryType,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get dueTo => $state.composableBuilder(
+      column: $state.table.dueTo,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$ToDoTableTableOrderingComposer
+    extends OrderingComposer<_$DriftDbApi, $ToDoTableTable> {
+  $$ToDoTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get location => $state.composableBuilder(
+      column: $state.table.location,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get categoryType => $state.composableBuilder(
+      column: $state.table.categoryType,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get dueTo => $state.composableBuilder(
+      column: $state.table.dueTo,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class $$ToDoTableTableTableManager extends RootTableManager<
+    _$DriftDbApi,
+    $ToDoTableTable,
+    ToDo,
+    $$ToDoTableTableFilterComposer,
+    $$ToDoTableTableOrderingComposer,
+    $$ToDoTableTableCreateCompanionBuilder,
+    $$ToDoTableTableUpdateCompanionBuilder,
+    (ToDo, BaseReferences<_$DriftDbApi, $ToDoTableTable, ToDo>),
+    ToDo,
+    PrefetchHooks Function()> {
+  $$ToDoTableTableTableManager(_$DriftDbApi db, $ToDoTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ToDoTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ToDoTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> location = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<CategoryType> categoryType = const Value.absent(),
+            Value<DateTime> dueTo = const Value.absent(),
+            Value<bool> isCompleted = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ToDoTableCompanion(
+            id: id,
+            location: location,
+            description: description,
+            categoryType: categoryType,
+            dueTo: dueTo,
+            isCompleted: isCompleted,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String location,
+            required String description,
+            required CategoryType categoryType,
+            required DateTime dueTo,
+            required bool isCompleted,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ToDoTableCompanion.insert(
+            id: id,
+            location: location,
+            description: description,
+            categoryType: categoryType,
+            dueTo: dueTo,
+            isCompleted: isCompleted,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ToDoTableTableProcessedTableManager = ProcessedTableManager<
+    _$DriftDbApi,
+    $ToDoTableTable,
+    ToDo,
+    $$ToDoTableTableFilterComposer,
+    $$ToDoTableTableOrderingComposer,
+    $$ToDoTableTableCreateCompanionBuilder,
+    $$ToDoTableTableUpdateCompanionBuilder,
+    (ToDo, BaseReferences<_$DriftDbApi, $ToDoTableTable, ToDo>),
+    ToDo,
+    PrefetchHooks Function()>;
 typedef $$HistoryLogTableTableCreateCompanionBuilder = HistoryLogTableCompanion
     Function({
   required String id,
@@ -4134,6 +4539,8 @@ class $DriftDbApiManager {
       $$TextEntryTableTableTableManager(_db, _db.textEntryTable);
   $$NumericEntryTableTableTableManager get numericEntryTable =>
       $$NumericEntryTableTableTableManager(_db, _db.numericEntryTable);
+  $$ToDoTableTableTableManager get toDoTable =>
+      $$ToDoTableTableTableManager(_db, _db.toDoTable);
   $$HistoryLogTableTableTableManager get historyLogTable =>
       $$HistoryLogTableTableTableManager(_db, _db.historyLogTable);
 }

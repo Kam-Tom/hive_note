@@ -18,6 +18,7 @@ part 'drift_database.g.dart';
     BooleanEntryTable,
     TextEntryTable,
     NumericEntryTable,
+    ToDoTable,
     HistoryLogTable,
   ]
 )

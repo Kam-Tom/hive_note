@@ -7,3 +7,4 @@ export 'boolean_entry.dart';
 export 'text_entry.dart';
 export 'numeric_entry.dart';
 export 'history_log.dart';
+export 'todo.dart';
