@@ -1,4 +1,3 @@
-import 'package:db_api/db_api.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
@@ -6,7 +5,8 @@ import 'package:uuid/uuid.dart';
 @immutable
 class Hive extends Equatable {
   final String id;
-  final Queen? queen;
+  final String? queenId;
+  final String? apiaryId;
   final String type; //Langstroth, Top Bar, Warre
   final String name;
   final int order; //order in apiary
@@ -14,7 +14,8 @@ class Hive extends Equatable {
 
   Hive({
     String? id,
-    this.queen,
+    this.queenId,
+    this.apiaryId,
     required this.type,
     required this.name,
     required this.order,
@@ -23,7 +24,8 @@ class Hive extends Equatable {
         createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Hive copyWith({
-    Queen? queen,
+    String? queenId,
+    String? apiaryId,
     DateTime? createdAt,
     String? type,
     String? name,
@@ -31,7 +33,8 @@ class Hive extends Equatable {
   }) {
     return Hive(
       id: this.id,
-      queen: queen ?? this.queen,
+      queenId: queenId ?? this.queenId,
+      apiaryId: apiaryId ?? this.apiaryId,
       createdAt: createdAt ?? this.createdAt,
       type: type ?? this.type,
       name: name ?? this.name,
@@ -40,5 +43,5 @@ class Hive extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, queen, createdAt, type, name, order];
+  List<Object?> get props => [id, queenId, createdAt, type, name, order];
 }

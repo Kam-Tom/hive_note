@@ -1,6 +1,7 @@
+import 'package:db_api/db_api.dart';
 import 'package:drift/drift.dart';
 
-@DataClassName('QueenEntity')
+@UseRowClass(Queen)
 class QueenTable extends Table {
 
   // Color can be derived from the birthDate

@@ -35,5 +35,5 @@ class Apiary extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, latitude, longitude];
+  List<Object?> get props => [id, name, latitude, longitude, createdAt];
 }

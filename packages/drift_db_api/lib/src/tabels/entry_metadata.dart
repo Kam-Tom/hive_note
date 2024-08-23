@@ -1,7 +1,7 @@
 import 'package:db_api/db_api.dart';
 import 'package:drift/drift.dart';
 
-@DataClassName('EntryMetadataEntity')
+@UseRowClass(EntryMetadata)
 class EntryMetadataTable extends Table {
   TextColumn get id => text()();
   TextColumn get label => text().withLength(max: 32)();

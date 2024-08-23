@@ -4,7 +4,7 @@ part of 'drift_db_api.dart';
 
 // ignore_for_file: type=lint
 class $ApiaryTableTable extends ApiaryTable
-    with TableInfo<$ApiaryTableTable, ApiaryEntity> {
+    with TableInfo<$ApiaryTableTable, Apiary> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -48,7 +48,7 @@ class $ApiaryTableTable extends ApiaryTable
   String get actualTableName => $name;
   static const String $name = 'apiary_table';
   @override
-  VerificationContext validateIntegrity(Insertable<ApiaryEntity> instance,
+  VerificationContext validateIntegrity(Insertable<Apiary> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -83,9 +83,9 @@ class $ApiaryTableTable extends ApiaryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ApiaryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Apiary map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ApiaryEntity(
+    return Apiary(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
@@ -105,119 +105,7 @@ class $ApiaryTableTable extends ApiaryTable
   }
 }
 
-class ApiaryEntity extends DataClass implements Insertable<ApiaryEntity> {
-  final String id;
-  final String name;
-  final double? latitude;
-  final double? longitude;
-  final DateTime createdAt;
-  const ApiaryEntity(
-      {required this.id,
-      required this.name,
-      this.latitude,
-      this.longitude,
-      required this.createdAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['name'] = Variable<String>(name);
-    if (!nullToAbsent || latitude != null) {
-      map['latitude'] = Variable<double>(latitude);
-    }
-    if (!nullToAbsent || longitude != null) {
-      map['longitude'] = Variable<double>(longitude);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    return map;
-  }
-
-  ApiaryTableCompanion toCompanion(bool nullToAbsent) {
-    return ApiaryTableCompanion(
-      id: Value(id),
-      name: Value(name),
-      latitude: latitude == null && nullToAbsent
-          ? const Value.absent()
-          : Value(latitude),
-      longitude: longitude == null && nullToAbsent
-          ? const Value.absent()
-          : Value(longitude),
-      createdAt: Value(createdAt),
-    );
-  }
-
-  factory ApiaryEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ApiaryEntity(
-      id: serializer.fromJson<String>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      latitude: serializer.fromJson<double?>(json['latitude']),
-      longitude: serializer.fromJson<double?>(json['longitude']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'name': serializer.toJson<String>(name),
-      'latitude': serializer.toJson<double?>(latitude),
-      'longitude': serializer.toJson<double?>(longitude),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-    };
-  }
-
-  ApiaryEntity copyWith(
-          {String? id,
-          String? name,
-          Value<double?> latitude = const Value.absent(),
-          Value<double?> longitude = const Value.absent(),
-          DateTime? createdAt}) =>
-      ApiaryEntity(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        latitude: latitude.present ? latitude.value : this.latitude,
-        longitude: longitude.present ? longitude.value : this.longitude,
-        createdAt: createdAt ?? this.createdAt,
-      );
-  ApiaryEntity copyWithCompanion(ApiaryTableCompanion data) {
-    return ApiaryEntity(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
-      latitude: data.latitude.present ? data.latitude.value : this.latitude,
-      longitude: data.longitude.present ? data.longitude.value : this.longitude,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ApiaryEntity(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('latitude: $latitude, ')
-          ..write('longitude: $longitude, ')
-          ..write('createdAt: $createdAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, name, latitude, longitude, createdAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ApiaryEntity &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.latitude == this.latitude &&
-          other.longitude == this.longitude &&
-          other.createdAt == this.createdAt);
-}
-
-class ApiaryTableCompanion extends UpdateCompanion<ApiaryEntity> {
+class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
   final Value<String> id;
   final Value<String> name;
   final Value<double?> latitude;
@@ -242,7 +130,7 @@ class ApiaryTableCompanion extends UpdateCompanion<ApiaryEntity> {
   })  : id = Value(id),
         name = Value(name),
         createdAt = Value(createdAt);
-  static Insertable<ApiaryEntity> custom({
+  static Insertable<Apiary> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<double>? latitude,
@@ -316,7 +204,7 @@ class ApiaryTableCompanion extends UpdateCompanion<ApiaryEntity> {
 }
 
 class $QueenTableTable extends QueenTable
-    with TableInfo<$QueenTableTable, QueenEntity> {
+    with TableInfo<$QueenTableTable, Queen> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -364,7 +252,7 @@ class $QueenTableTable extends QueenTable
   String get actualTableName => $name;
   static const String $name = 'queen_table';
   @override
-  VerificationContext validateIntegrity(Insertable<QueenEntity> instance,
+  VerificationContext validateIntegrity(Insertable<Queen> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -401,19 +289,19 @@ class $QueenTableTable extends QueenTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  QueenEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Queen map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return QueenEntity(
+    return Queen(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       breed: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}breed'])!,
       origin: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}origin'])!,
-      birthDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}birth_date'])!,
       isAlive: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_alive'])!,
+      birthDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}birth_date'])!,
     );
   }
 
@@ -423,111 +311,7 @@ class $QueenTableTable extends QueenTable
   }
 }
 
-class QueenEntity extends DataClass implements Insertable<QueenEntity> {
-  final String id;
-  final String breed;
-  final String origin;
-  final DateTime birthDate;
-  final bool isAlive;
-  const QueenEntity(
-      {required this.id,
-      required this.breed,
-      required this.origin,
-      required this.birthDate,
-      required this.isAlive});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['breed'] = Variable<String>(breed);
-    map['origin'] = Variable<String>(origin);
-    map['birth_date'] = Variable<DateTime>(birthDate);
-    map['is_alive'] = Variable<bool>(isAlive);
-    return map;
-  }
-
-  QueenTableCompanion toCompanion(bool nullToAbsent) {
-    return QueenTableCompanion(
-      id: Value(id),
-      breed: Value(breed),
-      origin: Value(origin),
-      birthDate: Value(birthDate),
-      isAlive: Value(isAlive),
-    );
-  }
-
-  factory QueenEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return QueenEntity(
-      id: serializer.fromJson<String>(json['id']),
-      breed: serializer.fromJson<String>(json['breed']),
-      origin: serializer.fromJson<String>(json['origin']),
-      birthDate: serializer.fromJson<DateTime>(json['birthDate']),
-      isAlive: serializer.fromJson<bool>(json['isAlive']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'breed': serializer.toJson<String>(breed),
-      'origin': serializer.toJson<String>(origin),
-      'birthDate': serializer.toJson<DateTime>(birthDate),
-      'isAlive': serializer.toJson<bool>(isAlive),
-    };
-  }
-
-  QueenEntity copyWith(
-          {String? id,
-          String? breed,
-          String? origin,
-          DateTime? birthDate,
-          bool? isAlive}) =>
-      QueenEntity(
-        id: id ?? this.id,
-        breed: breed ?? this.breed,
-        origin: origin ?? this.origin,
-        birthDate: birthDate ?? this.birthDate,
-        isAlive: isAlive ?? this.isAlive,
-      );
-  QueenEntity copyWithCompanion(QueenTableCompanion data) {
-    return QueenEntity(
-      id: data.id.present ? data.id.value : this.id,
-      breed: data.breed.present ? data.breed.value : this.breed,
-      origin: data.origin.present ? data.origin.value : this.origin,
-      birthDate: data.birthDate.present ? data.birthDate.value : this.birthDate,
-      isAlive: data.isAlive.present ? data.isAlive.value : this.isAlive,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('QueenEntity(')
-          ..write('id: $id, ')
-          ..write('breed: $breed, ')
-          ..write('origin: $origin, ')
-          ..write('birthDate: $birthDate, ')
-          ..write('isAlive: $isAlive')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, breed, origin, birthDate, isAlive);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is QueenEntity &&
-          other.id == this.id &&
-          other.breed == this.breed &&
-          other.origin == this.origin &&
-          other.birthDate == this.birthDate &&
-          other.isAlive == this.isAlive);
-}
-
-class QueenTableCompanion extends UpdateCompanion<QueenEntity> {
+class QueenTableCompanion extends UpdateCompanion<Queen> {
   final Value<String> id;
   final Value<String> breed;
   final Value<String> origin;
@@ -553,7 +337,7 @@ class QueenTableCompanion extends UpdateCompanion<QueenEntity> {
         breed = Value(breed),
         origin = Value(origin),
         birthDate = Value(birthDate);
-  static Insertable<QueenEntity> custom({
+  static Insertable<Queen> custom({
     Expression<String>? id,
     Expression<String>? breed,
     Expression<String>? origin,
@@ -626,8 +410,7 @@ class QueenTableCompanion extends UpdateCompanion<QueenEntity> {
   }
 }
 
-class $HiveTableTable extends HiveTable
-    with TableInfo<$HiveTableTable, HiveEntity> {
+class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -689,7 +472,7 @@ class $HiveTableTable extends HiveTable
   String get actualTableName => $name;
   static const String $name = 'hive_table';
   @override
-  VerificationContext validateIntegrity(Insertable<HiveEntity> instance,
+  VerificationContext validateIntegrity(Insertable<Hive> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -736,21 +519,21 @@ class $HiveTableTable extends HiveTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  HiveEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Hive map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HiveEntity(
+    return Hive(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       queenId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}queen_id']),
       apiaryId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -762,142 +545,7 @@ class $HiveTableTable extends HiveTable
   }
 }
 
-class HiveEntity extends DataClass implements Insertable<HiveEntity> {
-  final String id;
-  final String name;
-  final int order;
-  final String type;
-  final String? queenId;
-  final String? apiaryId;
-  final DateTime createdAt;
-  const HiveEntity(
-      {required this.id,
-      required this.name,
-      required this.order,
-      required this.type,
-      this.queenId,
-      this.apiaryId,
-      required this.createdAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['name'] = Variable<String>(name);
-    map['order'] = Variable<int>(order);
-    map['type'] = Variable<String>(type);
-    if (!nullToAbsent || queenId != null) {
-      map['queen_id'] = Variable<String>(queenId);
-    }
-    if (!nullToAbsent || apiaryId != null) {
-      map['apiary_id'] = Variable<String>(apiaryId);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    return map;
-  }
-
-  HiveTableCompanion toCompanion(bool nullToAbsent) {
-    return HiveTableCompanion(
-      id: Value(id),
-      name: Value(name),
-      order: Value(order),
-      type: Value(type),
-      queenId: queenId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(queenId),
-      apiaryId: apiaryId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(apiaryId),
-      createdAt: Value(createdAt),
-    );
-  }
-
-  factory HiveEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return HiveEntity(
-      id: serializer.fromJson<String>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      order: serializer.fromJson<int>(json['order']),
-      type: serializer.fromJson<String>(json['type']),
-      queenId: serializer.fromJson<String?>(json['queenId']),
-      apiaryId: serializer.fromJson<String?>(json['apiaryId']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'name': serializer.toJson<String>(name),
-      'order': serializer.toJson<int>(order),
-      'type': serializer.toJson<String>(type),
-      'queenId': serializer.toJson<String?>(queenId),
-      'apiaryId': serializer.toJson<String?>(apiaryId),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-    };
-  }
-
-  HiveEntity copyWith(
-          {String? id,
-          String? name,
-          int? order,
-          String? type,
-          Value<String?> queenId = const Value.absent(),
-          Value<String?> apiaryId = const Value.absent(),
-          DateTime? createdAt}) =>
-      HiveEntity(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        order: order ?? this.order,
-        type: type ?? this.type,
-        queenId: queenId.present ? queenId.value : this.queenId,
-        apiaryId: apiaryId.present ? apiaryId.value : this.apiaryId,
-        createdAt: createdAt ?? this.createdAt,
-      );
-  HiveEntity copyWithCompanion(HiveTableCompanion data) {
-    return HiveEntity(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
-      order: data.order.present ? data.order.value : this.order,
-      type: data.type.present ? data.type.value : this.type,
-      queenId: data.queenId.present ? data.queenId.value : this.queenId,
-      apiaryId: data.apiaryId.present ? data.apiaryId.value : this.apiaryId,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HiveEntity(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('order: $order, ')
-          ..write('type: $type, ')
-          ..write('queenId: $queenId, ')
-          ..write('apiaryId: $apiaryId, ')
-          ..write('createdAt: $createdAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, name, order, type, queenId, apiaryId, createdAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is HiveEntity &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.order == this.order &&
-          other.type == this.type &&
-          other.queenId == this.queenId &&
-          other.apiaryId == this.apiaryId &&
-          other.createdAt == this.createdAt);
-}
-
-class HiveTableCompanion extends UpdateCompanion<HiveEntity> {
+class HiveTableCompanion extends UpdateCompanion<Hive> {
   final Value<String> id;
   final Value<String> name;
   final Value<int> order;
@@ -930,7 +578,7 @@ class HiveTableCompanion extends UpdateCompanion<HiveEntity> {
         order = Value(order),
         type = Value(type),
         createdAt = Value(createdAt);
-  static Insertable<HiveEntity> custom({
+  static Insertable<Hive> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<int>? order,
@@ -1020,7 +668,7 @@ class HiveTableCompanion extends UpdateCompanion<HiveEntity> {
 }
 
 class $RaportTableTable extends RaportTable
-    with TableInfo<$RaportTableTable, RaportEntity> {
+    with TableInfo<$RaportTableTable, Raport> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1052,7 +700,7 @@ class $RaportTableTable extends RaportTable
   String get actualTableName => $name;
   static const String $name = 'raport_table';
   @override
-  VerificationContext validateIntegrity(Insertable<RaportEntity> instance,
+  VerificationContext validateIntegrity(Insertable<Raport> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1077,9 +725,9 @@ class $RaportTableTable extends RaportTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  RaportEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Raport map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return RaportEntity(
+    return Raport(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       hiveId: attachedDatabase.typeMapping
@@ -1095,89 +743,7 @@ class $RaportTableTable extends RaportTable
   }
 }
 
-class RaportEntity extends DataClass implements Insertable<RaportEntity> {
-  final String id;
-  final String? hiveId;
-  final DateTime createdAt;
-  const RaportEntity({required this.id, this.hiveId, required this.createdAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    if (!nullToAbsent || hiveId != null) {
-      map['hive_id'] = Variable<String>(hiveId);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    return map;
-  }
-
-  RaportTableCompanion toCompanion(bool nullToAbsent) {
-    return RaportTableCompanion(
-      id: Value(id),
-      hiveId:
-          hiveId == null && nullToAbsent ? const Value.absent() : Value(hiveId),
-      createdAt: Value(createdAt),
-    );
-  }
-
-  factory RaportEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return RaportEntity(
-      id: serializer.fromJson<String>(json['id']),
-      hiveId: serializer.fromJson<String?>(json['hiveId']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'hiveId': serializer.toJson<String?>(hiveId),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-    };
-  }
-
-  RaportEntity copyWith(
-          {String? id,
-          Value<String?> hiveId = const Value.absent(),
-          DateTime? createdAt}) =>
-      RaportEntity(
-        id: id ?? this.id,
-        hiveId: hiveId.present ? hiveId.value : this.hiveId,
-        createdAt: createdAt ?? this.createdAt,
-      );
-  RaportEntity copyWithCompanion(RaportTableCompanion data) {
-    return RaportEntity(
-      id: data.id.present ? data.id.value : this.id,
-      hiveId: data.hiveId.present ? data.hiveId.value : this.hiveId,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('RaportEntity(')
-          ..write('id: $id, ')
-          ..write('hiveId: $hiveId, ')
-          ..write('createdAt: $createdAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, hiveId, createdAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is RaportEntity &&
-          other.id == this.id &&
-          other.hiveId == this.hiveId &&
-          other.createdAt == this.createdAt);
-}
-
-class RaportTableCompanion extends UpdateCompanion<RaportEntity> {
+class RaportTableCompanion extends UpdateCompanion<Raport> {
   final Value<String> id;
   final Value<String?> hiveId;
   final Value<DateTime> createdAt;
@@ -1195,7 +761,7 @@ class RaportTableCompanion extends UpdateCompanion<RaportEntity> {
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         createdAt = Value(createdAt);
-  static Insertable<RaportEntity> custom({
+  static Insertable<Raport> custom({
     Expression<String>? id,
     Expression<String>? hiveId,
     Expression<DateTime>? createdAt,
@@ -1253,7 +819,7 @@ class RaportTableCompanion extends UpdateCompanion<RaportEntity> {
 }
 
 class $EntryMetadataTableTable extends EntryMetadataTable
-    with TableInfo<$EntryMetadataTableTable, EntryMetadataEntity> {
+    with TableInfo<$EntryMetadataTableTable, EntryMetadata> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1302,8 +868,7 @@ class $EntryMetadataTableTable extends EntryMetadataTable
   String get actualTableName => $name;
   static const String $name = 'entry_metadata_table';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<EntryMetadataEntity> instance,
+  VerificationContext validateIntegrity(Insertable<EntryMetadata> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1332,9 +897,9 @@ class $EntryMetadataTableTable extends EntryMetadataTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  EntryMetadataEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  EntryMetadata map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return EntryMetadataEntity(
+    return EntryMetadata(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       label: attachedDatabase.typeMapping
@@ -1361,123 +926,7 @@ class $EntryMetadataTableTable extends EntryMetadataTable
       const EnumIndexConverter<RaportType>(RaportType.values);
 }
 
-class EntryMetadataEntity extends DataClass
-    implements Insertable<EntryMetadataEntity> {
-  final String id;
-  final String label;
-  final String hint;
-  final EntryType valueType;
-  final RaportType raportType;
-  const EntryMetadataEntity(
-      {required this.id,
-      required this.label,
-      required this.hint,
-      required this.valueType,
-      required this.raportType});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['label'] = Variable<String>(label);
-    map['hint'] = Variable<String>(hint);
-    {
-      map['value_type'] = Variable<int>(
-          $EntryMetadataTableTable.$convertervalueType.toSql(valueType));
-    }
-    {
-      map['raport_type'] = Variable<int>(
-          $EntryMetadataTableTable.$converterraportType.toSql(raportType));
-    }
-    return map;
-  }
-
-  EntryMetadataTableCompanion toCompanion(bool nullToAbsent) {
-    return EntryMetadataTableCompanion(
-      id: Value(id),
-      label: Value(label),
-      hint: Value(hint),
-      valueType: Value(valueType),
-      raportType: Value(raportType),
-    );
-  }
-
-  factory EntryMetadataEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return EntryMetadataEntity(
-      id: serializer.fromJson<String>(json['id']),
-      label: serializer.fromJson<String>(json['label']),
-      hint: serializer.fromJson<String>(json['hint']),
-      valueType: $EntryMetadataTableTable.$convertervalueType
-          .fromJson(serializer.fromJson<int>(json['valueType'])),
-      raportType: $EntryMetadataTableTable.$converterraportType
-          .fromJson(serializer.fromJson<int>(json['raportType'])),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'label': serializer.toJson<String>(label),
-      'hint': serializer.toJson<String>(hint),
-      'valueType': serializer.toJson<int>(
-          $EntryMetadataTableTable.$convertervalueType.toJson(valueType)),
-      'raportType': serializer.toJson<int>(
-          $EntryMetadataTableTable.$converterraportType.toJson(raportType)),
-    };
-  }
-
-  EntryMetadataEntity copyWith(
-          {String? id,
-          String? label,
-          String? hint,
-          EntryType? valueType,
-          RaportType? raportType}) =>
-      EntryMetadataEntity(
-        id: id ?? this.id,
-        label: label ?? this.label,
-        hint: hint ?? this.hint,
-        valueType: valueType ?? this.valueType,
-        raportType: raportType ?? this.raportType,
-      );
-  EntryMetadataEntity copyWithCompanion(EntryMetadataTableCompanion data) {
-    return EntryMetadataEntity(
-      id: data.id.present ? data.id.value : this.id,
-      label: data.label.present ? data.label.value : this.label,
-      hint: data.hint.present ? data.hint.value : this.hint,
-      valueType: data.valueType.present ? data.valueType.value : this.valueType,
-      raportType:
-          data.raportType.present ? data.raportType.value : this.raportType,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('EntryMetadataEntity(')
-          ..write('id: $id, ')
-          ..write('label: $label, ')
-          ..write('hint: $hint, ')
-          ..write('valueType: $valueType, ')
-          ..write('raportType: $raportType')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, label, hint, valueType, raportType);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is EntryMetadataEntity &&
-          other.id == this.id &&
-          other.label == this.label &&
-          other.hint == this.hint &&
-          other.valueType == this.valueType &&
-          other.raportType == this.raportType);
-}
-
-class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadataEntity> {
+class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
   final Value<String> id;
   final Value<String> label;
   final Value<String> hint;
@@ -1504,7 +953,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadataEntity> {
         hint = Value(hint),
         valueType = Value(valueType),
         raportType = Value(raportType);
-  static Insertable<EntryMetadataEntity> custom({
+  static Insertable<EntryMetadata> custom({
     Expression<String>? id,
     Expression<String>? label,
     Expression<String>? hint,
@@ -1581,7 +1030,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadataEntity> {
 }
 
 class $BooleanEntryTableTable extends BooleanEntryTable
-    with TableInfo<$BooleanEntryTableTable, BooleanEntryEntity> {
+    with TableInfo<$BooleanEntryTableTable, BooleanEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1625,7 +1074,7 @@ class $BooleanEntryTableTable extends BooleanEntryTable
   String get actualTableName => $name;
   static const String $name = 'boolean_entry_table';
   @override
-  VerificationContext validateIntegrity(Insertable<BooleanEntryEntity> instance,
+  VerificationContext validateIntegrity(Insertable<BooleanEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1660,9 +1109,9 @@ class $BooleanEntryTableTable extends BooleanEntryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  BooleanEntryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  BooleanEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return BooleanEntryEntity(
+    return BooleanEntry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       raportId: attachedDatabase.typeMapping
@@ -1680,103 +1129,7 @@ class $BooleanEntryTableTable extends BooleanEntryTable
   }
 }
 
-class BooleanEntryEntity extends DataClass
-    implements Insertable<BooleanEntryEntity> {
-  final String id;
-  final String raportId;
-  final String entryMetadataId;
-  final bool value;
-  const BooleanEntryEntity(
-      {required this.id,
-      required this.raportId,
-      required this.entryMetadataId,
-      required this.value});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['raport_id'] = Variable<String>(raportId);
-    map['entry_metadata_id'] = Variable<String>(entryMetadataId);
-    map['value'] = Variable<bool>(value);
-    return map;
-  }
-
-  BooleanEntryTableCompanion toCompanion(bool nullToAbsent) {
-    return BooleanEntryTableCompanion(
-      id: Value(id),
-      raportId: Value(raportId),
-      entryMetadataId: Value(entryMetadataId),
-      value: Value(value),
-    );
-  }
-
-  factory BooleanEntryEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return BooleanEntryEntity(
-      id: serializer.fromJson<String>(json['id']),
-      raportId: serializer.fromJson<String>(json['raportId']),
-      entryMetadataId: serializer.fromJson<String>(json['entryMetadataId']),
-      value: serializer.fromJson<bool>(json['value']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'raportId': serializer.toJson<String>(raportId),
-      'entryMetadataId': serializer.toJson<String>(entryMetadataId),
-      'value': serializer.toJson<bool>(value),
-    };
-  }
-
-  BooleanEntryEntity copyWith(
-          {String? id,
-          String? raportId,
-          String? entryMetadataId,
-          bool? value}) =>
-      BooleanEntryEntity(
-        id: id ?? this.id,
-        raportId: raportId ?? this.raportId,
-        entryMetadataId: entryMetadataId ?? this.entryMetadataId,
-        value: value ?? this.value,
-      );
-  BooleanEntryEntity copyWithCompanion(BooleanEntryTableCompanion data) {
-    return BooleanEntryEntity(
-      id: data.id.present ? data.id.value : this.id,
-      raportId: data.raportId.present ? data.raportId.value : this.raportId,
-      entryMetadataId: data.entryMetadataId.present
-          ? data.entryMetadataId.value
-          : this.entryMetadataId,
-      value: data.value.present ? data.value.value : this.value,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('BooleanEntryEntity(')
-          ..write('id: $id, ')
-          ..write('raportId: $raportId, ')
-          ..write('entryMetadataId: $entryMetadataId, ')
-          ..write('value: $value')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, raportId, entryMetadataId, value);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is BooleanEntryEntity &&
-          other.id == this.id &&
-          other.raportId == this.raportId &&
-          other.entryMetadataId == this.entryMetadataId &&
-          other.value == this.value);
-}
-
-class BooleanEntryTableCompanion extends UpdateCompanion<BooleanEntryEntity> {
+class BooleanEntryTableCompanion extends UpdateCompanion<BooleanEntry> {
   final Value<String> id;
   final Value<String> raportId;
   final Value<String> entryMetadataId;
@@ -1799,7 +1152,7 @@ class BooleanEntryTableCompanion extends UpdateCompanion<BooleanEntryEntity> {
         raportId = Value(raportId),
         entryMetadataId = Value(entryMetadataId),
         value = Value(value);
-  static Insertable<BooleanEntryEntity> custom({
+  static Insertable<BooleanEntry> custom({
     Expression<String>? id,
     Expression<String>? raportId,
     Expression<String>? entryMetadataId,
@@ -1865,7 +1218,7 @@ class BooleanEntryTableCompanion extends UpdateCompanion<BooleanEntryEntity> {
 }
 
 class $TextEntryTableTable extends TextEntryTable
-    with TableInfo<$TextEntryTableTable, TextEntryEntity> {
+    with TableInfo<$TextEntryTableTable, TextEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1906,7 +1259,7 @@ class $TextEntryTableTable extends TextEntryTable
   String get actualTableName => $name;
   static const String $name = 'text_entry_table';
   @override
-  VerificationContext validateIntegrity(Insertable<TextEntryEntity> instance,
+  VerificationContext validateIntegrity(Insertable<TextEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1941,9 +1294,9 @@ class $TextEntryTableTable extends TextEntryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TextEntryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  TextEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TextEntryEntity(
+    return TextEntry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       raportId: attachedDatabase.typeMapping
@@ -1961,102 +1314,7 @@ class $TextEntryTableTable extends TextEntryTable
   }
 }
 
-class TextEntryEntity extends DataClass implements Insertable<TextEntryEntity> {
-  final String id;
-  final String raportId;
-  final String entryMetadataId;
-  final String value;
-  const TextEntryEntity(
-      {required this.id,
-      required this.raportId,
-      required this.entryMetadataId,
-      required this.value});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['raport_id'] = Variable<String>(raportId);
-    map['entry_metadata_id'] = Variable<String>(entryMetadataId);
-    map['value'] = Variable<String>(value);
-    return map;
-  }
-
-  TextEntryTableCompanion toCompanion(bool nullToAbsent) {
-    return TextEntryTableCompanion(
-      id: Value(id),
-      raportId: Value(raportId),
-      entryMetadataId: Value(entryMetadataId),
-      value: Value(value),
-    );
-  }
-
-  factory TextEntryEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TextEntryEntity(
-      id: serializer.fromJson<String>(json['id']),
-      raportId: serializer.fromJson<String>(json['raportId']),
-      entryMetadataId: serializer.fromJson<String>(json['entryMetadataId']),
-      value: serializer.fromJson<String>(json['value']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'raportId': serializer.toJson<String>(raportId),
-      'entryMetadataId': serializer.toJson<String>(entryMetadataId),
-      'value': serializer.toJson<String>(value),
-    };
-  }
-
-  TextEntryEntity copyWith(
-          {String? id,
-          String? raportId,
-          String? entryMetadataId,
-          String? value}) =>
-      TextEntryEntity(
-        id: id ?? this.id,
-        raportId: raportId ?? this.raportId,
-        entryMetadataId: entryMetadataId ?? this.entryMetadataId,
-        value: value ?? this.value,
-      );
-  TextEntryEntity copyWithCompanion(TextEntryTableCompanion data) {
-    return TextEntryEntity(
-      id: data.id.present ? data.id.value : this.id,
-      raportId: data.raportId.present ? data.raportId.value : this.raportId,
-      entryMetadataId: data.entryMetadataId.present
-          ? data.entryMetadataId.value
-          : this.entryMetadataId,
-      value: data.value.present ? data.value.value : this.value,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('TextEntryEntity(')
-          ..write('id: $id, ')
-          ..write('raportId: $raportId, ')
-          ..write('entryMetadataId: $entryMetadataId, ')
-          ..write('value: $value')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, raportId, entryMetadataId, value);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TextEntryEntity &&
-          other.id == this.id &&
-          other.raportId == this.raportId &&
-          other.entryMetadataId == this.entryMetadataId &&
-          other.value == this.value);
-}
-
-class TextEntryTableCompanion extends UpdateCompanion<TextEntryEntity> {
+class TextEntryTableCompanion extends UpdateCompanion<TextEntry> {
   final Value<String> id;
   final Value<String> raportId;
   final Value<String> entryMetadataId;
@@ -2079,7 +1337,7 @@ class TextEntryTableCompanion extends UpdateCompanion<TextEntryEntity> {
         raportId = Value(raportId),
         entryMetadataId = Value(entryMetadataId),
         value = Value(value);
-  static Insertable<TextEntryEntity> custom({
+  static Insertable<TextEntry> custom({
     Expression<String>? id,
     Expression<String>? raportId,
     Expression<String>? entryMetadataId,
@@ -2145,7 +1403,7 @@ class TextEntryTableCompanion extends UpdateCompanion<TextEntryEntity> {
 }
 
 class $NumericEntryTableTable extends NumericEntryTable
-    with TableInfo<$NumericEntryTableTable, NumericEntryEntity> {
+    with TableInfo<$NumericEntryTableTable, NumericEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -2186,7 +1444,7 @@ class $NumericEntryTableTable extends NumericEntryTable
   String get actualTableName => $name;
   static const String $name = 'numeric_entry_table';
   @override
-  VerificationContext validateIntegrity(Insertable<NumericEntryEntity> instance,
+  VerificationContext validateIntegrity(Insertable<NumericEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -2221,9 +1479,9 @@ class $NumericEntryTableTable extends NumericEntryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  NumericEntryEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  NumericEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NumericEntryEntity(
+    return NumericEntry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       raportId: attachedDatabase.typeMapping
@@ -2241,103 +1499,7 @@ class $NumericEntryTableTable extends NumericEntryTable
   }
 }
 
-class NumericEntryEntity extends DataClass
-    implements Insertable<NumericEntryEntity> {
-  final String id;
-  final String raportId;
-  final String entryMetadataId;
-  final double value;
-  const NumericEntryEntity(
-      {required this.id,
-      required this.raportId,
-      required this.entryMetadataId,
-      required this.value});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['raport_id'] = Variable<String>(raportId);
-    map['entry_metadata_id'] = Variable<String>(entryMetadataId);
-    map['value'] = Variable<double>(value);
-    return map;
-  }
-
-  NumericEntryTableCompanion toCompanion(bool nullToAbsent) {
-    return NumericEntryTableCompanion(
-      id: Value(id),
-      raportId: Value(raportId),
-      entryMetadataId: Value(entryMetadataId),
-      value: Value(value),
-    );
-  }
-
-  factory NumericEntryEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return NumericEntryEntity(
-      id: serializer.fromJson<String>(json['id']),
-      raportId: serializer.fromJson<String>(json['raportId']),
-      entryMetadataId: serializer.fromJson<String>(json['entryMetadataId']),
-      value: serializer.fromJson<double>(json['value']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'raportId': serializer.toJson<String>(raportId),
-      'entryMetadataId': serializer.toJson<String>(entryMetadataId),
-      'value': serializer.toJson<double>(value),
-    };
-  }
-
-  NumericEntryEntity copyWith(
-          {String? id,
-          String? raportId,
-          String? entryMetadataId,
-          double? value}) =>
-      NumericEntryEntity(
-        id: id ?? this.id,
-        raportId: raportId ?? this.raportId,
-        entryMetadataId: entryMetadataId ?? this.entryMetadataId,
-        value: value ?? this.value,
-      );
-  NumericEntryEntity copyWithCompanion(NumericEntryTableCompanion data) {
-    return NumericEntryEntity(
-      id: data.id.present ? data.id.value : this.id,
-      raportId: data.raportId.present ? data.raportId.value : this.raportId,
-      entryMetadataId: data.entryMetadataId.present
-          ? data.entryMetadataId.value
-          : this.entryMetadataId,
-      value: data.value.present ? data.value.value : this.value,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('NumericEntryEntity(')
-          ..write('id: $id, ')
-          ..write('raportId: $raportId, ')
-          ..write('entryMetadataId: $entryMetadataId, ')
-          ..write('value: $value')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, raportId, entryMetadataId, value);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is NumericEntryEntity &&
-          other.id == this.id &&
-          other.raportId == this.raportId &&
-          other.entryMetadataId == this.entryMetadataId &&
-          other.value == this.value);
-}
-
-class NumericEntryTableCompanion extends UpdateCompanion<NumericEntryEntity> {
+class NumericEntryTableCompanion extends UpdateCompanion<NumericEntry> {
   final Value<String> id;
   final Value<String> raportId;
   final Value<String> entryMetadataId;
@@ -2360,7 +1522,7 @@ class NumericEntryTableCompanion extends UpdateCompanion<NumericEntryEntity> {
         raportId = Value(raportId),
         entryMetadataId = Value(entryMetadataId),
         value = Value(value);
-  static Insertable<NumericEntryEntity> custom({
+  static Insertable<NumericEntry> custom({
     Expression<String>? id,
     Expression<String>? raportId,
     Expression<String>? entryMetadataId,
@@ -2426,7 +1588,7 @@ class NumericEntryTableCompanion extends UpdateCompanion<NumericEntryEntity> {
 }
 
 class $HistoryLogTableTable extends HistoryLogTable
-    with TableInfo<$HistoryLogTableTable, HistoryLogEntity> {
+    with TableInfo<$HistoryLogTableTable, HistoryLog> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -2472,7 +1634,7 @@ class $HistoryLogTableTable extends HistoryLogTable
   String get actualTableName => $name;
   static const String $name = 'history_log_table';
   @override
-  VerificationContext validateIntegrity(Insertable<HistoryLogEntity> instance,
+  VerificationContext validateIntegrity(Insertable<HistoryLog> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -2503,9 +1665,9 @@ class $HistoryLogTableTable extends HistoryLogTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  HistoryLogEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HistoryLog map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HistoryLogEntity(
+    return HistoryLog(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       referenceId: attachedDatabase.typeMapping
@@ -2532,125 +1694,7 @@ class $HistoryLogTableTable extends HistoryLogTable
       const EnumIndexConverter<ActionType>(ActionType.values);
 }
 
-class HistoryLogEntity extends DataClass
-    implements Insertable<HistoryLogEntity> {
-  final String id;
-  final String referenceId;
-  final TableType tableType;
-  final ActionType actionType;
-  final DateTime createdAt;
-  const HistoryLogEntity(
-      {required this.id,
-      required this.referenceId,
-      required this.tableType,
-      required this.actionType,
-      required this.createdAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['reference_id'] = Variable<String>(referenceId);
-    {
-      map['table_type'] = Variable<int>(
-          $HistoryLogTableTable.$convertertableType.toSql(tableType));
-    }
-    {
-      map['action_type'] = Variable<int>(
-          $HistoryLogTableTable.$converteractionType.toSql(actionType));
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    return map;
-  }
-
-  HistoryLogTableCompanion toCompanion(bool nullToAbsent) {
-    return HistoryLogTableCompanion(
-      id: Value(id),
-      referenceId: Value(referenceId),
-      tableType: Value(tableType),
-      actionType: Value(actionType),
-      createdAt: Value(createdAt),
-    );
-  }
-
-  factory HistoryLogEntity.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return HistoryLogEntity(
-      id: serializer.fromJson<String>(json['id']),
-      referenceId: serializer.fromJson<String>(json['referenceId']),
-      tableType: $HistoryLogTableTable.$convertertableType
-          .fromJson(serializer.fromJson<int>(json['tableType'])),
-      actionType: $HistoryLogTableTable.$converteractionType
-          .fromJson(serializer.fromJson<int>(json['actionType'])),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'referenceId': serializer.toJson<String>(referenceId),
-      'tableType': serializer.toJson<int>(
-          $HistoryLogTableTable.$convertertableType.toJson(tableType)),
-      'actionType': serializer.toJson<int>(
-          $HistoryLogTableTable.$converteractionType.toJson(actionType)),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-    };
-  }
-
-  HistoryLogEntity copyWith(
-          {String? id,
-          String? referenceId,
-          TableType? tableType,
-          ActionType? actionType,
-          DateTime? createdAt}) =>
-      HistoryLogEntity(
-        id: id ?? this.id,
-        referenceId: referenceId ?? this.referenceId,
-        tableType: tableType ?? this.tableType,
-        actionType: actionType ?? this.actionType,
-        createdAt: createdAt ?? this.createdAt,
-      );
-  HistoryLogEntity copyWithCompanion(HistoryLogTableCompanion data) {
-    return HistoryLogEntity(
-      id: data.id.present ? data.id.value : this.id,
-      referenceId:
-          data.referenceId.present ? data.referenceId.value : this.referenceId,
-      tableType: data.tableType.present ? data.tableType.value : this.tableType,
-      actionType:
-          data.actionType.present ? data.actionType.value : this.actionType,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HistoryLogEntity(')
-          ..write('id: $id, ')
-          ..write('referenceId: $referenceId, ')
-          ..write('tableType: $tableType, ')
-          ..write('actionType: $actionType, ')
-          ..write('createdAt: $createdAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, referenceId, tableType, actionType, createdAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is HistoryLogEntity &&
-          other.id == this.id &&
-          other.referenceId == this.referenceId &&
-          other.tableType == this.tableType &&
-          other.actionType == this.actionType &&
-          other.createdAt == this.createdAt);
-}
-
-class HistoryLogTableCompanion extends UpdateCompanion<HistoryLogEntity> {
+class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
   final Value<String> id;
   final Value<String> referenceId;
   final Value<TableType> tableType;
@@ -2677,7 +1721,7 @@ class HistoryLogTableCompanion extends UpdateCompanion<HistoryLogEntity> {
         tableType = Value(tableType),
         actionType = Value(actionType),
         createdAt = Value(createdAt);
-  static Insertable<HistoryLogEntity> custom({
+  static Insertable<HistoryLog> custom({
     Expression<String>? id,
     Expression<String>? referenceId,
     Expression<int>? tableType,
@@ -2768,18 +1812,6 @@ abstract class _$DriftDbApi extends GeneratedDatabase {
       $NumericEntryTableTable(this);
   late final $HistoryLogTableTable historyLogTable =
       $HistoryLogTableTable(this);
-  late final ApiaryDao apiaryDao = ApiaryDao(this as DriftDbApi);
-  late final HiveDao hiveDao = HiveDao(this as DriftDbApi);
-  late final QueenDao queenDao = QueenDao(this as DriftDbApi);
-  late final RaportDao raportDao = RaportDao(this as DriftDbApi);
-  late final EntryMetadataDao entryMetadataDao =
-      EntryMetadataDao(this as DriftDbApi);
-  late final BooleanEntryDao booleanEntryDao =
-      BooleanEntryDao(this as DriftDbApi);
-  late final TextEntryDao textEntryDao = TextEntryDao(this as DriftDbApi);
-  late final NumericEntryDao numericEntryDao =
-      NumericEntryDao(this as DriftDbApi);
-  late final HistoryLogDao historyLogDao = HistoryLogDao(this as DriftDbApi);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2817,12 +1849,12 @@ typedef $$ApiaryTableTableUpdateCompanionBuilder = ApiaryTableCompanion
 });
 
 final class $$ApiaryTableTableReferences
-    extends BaseReferences<_$DriftDbApi, $ApiaryTableTable, ApiaryEntity> {
+    extends BaseReferences<_$DriftDbApi, $ApiaryTableTable, Apiary> {
   $$ApiaryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$HiveTableTable, List<HiveEntity>>
-      _hiveTableRefsTable(_$DriftDbApi db) => MultiTypedResultKey.fromTable(
-          db.hiveTable,
+  static MultiTypedResultKey<$HiveTableTable, List<Hive>> _hiveTableRefsTable(
+          _$DriftDbApi db) =>
+      MultiTypedResultKey.fromTable(db.hiveTable,
           aliasName:
               $_aliasNameGenerator(db.apiaryTable.id, db.hiveTable.apiaryId));
 
@@ -2910,13 +1942,13 @@ class $$ApiaryTableTableOrderingComposer
 class $$ApiaryTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $ApiaryTableTable,
-    ApiaryEntity,
+    Apiary,
     $$ApiaryTableTableFilterComposer,
     $$ApiaryTableTableOrderingComposer,
     $$ApiaryTableTableCreateCompanionBuilder,
     $$ApiaryTableTableUpdateCompanionBuilder,
-    (ApiaryEntity, $$ApiaryTableTableReferences),
-    ApiaryEntity,
+    (Apiary, $$ApiaryTableTableReferences),
+    Apiary,
     PrefetchHooks Function({bool hiveTableRefs})> {
   $$ApiaryTableTableTableManager(_$DriftDbApi db, $ApiaryTableTable table)
       : super(TableManagerState(
@@ -2993,13 +2025,13 @@ class $$ApiaryTableTableTableManager extends RootTableManager<
 typedef $$ApiaryTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $ApiaryTableTable,
-    ApiaryEntity,
+    Apiary,
     $$ApiaryTableTableFilterComposer,
     $$ApiaryTableTableOrderingComposer,
     $$ApiaryTableTableCreateCompanionBuilder,
     $$ApiaryTableTableUpdateCompanionBuilder,
-    (ApiaryEntity, $$ApiaryTableTableReferences),
-    ApiaryEntity,
+    (Apiary, $$ApiaryTableTableReferences),
+    Apiary,
     PrefetchHooks Function({bool hiveTableRefs})>;
 typedef $$QueenTableTableCreateCompanionBuilder = QueenTableCompanion Function({
   required String id,
@@ -3019,14 +2051,14 @@ typedef $$QueenTableTableUpdateCompanionBuilder = QueenTableCompanion Function({
 });
 
 final class $$QueenTableTableReferences
-    extends BaseReferences<_$DriftDbApi, $QueenTableTable, QueenEntity> {
+    extends BaseReferences<_$DriftDbApi, $QueenTableTable, Queen> {
   $$QueenTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$HiveTableTable, List<HiveEntity>>
-      _hiveTableRefsTable(_$DriftDbApi db) =>
-          MultiTypedResultKey.fromTable(db.hiveTable,
-              aliasName:
-                  $_aliasNameGenerator(db.queenTable.id, db.hiveTable.queenId));
+  static MultiTypedResultKey<$HiveTableTable, List<Hive>> _hiveTableRefsTable(
+          _$DriftDbApi db) =>
+      MultiTypedResultKey.fromTable(db.hiveTable,
+          aliasName:
+              $_aliasNameGenerator(db.queenTable.id, db.hiveTable.queenId));
 
   $$HiveTableTableProcessedTableManager get hiveTableRefs {
     final manager = $$HiveTableTableTableManager($_db, $_db.hiveTable)
@@ -3112,13 +2144,13 @@ class $$QueenTableTableOrderingComposer
 class $$QueenTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $QueenTableTable,
-    QueenEntity,
+    Queen,
     $$QueenTableTableFilterComposer,
     $$QueenTableTableOrderingComposer,
     $$QueenTableTableCreateCompanionBuilder,
     $$QueenTableTableUpdateCompanionBuilder,
-    (QueenEntity, $$QueenTableTableReferences),
-    QueenEntity,
+    (Queen, $$QueenTableTableReferences),
+    Queen,
     PrefetchHooks Function({bool hiveTableRefs})> {
   $$QueenTableTableTableManager(_$DriftDbApi db, $QueenTableTable table)
       : super(TableManagerState(
@@ -3195,13 +2227,13 @@ class $$QueenTableTableTableManager extends RootTableManager<
 typedef $$QueenTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $QueenTableTable,
-    QueenEntity,
+    Queen,
     $$QueenTableTableFilterComposer,
     $$QueenTableTableOrderingComposer,
     $$QueenTableTableCreateCompanionBuilder,
     $$QueenTableTableUpdateCompanionBuilder,
-    (QueenEntity, $$QueenTableTableReferences),
-    QueenEntity,
+    (Queen, $$QueenTableTableReferences),
+    Queen,
     PrefetchHooks Function({bool hiveTableRefs})>;
 typedef $$HiveTableTableCreateCompanionBuilder = HiveTableCompanion Function({
   required String id,
@@ -3225,7 +2257,7 @@ typedef $$HiveTableTableUpdateCompanionBuilder = HiveTableCompanion Function({
 });
 
 final class $$HiveTableTableReferences
-    extends BaseReferences<_$DriftDbApi, $HiveTableTable, HiveEntity> {
+    extends BaseReferences<_$DriftDbApi, $HiveTableTable, Hive> {
   $$HiveTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $QueenTableTable _queenIdTable(_$DriftDbApi db) =>
@@ -3256,7 +2288,7 @@ final class $$HiveTableTableReferences
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static MultiTypedResultKey<$RaportTableTable, List<RaportEntity>>
+  static MultiTypedResultKey<$RaportTableTable, List<Raport>>
       _raportTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.raportTable,
               aliasName:
@@ -3394,13 +2426,13 @@ class $$HiveTableTableOrderingComposer
 class $$HiveTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $HiveTableTable,
-    HiveEntity,
+    Hive,
     $$HiveTableTableFilterComposer,
     $$HiveTableTableOrderingComposer,
     $$HiveTableTableCreateCompanionBuilder,
     $$HiveTableTableUpdateCompanionBuilder,
-    (HiveEntity, $$HiveTableTableReferences),
-    HiveEntity,
+    (Hive, $$HiveTableTableReferences),
+    Hive,
     PrefetchHooks Function(
         {bool queenId, bool apiaryId, bool raportTableRefs})> {
   $$HiveTableTableTableManager(_$DriftDbApi db, $HiveTableTable table)
@@ -3521,13 +2553,13 @@ class $$HiveTableTableTableManager extends RootTableManager<
 typedef $$HiveTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $HiveTableTable,
-    HiveEntity,
+    Hive,
     $$HiveTableTableFilterComposer,
     $$HiveTableTableOrderingComposer,
     $$HiveTableTableCreateCompanionBuilder,
     $$HiveTableTableUpdateCompanionBuilder,
-    (HiveEntity, $$HiveTableTableReferences),
-    HiveEntity,
+    (Hive, $$HiveTableTableReferences),
+    Hive,
     PrefetchHooks Function(
         {bool queenId, bool apiaryId, bool raportTableRefs})>;
 typedef $$RaportTableTableCreateCompanionBuilder = RaportTableCompanion
@@ -3546,7 +2578,7 @@ typedef $$RaportTableTableUpdateCompanionBuilder = RaportTableCompanion
 });
 
 final class $$RaportTableTableReferences
-    extends BaseReferences<_$DriftDbApi, $RaportTableTable, RaportEntity> {
+    extends BaseReferences<_$DriftDbApi, $RaportTableTable, Raport> {
   $$RaportTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $HiveTableTable _hiveIdTable(_$DriftDbApi db) =>
@@ -3563,7 +2595,7 @@ final class $$RaportTableTableReferences
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntryEntity>>
+  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntry>>
       _booleanEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.booleanEntryTable,
               aliasName: $_aliasNameGenerator(
@@ -3580,7 +2612,7 @@ final class $$RaportTableTableReferences
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntryEntity>>
+  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntry>>
       _textEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.textEntryTable,
               aliasName: $_aliasNameGenerator(
@@ -3595,7 +2627,7 @@ final class $$RaportTableTableReferences
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntryEntity>>
+  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntry>>
       _numericEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.numericEntryTable,
               aliasName: $_aliasNameGenerator(
@@ -3715,13 +2747,13 @@ class $$RaportTableTableOrderingComposer
 class $$RaportTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $RaportTableTable,
-    RaportEntity,
+    Raport,
     $$RaportTableTableFilterComposer,
     $$RaportTableTableOrderingComposer,
     $$RaportTableTableCreateCompanionBuilder,
     $$RaportTableTableUpdateCompanionBuilder,
-    (RaportEntity, $$RaportTableTableReferences),
-    RaportEntity,
+    (Raport, $$RaportTableTableReferences),
+    Raport,
     PrefetchHooks Function(
         {bool hiveId,
         bool booleanEntryTableRefs,
@@ -3850,13 +2882,13 @@ class $$RaportTableTableTableManager extends RootTableManager<
 typedef $$RaportTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $RaportTableTable,
-    RaportEntity,
+    Raport,
     $$RaportTableTableFilterComposer,
     $$RaportTableTableOrderingComposer,
     $$RaportTableTableCreateCompanionBuilder,
     $$RaportTableTableUpdateCompanionBuilder,
-    (RaportEntity, $$RaportTableTableReferences),
-    RaportEntity,
+    (Raport, $$RaportTableTableReferences),
+    Raport,
     PrefetchHooks Function(
         {bool hiveId,
         bool booleanEntryTableRefs,
@@ -3882,11 +2914,11 @@ typedef $$EntryMetadataTableTableUpdateCompanionBuilder
 });
 
 final class $$EntryMetadataTableTableReferences extends BaseReferences<
-    _$DriftDbApi, $EntryMetadataTableTable, EntryMetadataEntity> {
+    _$DriftDbApi, $EntryMetadataTableTable, EntryMetadata> {
   $$EntryMetadataTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntryEntity>>
+  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntry>>
       _booleanEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.booleanEntryTable,
               aliasName: $_aliasNameGenerator(db.entryMetadataTable.id,
@@ -3903,7 +2935,7 @@ final class $$EntryMetadataTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntryEntity>>
+  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntry>>
       _textEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.textEntryTable,
               aliasName: $_aliasNameGenerator(
@@ -3918,7 +2950,7 @@ final class $$EntryMetadataTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntryEntity>>
+  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntry>>
       _numericEntryTableRefsTable(_$DriftDbApi db) =>
           MultiTypedResultKey.fromTable(db.numericEntryTable,
               aliasName: $_aliasNameGenerator(db.entryMetadataTable.id,
@@ -4048,13 +3080,13 @@ class $$EntryMetadataTableTableOrderingComposer
 class $$EntryMetadataTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $EntryMetadataTableTable,
-    EntryMetadataEntity,
+    EntryMetadata,
     $$EntryMetadataTableTableFilterComposer,
     $$EntryMetadataTableTableOrderingComposer,
     $$EntryMetadataTableTableCreateCompanionBuilder,
     $$EntryMetadataTableTableUpdateCompanionBuilder,
-    (EntryMetadataEntity, $$EntryMetadataTableTableReferences),
-    EntryMetadataEntity,
+    (EntryMetadata, $$EntryMetadataTableTableReferences),
+    EntryMetadata,
     PrefetchHooks Function(
         {bool booleanEntryTableRefs,
         bool textEntryTableRefs,
@@ -4166,13 +3198,13 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
 typedef $$EntryMetadataTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $EntryMetadataTableTable,
-    EntryMetadataEntity,
+    EntryMetadata,
     $$EntryMetadataTableTableFilterComposer,
     $$EntryMetadataTableTableOrderingComposer,
     $$EntryMetadataTableTableCreateCompanionBuilder,
     $$EntryMetadataTableTableUpdateCompanionBuilder,
-    (EntryMetadataEntity, $$EntryMetadataTableTableReferences),
-    EntryMetadataEntity,
+    (EntryMetadata, $$EntryMetadataTableTableReferences),
+    EntryMetadata,
     PrefetchHooks Function(
         {bool booleanEntryTableRefs,
         bool textEntryTableRefs,
@@ -4195,7 +3227,7 @@ typedef $$BooleanEntryTableTableUpdateCompanionBuilder
 });
 
 final class $$BooleanEntryTableTableReferences extends BaseReferences<
-    _$DriftDbApi, $BooleanEntryTableTable, BooleanEntryEntity> {
+    _$DriftDbApi, $BooleanEntryTableTable, BooleanEntry> {
   $$BooleanEntryTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
@@ -4316,13 +3348,13 @@ class $$BooleanEntryTableTableOrderingComposer
 class $$BooleanEntryTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $BooleanEntryTableTable,
-    BooleanEntryEntity,
+    BooleanEntry,
     $$BooleanEntryTableTableFilterComposer,
     $$BooleanEntryTableTableOrderingComposer,
     $$BooleanEntryTableTableCreateCompanionBuilder,
     $$BooleanEntryTableTableUpdateCompanionBuilder,
-    (BooleanEntryEntity, $$BooleanEntryTableTableReferences),
-    BooleanEntryEntity,
+    (BooleanEntry, $$BooleanEntryTableTableReferences),
+    BooleanEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
   $$BooleanEntryTableTableTableManager(
       _$DriftDbApi db, $BooleanEntryTableTable table)
@@ -4419,13 +3451,13 @@ class $$BooleanEntryTableTableTableManager extends RootTableManager<
 typedef $$BooleanEntryTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $BooleanEntryTableTable,
-    BooleanEntryEntity,
+    BooleanEntry,
     $$BooleanEntryTableTableFilterComposer,
     $$BooleanEntryTableTableOrderingComposer,
     $$BooleanEntryTableTableCreateCompanionBuilder,
     $$BooleanEntryTableTableUpdateCompanionBuilder,
-    (BooleanEntryEntity, $$BooleanEntryTableTableReferences),
-    BooleanEntryEntity,
+    (BooleanEntry, $$BooleanEntryTableTableReferences),
+    BooleanEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
 typedef $$TextEntryTableTableCreateCompanionBuilder = TextEntryTableCompanion
     Function({
@@ -4444,8 +3476,8 @@ typedef $$TextEntryTableTableUpdateCompanionBuilder = TextEntryTableCompanion
   Value<int> rowid,
 });
 
-final class $$TextEntryTableTableReferences extends BaseReferences<_$DriftDbApi,
-    $TextEntryTableTable, TextEntryEntity> {
+final class $$TextEntryTableTableReferences
+    extends BaseReferences<_$DriftDbApi, $TextEntryTableTable, TextEntry> {
   $$TextEntryTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
@@ -4566,13 +3598,13 @@ class $$TextEntryTableTableOrderingComposer
 class $$TextEntryTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $TextEntryTableTable,
-    TextEntryEntity,
+    TextEntry,
     $$TextEntryTableTableFilterComposer,
     $$TextEntryTableTableOrderingComposer,
     $$TextEntryTableTableCreateCompanionBuilder,
     $$TextEntryTableTableUpdateCompanionBuilder,
-    (TextEntryEntity, $$TextEntryTableTableReferences),
-    TextEntryEntity,
+    (TextEntry, $$TextEntryTableTableReferences),
+    TextEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
   $$TextEntryTableTableTableManager(_$DriftDbApi db, $TextEntryTableTable table)
       : super(TableManagerState(
@@ -4667,13 +3699,13 @@ class $$TextEntryTableTableTableManager extends RootTableManager<
 typedef $$TextEntryTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $TextEntryTableTable,
-    TextEntryEntity,
+    TextEntry,
     $$TextEntryTableTableFilterComposer,
     $$TextEntryTableTableOrderingComposer,
     $$TextEntryTableTableCreateCompanionBuilder,
     $$TextEntryTableTableUpdateCompanionBuilder,
-    (TextEntryEntity, $$TextEntryTableTableReferences),
-    TextEntryEntity,
+    (TextEntry, $$TextEntryTableTableReferences),
+    TextEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
 typedef $$NumericEntryTableTableCreateCompanionBuilder
     = NumericEntryTableCompanion Function({
@@ -4693,7 +3725,7 @@ typedef $$NumericEntryTableTableUpdateCompanionBuilder
 });
 
 final class $$NumericEntryTableTableReferences extends BaseReferences<
-    _$DriftDbApi, $NumericEntryTableTable, NumericEntryEntity> {
+    _$DriftDbApi, $NumericEntryTableTable, NumericEntry> {
   $$NumericEntryTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
@@ -4814,13 +3846,13 @@ class $$NumericEntryTableTableOrderingComposer
 class $$NumericEntryTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $NumericEntryTableTable,
-    NumericEntryEntity,
+    NumericEntry,
     $$NumericEntryTableTableFilterComposer,
     $$NumericEntryTableTableOrderingComposer,
     $$NumericEntryTableTableCreateCompanionBuilder,
     $$NumericEntryTableTableUpdateCompanionBuilder,
-    (NumericEntryEntity, $$NumericEntryTableTableReferences),
-    NumericEntryEntity,
+    (NumericEntry, $$NumericEntryTableTableReferences),
+    NumericEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
   $$NumericEntryTableTableTableManager(
       _$DriftDbApi db, $NumericEntryTableTable table)
@@ -4917,13 +3949,13 @@ class $$NumericEntryTableTableTableManager extends RootTableManager<
 typedef $$NumericEntryTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $NumericEntryTableTable,
-    NumericEntryEntity,
+    NumericEntry,
     $$NumericEntryTableTableFilterComposer,
     $$NumericEntryTableTableOrderingComposer,
     $$NumericEntryTableTableCreateCompanionBuilder,
     $$NumericEntryTableTableUpdateCompanionBuilder,
-    (NumericEntryEntity, $$NumericEntryTableTableReferences),
-    NumericEntryEntity,
+    (NumericEntry, $$NumericEntryTableTableReferences),
+    NumericEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
 typedef $$HistoryLogTableTableCreateCompanionBuilder = HistoryLogTableCompanion
     Function({
@@ -5009,16 +4041,16 @@ class $$HistoryLogTableTableOrderingComposer
 class $$HistoryLogTableTableTableManager extends RootTableManager<
     _$DriftDbApi,
     $HistoryLogTableTable,
-    HistoryLogEntity,
+    HistoryLog,
     $$HistoryLogTableTableFilterComposer,
     $$HistoryLogTableTableOrderingComposer,
     $$HistoryLogTableTableCreateCompanionBuilder,
     $$HistoryLogTableTableUpdateCompanionBuilder,
     (
-      HistoryLogEntity,
-      BaseReferences<_$DriftDbApi, $HistoryLogTableTable, HistoryLogEntity>
+      HistoryLog,
+      BaseReferences<_$DriftDbApi, $HistoryLogTableTable, HistoryLog>
     ),
-    HistoryLogEntity,
+    HistoryLog,
     PrefetchHooks Function()> {
   $$HistoryLogTableTableTableManager(
       _$DriftDbApi db, $HistoryLogTableTable table)
@@ -5071,16 +4103,16 @@ class $$HistoryLogTableTableTableManager extends RootTableManager<
 typedef $$HistoryLogTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftDbApi,
     $HistoryLogTableTable,
-    HistoryLogEntity,
+    HistoryLog,
     $$HistoryLogTableTableFilterComposer,
     $$HistoryLogTableTableOrderingComposer,
     $$HistoryLogTableTableCreateCompanionBuilder,
     $$HistoryLogTableTableUpdateCompanionBuilder,
     (
-      HistoryLogEntity,
-      BaseReferences<_$DriftDbApi, $HistoryLogTableTable, HistoryLogEntity>
+      HistoryLog,
+      BaseReferences<_$DriftDbApi, $HistoryLogTableTable, HistoryLog>
     ),
-    HistoryLogEntity,
+    HistoryLog,
     PrefetchHooks Function()>;
 
 class $DriftDbApiManager {

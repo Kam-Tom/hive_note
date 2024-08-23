@@ -1,6 +1,7 @@
+import 'package:db_api/db_api.dart';
 import 'package:drift/drift.dart';
 
-@DataClassName('ApiaryEntity')
+@UseRowClass(Apiary)
 class ApiaryTable extends Table {
   TextColumn get id => text()();
   TextColumn get name => text().withLength(max: 32)();
@@ -11,3 +12,4 @@ class ApiaryTable extends Table {
   @override
   Set<Column> get primaryKey => {id};
 }
+

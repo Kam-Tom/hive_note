@@ -6,30 +6,28 @@ import 'package:uuid/uuid.dart';
 @immutable
 class NumericEntry extends Equatable {
   final String id;
-  final Raport raport;
-  final EntryMetadata entryMetadata;
+  final String raportId;
+  final String entryMetadataId;
   final double value;
 
   NumericEntry({
     String? id,
-    required this.raport,
-    required this.entryMetadata,
+    required this.raportId,
+    required this.entryMetadataId,
     required this.value,
   }) : id = id ?? Uuid().v4();
 
   NumericEntry copyWith({
-    Raport? raport,
-    EntryMetadata? entryMetadata,
     double? value,
   }) {
     return NumericEntry(
       id: this.id,
-      raport: raport ?? this.raport,
-      entryMetadata: entryMetadata ?? this.entryMetadata,
+      raportId: this.raportId,
+      entryMetadataId: this.entryMetadataId,
       value: value ?? this.value,
     );
   }
 
   @override
-  List<Object?> get props => [id, raport, entryMetadata, value];
+  List<Object?> get props => [id, raportId, entryMetadataId, value];
 }

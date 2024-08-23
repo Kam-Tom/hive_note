@@ -1,7 +1,8 @@
+import 'package:db_api/db_api.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_db_api/src/tabels/tabels.dart';
 
-@DataClassName('HiveEntity')
+@UseRowClass(Hive)
 class HiveTable extends Table {
   TextColumn get id => text()();
   TextColumn get name => text().withLength(max: 32)();

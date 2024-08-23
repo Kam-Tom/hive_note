@@ -1,4 +1,3 @@
-import 'package:db_api/db_api.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
@@ -6,27 +5,27 @@ import 'package:uuid/uuid.dart';
 @immutable
 class Raport extends Equatable {
   final String id;
-  final Hive? hive;
+  final String? hiveId;
   final DateTime createdAt;
 
   Raport({
     String? id,
-    this.hive,
+    this.hiveId,
     required DateTime createdAt,
   })  : id = id ?? Uuid().v4(),
         createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Raport copyWith({
-    Hive? hive,
+    String? hiveId,
     DateTime? createdAt,
   }) {
     return Raport(
       id: this.id,
-      hive: hive ?? this.hive,
+      hiveId: hiveId ?? this.hiveId,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 
   @override
-  List<Object?> get props => [id, hive, createdAt];
+  List<Object?> get props => [id, hiveId, createdAt];
 }

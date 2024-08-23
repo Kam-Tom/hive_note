@@ -18,21 +18,6 @@ class HistoryLog extends Equatable {
     required DateTime createdAt,
   }) : id = id ?? Uuid().v4(),
   createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
-
-  HistoryLog copyWith({
-    String? referenceId,
-    TableType? tableType,
-    ActionType? actionType,
-    DateTime? createdAt,
-  }) {
-    return HistoryLog(
-      id: this.id,
-      referenceId: referenceId ?? this.referenceId,
-      tableType: tableType ?? this.tableType,
-      actionType: actionType ?? this.actionType,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
   
   @override
   List<Object?> get props => [id, referenceId, tableType, actionType, createdAt];
