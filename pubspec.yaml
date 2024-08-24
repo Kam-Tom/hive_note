@@ -41,6 +41,12 @@ dependencies:
   flutter_bloc:
   equatable:
   easy_localization:
+  logger:
+
+  drift_app_database:
+    path: packages/drift_app_database  
+  repositories:
+    path: packages/repositories
 
 dev_dependencies:
   flutter_test:
