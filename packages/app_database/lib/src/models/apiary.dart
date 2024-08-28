@@ -1,3 +1,4 @@
+import 'package:app_database/app_database.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
@@ -9,6 +10,7 @@ class Apiary extends Equatable {
   final double? latitude;
   final double? longitude;
   final DateTime createdAt;
+  final List<Hive> hives;
 
   Apiary({
     String? id,
@@ -16,6 +18,7 @@ class Apiary extends Equatable {
     this.latitude,
     this.longitude,
     required DateTime createdAt,
+    this.hives = const [],
   })  : id = id ?? Uuid().v4(),
         createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
@@ -24,6 +27,7 @@ class Apiary extends Equatable {
     double? latitude,
     double? longitude,
     DateTime? createdAt,
+    List<Hive>? hives,
   }) {
     return Apiary(
       id: this.id,
@@ -31,9 +35,10 @@ class Apiary extends Equatable {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       createdAt: createdAt ?? this.createdAt,
+      hives: hives ?? this.hives,
     );
   }
 
   @override
-  List<Object?> get props => [id, name, latitude, longitude, createdAt];
+  List<Object?> get props => [id, name, latitude, longitude, createdAt, hives];
 }

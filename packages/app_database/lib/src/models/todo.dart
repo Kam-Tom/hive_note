@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 @immutable
-class ToDo extends Equatable {
+class Todo extends Equatable {
   final String id;
   final String location;
   final String description;
@@ -11,7 +11,7 @@ class ToDo extends Equatable {
   final DateTime dueTo;
   final bool isCompleted;
 
-  ToDo({
+  Todo({
     String? id,
     required this.location,
     required this.description,
@@ -22,14 +22,14 @@ class ToDo extends Equatable {
         dueTo = dueTo.copyWith(millisecond: 0, microsecond: 0),
         isCompleted = isCompleted?? false;
 
-  ToDo copyWith({
+  Todo copyWith({
     String? location,
     String? description,
     CategoryType? categoryType,
     bool? isCompleted,
     DateTime? dueTo,
   }) {
-    return ToDo(
+    return Todo(
       id: this.id,
       location: location ?? this.location,
       description: description ?? this.description,

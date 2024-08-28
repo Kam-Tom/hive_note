@@ -11,7 +11,7 @@ import 'setup.dart';
 
 void bootstrap() {
   Logger logger = Logger();
-
+  
   FlutterError.onError = (details) {
     logger.e(details.exceptionAsString(), stackTrace: details.stack);
   };

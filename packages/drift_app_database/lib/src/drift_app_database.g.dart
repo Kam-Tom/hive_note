@@ -452,9 +452,9 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
       const VerificationMeta('apiaryId');
   @override
   late final GeneratedColumn<String> apiaryId = GeneratedColumn<String>(
-      'apiary_id', aliasedName, true,
+      'apiary_id', aliasedName, false,
       type: DriftSqlType.string,
-      requiredDuringInsert: false,
+      requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES apiary_table (id)'));
   static const VerificationMeta _createdAtMeta =
@@ -506,6 +506,8 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
     if (data.containsKey('apiary_id')) {
       context.handle(_apiaryIdMeta,
           apiaryId.isAcceptableOrUnknown(data['apiary_id']!, _apiaryIdMeta));
+    } else if (isInserting) {
+      context.missing(_apiaryIdMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -527,7 +529,7 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
       queenId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}queen_id']),
       apiaryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
+          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id'])!,
       type: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       name: attachedDatabase.typeMapping
@@ -551,7 +553,7 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
   final Value<int> order;
   final Value<String> type;
   final Value<String?> queenId;
-  final Value<String?> apiaryId;
+  final Value<String> apiaryId;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const HiveTableCompanion({
@@ -570,13 +572,14 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
     required int order,
     required String type,
     this.queenId = const Value.absent(),
-    this.apiaryId = const Value.absent(),
+    required String apiaryId,
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
         order = Value(order),
         type = Value(type),
+        apiaryId = Value(apiaryId),
         createdAt = Value(createdAt);
   static Insertable<Hive> custom({
     Expression<String>? id,
@@ -606,7 +609,7 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
       Value<int>? order,
       Value<String>? type,
       Value<String?>? queenId,
-      Value<String?>? apiaryId,
+      Value<String>? apiaryId,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return HiveTableCompanion(
@@ -1587,11 +1590,11 @@ class NumericEntryTableCompanion extends UpdateCompanion<NumericEntry> {
   }
 }
 
-class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
+class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, Todo> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ToDoTableTable(this.attachedDatabase, [this._alias]);
+  $TodoTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -1619,7 +1622,7 @@ class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
   late final GeneratedColumnWithTypeConverter<CategoryType, int> categoryType =
       GeneratedColumn<int>('category_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<CategoryType>($ToDoTableTable.$convertercategoryType);
+          .withConverter<CategoryType>($TodoTableTable.$convertercategoryType);
   static const VerificationMeta _dueToMeta = const VerificationMeta('dueTo');
   @override
   late final GeneratedColumn<DateTime> dueTo = GeneratedColumn<DateTime>(
@@ -1641,9 +1644,9 @@ class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'to_do_table';
+  static const String $name = 'todo_table';
   @override
-  VerificationContext validateIntegrity(Insertable<ToDo> instance,
+  VerificationContext validateIntegrity(Insertable<Todo> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1687,16 +1690,16 @@ class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ToDo map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Todo map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ToDo(
+    return Todo(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       location: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}location'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
-      categoryType: $ToDoTableTable.$convertercategoryType.fromSql(
+      categoryType: $TodoTableTable.$convertercategoryType.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.int, data['${effectivePrefix}category_type'])!),
       isCompleted: attachedDatabase.typeMapping
@@ -1707,15 +1710,15 @@ class $ToDoTableTable extends ToDoTable with TableInfo<$ToDoTableTable, ToDo> {
   }
 
   @override
-  $ToDoTableTable createAlias(String alias) {
-    return $ToDoTableTable(attachedDatabase, alias);
+  $TodoTableTable createAlias(String alias) {
+    return $TodoTableTable(attachedDatabase, alias);
   }
 
   static JsonTypeConverter2<CategoryType, int, int> $convertercategoryType =
       const EnumIndexConverter<CategoryType>(CategoryType.values);
 }
 
-class ToDoTableCompanion extends UpdateCompanion<ToDo> {
+class TodoTableCompanion extends UpdateCompanion<Todo> {
   final Value<String> id;
   final Value<String> location;
   final Value<String> description;
@@ -1723,7 +1726,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
   final Value<DateTime> dueTo;
   final Value<bool> isCompleted;
   final Value<int> rowid;
-  const ToDoTableCompanion({
+  const TodoTableCompanion({
     this.id = const Value.absent(),
     this.location = const Value.absent(),
     this.description = const Value.absent(),
@@ -1732,7 +1735,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
     this.isCompleted = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  ToDoTableCompanion.insert({
+  TodoTableCompanion.insert({
     required String id,
     required String location,
     required String description,
@@ -1746,7 +1749,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
         categoryType = Value(categoryType),
         dueTo = Value(dueTo),
         isCompleted = Value(isCompleted);
-  static Insertable<ToDo> custom({
+  static Insertable<Todo> custom({
     Expression<String>? id,
     Expression<String>? location,
     Expression<String>? description,
@@ -1766,7 +1769,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
     });
   }
 
-  ToDoTableCompanion copyWith(
+  TodoTableCompanion copyWith(
       {Value<String>? id,
       Value<String>? location,
       Value<String>? description,
@@ -1774,7 +1777,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
       Value<DateTime>? dueTo,
       Value<bool>? isCompleted,
       Value<int>? rowid}) {
-    return ToDoTableCompanion(
+    return TodoTableCompanion(
       id: id ?? this.id,
       location: location ?? this.location,
       description: description ?? this.description,
@@ -1799,7 +1802,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
     }
     if (categoryType.present) {
       map['category_type'] = Variable<int>(
-          $ToDoTableTable.$convertercategoryType.toSql(categoryType.value));
+          $TodoTableTable.$convertercategoryType.toSql(categoryType.value));
     }
     if (dueTo.present) {
       map['due_to'] = Variable<DateTime>(dueTo.value);
@@ -1815,7 +1818,7 @@ class ToDoTableCompanion extends UpdateCompanion<ToDo> {
 
   @override
   String toString() {
-    return (StringBuffer('ToDoTableCompanion(')
+    return (StringBuffer('TodoTableCompanion(')
           ..write('id: $id, ')
           ..write('location: $location, ')
           ..write('description: $description, ')
@@ -2051,9 +2054,12 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   late final $TextEntryTableTable textEntryTable = $TextEntryTableTable(this);
   late final $NumericEntryTableTable numericEntryTable =
       $NumericEntryTableTable(this);
-  late final $ToDoTableTable toDoTable = $ToDoTableTable(this);
+  late final $TodoTableTable todoTable = $TodoTableTable(this);
   late final $HistoryLogTableTable historyLogTable =
       $HistoryLogTableTable(this);
+  late final ApiaryDao apiaryDao = ApiaryDao(this as DriftAppDatabase);
+  late final HiveDao hiveDao = HiveDao(this as DriftAppDatabase);
+  late final TodoDao todoDao = TodoDao(this as DriftAppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2067,7 +2073,7 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
         booleanEntryTable,
         textEntryTable,
         numericEntryTable,
-        toDoTable,
+        todoTable,
         historyLogTable
       ];
 }
@@ -2484,7 +2490,7 @@ typedef $$HiveTableTableCreateCompanionBuilder = HiveTableCompanion Function({
   required int order,
   required String type,
   Value<String?> queenId,
-  Value<String?> apiaryId,
+  required String apiaryId,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -2494,7 +2500,7 @@ typedef $$HiveTableTableUpdateCompanionBuilder = HiveTableCompanion Function({
   Value<int> order,
   Value<String> type,
   Value<String?> queenId,
-  Value<String?> apiaryId,
+  Value<String> apiaryId,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -2692,7 +2698,7 @@ class $$HiveTableTableTableManager extends RootTableManager<
             Value<int> order = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<String?> queenId = const Value.absent(),
-            Value<String?> apiaryId = const Value.absent(),
+            Value<String> apiaryId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -2712,7 +2718,7 @@ class $$HiveTableTableTableManager extends RootTableManager<
             required int order,
             required String type,
             Value<String?> queenId = const Value.absent(),
-            Value<String?> apiaryId = const Value.absent(),
+            required String apiaryId,
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4204,7 +4210,7 @@ typedef $$NumericEntryTableTableProcessedTableManager = ProcessedTableManager<
     (NumericEntry, $$NumericEntryTableTableReferences),
     NumericEntry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
-typedef $$ToDoTableTableCreateCompanionBuilder = ToDoTableCompanion Function({
+typedef $$TodoTableTableCreateCompanionBuilder = TodoTableCompanion Function({
   required String id,
   required String location,
   required String description,
@@ -4213,7 +4219,7 @@ typedef $$ToDoTableTableCreateCompanionBuilder = ToDoTableCompanion Function({
   required bool isCompleted,
   Value<int> rowid,
 });
-typedef $$ToDoTableTableUpdateCompanionBuilder = ToDoTableCompanion Function({
+typedef $$TodoTableTableUpdateCompanionBuilder = TodoTableCompanion Function({
   Value<String> id,
   Value<String> location,
   Value<String> description,
@@ -4223,9 +4229,9 @@ typedef $$ToDoTableTableUpdateCompanionBuilder = ToDoTableCompanion Function({
   Value<int> rowid,
 });
 
-class $$ToDoTableTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $ToDoTableTable> {
-  $$ToDoTableTableFilterComposer(super.$state);
+class $$TodoTableTableFilterComposer
+    extends FilterComposer<_$DriftAppDatabase, $TodoTableTable> {
+  $$TodoTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -4259,9 +4265,9 @@ class $$ToDoTableTableFilterComposer
           ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
-class $$ToDoTableTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $ToDoTableTable> {
-  $$ToDoTableTableOrderingComposer(super.$state);
+class $$TodoTableTableOrderingComposer
+    extends OrderingComposer<_$DriftAppDatabase, $TodoTableTable> {
+  $$TodoTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -4293,25 +4299,25 @@ class $$ToDoTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $$ToDoTableTableTableManager extends RootTableManager<
+class $$TodoTableTableTableManager extends RootTableManager<
     _$DriftAppDatabase,
-    $ToDoTableTable,
-    ToDo,
-    $$ToDoTableTableFilterComposer,
-    $$ToDoTableTableOrderingComposer,
-    $$ToDoTableTableCreateCompanionBuilder,
-    $$ToDoTableTableUpdateCompanionBuilder,
-    (ToDo, BaseReferences<_$DriftAppDatabase, $ToDoTableTable, ToDo>),
-    ToDo,
+    $TodoTableTable,
+    Todo,
+    $$TodoTableTableFilterComposer,
+    $$TodoTableTableOrderingComposer,
+    $$TodoTableTableCreateCompanionBuilder,
+    $$TodoTableTableUpdateCompanionBuilder,
+    (Todo, BaseReferences<_$DriftAppDatabase, $TodoTableTable, Todo>),
+    Todo,
     PrefetchHooks Function()> {
-  $$ToDoTableTableTableManager(_$DriftAppDatabase db, $ToDoTableTable table)
+  $$TodoTableTableTableManager(_$DriftAppDatabase db, $TodoTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer:
-              $$ToDoTableTableFilterComposer(ComposerState(db, table)),
+              $$TodoTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
-              $$ToDoTableTableOrderingComposer(ComposerState(db, table)),
+              $$TodoTableTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> location = const Value.absent(),
@@ -4321,7 +4327,7 @@ class $$ToDoTableTableTableManager extends RootTableManager<
             Value<bool> isCompleted = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              ToDoTableCompanion(
+              TodoTableCompanion(
             id: id,
             location: location,
             description: description,
@@ -4339,7 +4345,7 @@ class $$ToDoTableTableTableManager extends RootTableManager<
             required bool isCompleted,
             Value<int> rowid = const Value.absent(),
           }) =>
-              ToDoTableCompanion.insert(
+              TodoTableCompanion.insert(
             id: id,
             location: location,
             description: description,
@@ -4355,16 +4361,16 @@ class $$ToDoTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$ToDoTableTableProcessedTableManager = ProcessedTableManager<
+typedef $$TodoTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftAppDatabase,
-    $ToDoTableTable,
-    ToDo,
-    $$ToDoTableTableFilterComposer,
-    $$ToDoTableTableOrderingComposer,
-    $$ToDoTableTableCreateCompanionBuilder,
-    $$ToDoTableTableUpdateCompanionBuilder,
-    (ToDo, BaseReferences<_$DriftAppDatabase, $ToDoTableTable, ToDo>),
-    ToDo,
+    $TodoTableTable,
+    Todo,
+    $$TodoTableTableFilterComposer,
+    $$TodoTableTableOrderingComposer,
+    $$TodoTableTableCreateCompanionBuilder,
+    $$TodoTableTableUpdateCompanionBuilder,
+    (Todo, BaseReferences<_$DriftAppDatabase, $TodoTableTable, Todo>),
+    Todo,
     PrefetchHooks Function()>;
 typedef $$HistoryLogTableTableCreateCompanionBuilder = HistoryLogTableCompanion
     Function({
@@ -4543,8 +4549,8 @@ class $DriftAppDatabaseManager {
       $$TextEntryTableTableTableManager(_db, _db.textEntryTable);
   $$NumericEntryTableTableTableManager get numericEntryTable =>
       $$NumericEntryTableTableTableManager(_db, _db.numericEntryTable);
-  $$ToDoTableTableTableManager get toDoTable =>
-      $$ToDoTableTableTableManager(_db, _db.toDoTable);
+  $$TodoTableTableTableManager get todoTable =>
+      $$TodoTableTableTableManager(_db, _db.todoTable);
   $$HistoryLogTableTableTableManager get historyLogTable =>
       $$HistoryLogTableTableTableManager(_db, _db.historyLogTable);
 }

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_note/dashboard/bloc/bloc/dashboard_bloc.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var s = context.watch<DashboardBloc>().state;
   return Scaffold(
     body: Center(
-      child: Text(s.toString()),
+
     ),
   );
 }

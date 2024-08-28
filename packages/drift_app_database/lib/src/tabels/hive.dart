@@ -9,7 +9,7 @@ class HiveTable extends Table {
   IntColumn get order => integer()();
   TextColumn get type => text().withLength(max: 32)(); //Langstroth, Top Bar, Warre
   TextColumn get queenId => text().nullable().references(QueenTable, #id)();
-  TextColumn get apiaryId => text().nullable().references(ApiaryTable, #id)();
+  TextColumn get apiaryId => text().references(ApiaryTable, #id)();
 
   DateTimeColumn get createdAt => dateTime()();
 
