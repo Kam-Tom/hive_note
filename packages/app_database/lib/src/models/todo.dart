@@ -20,7 +20,7 @@ class Todo extends Equatable {
     required DateTime dueTo,
   })  : id = id ?? Uuid().v4(),
         dueTo = dueTo.copyWith(millisecond: 0, microsecond: 0),
-        isCompleted = isCompleted?? false;
+        isCompleted = isCompleted ?? false;
 
   Todo copyWith({
     String? location,
@@ -34,7 +34,7 @@ class Todo extends Equatable {
       location: location ?? this.location,
       description: description ?? this.description,
       categoryType: categoryType ?? this.categoryType,
-      isCompleted: this.isCompleted,
+      isCompleted: isCompleted ?? this.isCompleted,
       dueTo: dueTo ?? this.dueTo,
     );
   }
@@ -46,11 +46,12 @@ class Todo extends Equatable {
 enum CategoryType {
   feeding,
   inspection,
+  treatment,
   harvest,
-  wintering,
+  winterize,
   sell,
   buy,
-  requeen,
+  queen,
   other,
 
 }

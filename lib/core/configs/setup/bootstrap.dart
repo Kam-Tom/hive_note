@@ -21,6 +21,7 @@ void bootstrap() {
   final DriftAppDatabase database = DriftAppDatabase();
 
   final todoRepository = TodoRepository(database);
+  final apiaryRepository = ApiaryRepository(database);
   
   runZonedGuarded(
     () async {
@@ -32,7 +33,10 @@ void bootstrap() {
         supportedLocales: const [Locale('en'), Locale('pl')],
         path: 'assets/translations',
         fallbackLocale: const Locale('en', 'US'),
-        child: MyApp(todoRepository: todoRepository),
+        child: MyApp(
+          todoRepository: todoRepository,
+          apiaryRepository: apiaryRepository,
+          ),
       ));
     },
     (error, stackTrace) => logger.e(error.toString(), stackTrace: stackTrace),

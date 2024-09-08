@@ -80,4 +80,7 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
 
   @override
   Stream<List<Todo>> watchTodos() => todoDao.watchTodos();
+  
+  @override
+  Stream<List<Todo>> watchNotCompletedTodos() => todoDao.watchNotCompletedTodos();
 }

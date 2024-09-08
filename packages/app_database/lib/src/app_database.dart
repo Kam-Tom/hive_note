@@ -2,6 +2,7 @@ import 'package:app_database/app_database.dart';
 
 abstract class AppDatabase {
   Stream<List<Todo>> watchTodos();
+  Stream<List<Todo>> watchNotCompletedTodos();
   Stream<List<Apiary>> watchApiaries();
 
   Future<void> insertApiary(Apiary apiary);

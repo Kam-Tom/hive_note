@@ -1,3 +1,28 @@
 {
-    "test": "english"
+    "test": "english",
+    "apiaries": "Apiaries",
+    "statistics": "Statistics",
+    "records": "Records",
+    "calendar": "Calendar",
+    "complete_todo": "Task completed 😊",
+    "todos_load_failed": "Failed to load tasks",
+    "no_todos": "No Tasks yet",
+    "tap_to_add_todo": "Tap to add your new task",
+    "apiaries_load_failed": "Failed to load apiaries",
+    "no_apiaries": "No apiaries added",
+    "tap_to_add_apiary": "Tap to add a new apiary",
+    "tap_to_retry": "Tap to retry",
+    "loading": "Loading...",
+    "todo_completed": "Task completed",
+    "todo_pending": "Task pending",
+
+    "feeding": "Feeding",
+    "inspection": "Inspection",
+    "treatment": "Treatment",
+    "harvest": "Harvest",
+    "winterize": "Winterize",
+    "sell": "Sell",
+    "buy": "Buy",
+    "queen": "Queen",
+    "other": "Other"
 }

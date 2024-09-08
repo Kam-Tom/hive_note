@@ -18,9 +18,7 @@ class $ApiaryTableTable extends ApiaryTable
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _latitudeMeta =
       const VerificationMeta('latitude');
   @override
@@ -1613,7 +1611,7 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, Todo> {
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
       'description', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 128),
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 256),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _categoryTypeMeta =

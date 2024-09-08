@@ -1,4 +1,29 @@
-
 {
-    "test": "polski"
+    "test": "polski",
+    "apiaries": "Pasieki",
+    "statistics": "Statystyki",
+    "records": "Rekordy",
+    "calendar": "Kalendarz",
+    "complete_todo": "Zadanie wykonane 😊",
+    "todos_load_failed": "Nie udało się wczytać zadań",
+    "no_todos": "Brak zadań do wykonania",
+    "tap_to_add_todo": "Dotknij, aby dodać nowe zadanie",
+    "apiaries_load_failed": "Błąd wczytywania pasiek",
+    "no_apiaries": "Brak pasiek",
+    "tap_to_add_apiary": "Dotknij, aby dodać pasiekę",
+    "tap_to_retry": "Dotknij, aby spróbować ponownie",
+    "loading": "Wczytywanie...",
+    "todo_completed": "Zadanie wykonane",
+    "todo_pending": "Zadanie oczekujące",
+    
+    "feeding": "Karmienie",
+    "inspection": "Inspekcja",
+    "treatment": "Leczenie",
+    "harvest": "Miodobranie",
+    "winterize": "Zimowanie",
+    "sell": "Sprzedaż",
+    "buy": "Zakup",
+    "queen": "Królowa",
+    "other": "Inne"
+    
 }

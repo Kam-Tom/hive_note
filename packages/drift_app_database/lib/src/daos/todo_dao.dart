@@ -12,6 +12,8 @@ class TodoDao extends DatabaseAccessor<DriftAppDatabase> with _$TodoDaoMixin {
 
   Stream<List<Todo>> watchTodos() => select(todoTable).watch();
 
+  Stream<List<Todo>> watchNotCompletedTodos() => (select(todoTable)..where((t) => t.isCompleted.equals(false))).watch();
+
   Future insertTodo(Todo todo) => into(todoTable).insert(todo.toCompanion());
 
   Future updateTodo(Todo todo) => update(todoTable).replace(todo.toCompanion());

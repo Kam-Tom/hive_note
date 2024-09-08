@@ -7,4 +7,7 @@ class ApiaryRepository {
   
   Stream<List<Apiary>> watchApiaries() => _database.watchApiaries();
   
+  Future insertApiary(Apiary apiary) => _database.insertApiary(apiary);
+  
+  Future insertHive(Hive hive) => _database.insertHive(hive);
 }

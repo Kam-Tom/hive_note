@@ -7,7 +7,12 @@ import 'package:repositories/repositories.dart';
 
 class MyApp extends StatelessWidget {
   final TodoRepository todoRepository;
-  const MyApp({super.key, required this.todoRepository});
+  final ApiaryRepository apiaryRepository;
+  const MyApp({
+    super.key, 
+    required this.todoRepository,
+    required this.apiaryRepository
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       home: MultiRepositoryProvider(providers: [
-        RepositoryProvider(create: (context) => todoRepository)
+        RepositoryProvider(create: (context) => todoRepository),
+        RepositoryProvider(create: (context) => apiaryRepository),
       ], 
       child: const DashboardPage())
     );

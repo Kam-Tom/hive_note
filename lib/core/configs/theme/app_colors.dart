@@ -16,6 +16,8 @@ class AppColors {
 
   static const divider = Color(0xFFC7C0BE); 
 
+  static const failure = Color(0xFFE73F33); 
+
   static const white = Color(0xFFFFFFFF); 
   static const black = Color(0xFF000000); 
 }

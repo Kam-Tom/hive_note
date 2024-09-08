@@ -15,5 +15,10 @@ class AppVectors {
   static const String history = '${_basePath}history$_format';
   static const String other = '${_basePath}other$_format';
   static const String treatment = '${_basePath}treatment$_format';
-
+  
+  static const String inspection = '${_basePath}inspection$_format';
+  static const String winterize = '${_basePath}winterize$_format';
+  static const String sell = '${_basePath}sell$_format';
+  static const String buy = '${_basePath}buy$_format';
+  static const String queen = '${_basePath}queen$_format';
 }

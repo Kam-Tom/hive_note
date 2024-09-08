@@ -42,6 +42,8 @@ dependencies:
   equatable:
   easy_localization:
   logger:
+  rxdart: ^0.28.0
+  fluttertoast: ^8.2.8
 
   drift_app_database:
     path: packages/drift_app_database  

@@ -7,7 +7,7 @@ import 'package:hive_note/navigation/presentation/pages/harvest.dart';
 import 'package:hive_note/navigation/presentation/pages/history.dart';
 import 'package:hive_note/navigation/presentation/pages/other.dart';
 import 'package:hive_note/navigation/presentation/pages/treatment.dart';
-import 'package:hive_note/navigation/presentation/widgets/menu_button.dart';
+import 'package:hive_note/shared/presentation/widgets/menu_button.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
 
