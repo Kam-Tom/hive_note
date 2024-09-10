@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_note/ManageApiaries/presentation/manage_apiaries_page.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/dashboard/bloc/dashboard_blocs.dart';
@@ -188,7 +189,7 @@ class _Buttons extends StatelessWidget {
           children: [
             _buildMenuButtonRow(
               buttons: [
-                _buildMenuButton(AppVectors.apiary, "apiaries".tr(), const TMPPage()),
+                _buildMenuButton(AppVectors.apiary, "apiaries".tr(), const ManageApiariesPage()),
                 _buildMenuButton(AppVectors.statistics, "statistics".tr(), const TMPPage()),
               ],
             ),
