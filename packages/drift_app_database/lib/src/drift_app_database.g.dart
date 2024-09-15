@@ -18,19 +18,29 @@ class $ApiaryTableTable extends ApiaryTable
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _latitudeMeta =
-      const VerificationMeta('latitude');
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
-  late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
-      'latitude', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _longitudeMeta =
-      const VerificationMeta('longitude');
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _colorValueMeta =
+      const VerificationMeta('colorValue');
   @override
-  late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
-      'longitude', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
+  late final GeneratedColumn<int> colorValue = GeneratedColumn<int>(
+      'color_value', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -39,7 +49,7 @@ class $ApiaryTableTable extends ApiaryTable
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, latitude, longitude, createdAt];
+      [id, name, order, colorValue, isActive, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -61,13 +71,25 @@ class $ApiaryTableTable extends ApiaryTable
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('latitude')) {
-      context.handle(_latitudeMeta,
-          latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta));
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
     }
-    if (data.containsKey('longitude')) {
-      context.handle(_longitudeMeta,
-          longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta));
+    if (data.containsKey('color_value')) {
+      context.handle(
+          _colorValueMeta,
+          colorValue.isAcceptableOrUnknown(
+              data['color_value']!, _colorValueMeta));
+    } else if (isInserting) {
+      context.missing(_colorValueMeta);
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    } else if (isInserting) {
+      context.missing(_isActiveMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -88,10 +110,12 @@ class $ApiaryTableTable extends ApiaryTable
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      latitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}latitude']),
-      longitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}longitude']),
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      colorValue: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color_value'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -106,41 +130,49 @@ class $ApiaryTableTable extends ApiaryTable
 class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
   final Value<String> id;
   final Value<String> name;
-  final Value<double?> latitude;
-  final Value<double?> longitude;
+  final Value<int> order;
+  final Value<int> colorValue;
+  final Value<bool> isActive;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const ApiaryTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.latitude = const Value.absent(),
-    this.longitude = const Value.absent(),
+    this.order = const Value.absent(),
+    this.colorValue = const Value.absent(),
+    this.isActive = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ApiaryTableCompanion.insert({
     required String id,
     required String name,
-    this.latitude = const Value.absent(),
-    this.longitude = const Value.absent(),
+    required int order,
+    required int colorValue,
+    required bool isActive,
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
+        order = Value(order),
+        colorValue = Value(colorValue),
+        isActive = Value(isActive),
         createdAt = Value(createdAt);
   static Insertable<Apiary> custom({
     Expression<String>? id,
     Expression<String>? name,
-    Expression<double>? latitude,
-    Expression<double>? longitude,
+    Expression<int>? order,
+    Expression<int>? colorValue,
+    Expression<bool>? isActive,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      if (order != null) 'order': order,
+      if (colorValue != null) 'color_value': colorValue,
+      if (isActive != null) 'is_active': isActive,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -149,15 +181,17 @@ class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
   ApiaryTableCompanion copyWith(
       {Value<String>? id,
       Value<String>? name,
-      Value<double?>? latitude,
-      Value<double?>? longitude,
+      Value<int>? order,
+      Value<int>? colorValue,
+      Value<bool>? isActive,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return ApiaryTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
+      order: order ?? this.order,
+      colorValue: colorValue ?? this.colorValue,
+      isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -172,11 +206,14 @@ class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (latitude.present) {
-      map['latitude'] = Variable<double>(latitude.value);
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
     }
-    if (longitude.present) {
-      map['longitude'] = Variable<double>(longitude.value);
+    if (colorValue.present) {
+      map['color_value'] = Variable<int>(colorValue.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -192,8 +229,9 @@ class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
     return (StringBuffer('ApiaryTableCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('latitude: $latitude, ')
-          ..write('longitude: $longitude, ')
+          ..write('order: $order, ')
+          ..write('colorValue: $colorValue, ')
+          ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -444,17 +482,17 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
       'queen_id', aliasedName, true,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES queen_table (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES queen_table (id) ON DELETE SET NULL'));
   static const VerificationMeta _apiaryIdMeta =
       const VerificationMeta('apiaryId');
   @override
   late final GeneratedColumn<String> apiaryId = GeneratedColumn<String>(
-      'apiary_id', aliasedName, false,
+      'apiary_id', aliasedName, true,
       type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES apiary_table (id)'));
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES apiary_table (id) ON DELETE SET NULL'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -504,8 +542,6 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
     if (data.containsKey('apiary_id')) {
       context.handle(_apiaryIdMeta,
           apiaryId.isAcceptableOrUnknown(data['apiary_id']!, _apiaryIdMeta));
-    } else if (isInserting) {
-      context.missing(_apiaryIdMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -527,7 +563,7 @@ class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
       queenId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}queen_id']),
       apiaryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
       type: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
       name: attachedDatabase.typeMapping
@@ -551,7 +587,7 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
   final Value<int> order;
   final Value<String> type;
   final Value<String?> queenId;
-  final Value<String> apiaryId;
+  final Value<String?> apiaryId;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const HiveTableCompanion({
@@ -570,14 +606,13 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
     required int order,
     required String type,
     this.queenId = const Value.absent(),
-    required String apiaryId,
+    this.apiaryId = const Value.absent(),
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
         order = Value(order),
         type = Value(type),
-        apiaryId = Value(apiaryId),
         createdAt = Value(createdAt);
   static Insertable<Hive> custom({
     Expression<String>? id,
@@ -607,7 +642,7 @@ class HiveTableCompanion extends UpdateCompanion<Hive> {
       Value<int>? order,
       Value<String>? type,
       Value<String?>? queenId,
-      Value<String>? apiaryId,
+      Value<String?>? apiaryId,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return HiveTableCompanion(
@@ -687,6 +722,15 @@ class $RaportTableTable extends RaportTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES hive_table (id)'));
+  static const VerificationMeta _apiaryIdMeta =
+      const VerificationMeta('apiaryId');
+  @override
+  late final GeneratedColumn<String> apiaryId = GeneratedColumn<String>(
+      'apiary_id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES apiary_table (id)'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -694,7 +738,7 @@ class $RaportTableTable extends RaportTable
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, hiveId, createdAt];
+  List<GeneratedColumn> get $columns => [id, hiveId, apiaryId, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -713,6 +757,10 @@ class $RaportTableTable extends RaportTable
     if (data.containsKey('hive_id')) {
       context.handle(_hiveIdMeta,
           hiveId.isAcceptableOrUnknown(data['hive_id']!, _hiveIdMeta));
+    }
+    if (data.containsKey('apiary_id')) {
+      context.handle(_apiaryIdMeta,
+          apiaryId.isAcceptableOrUnknown(data['apiary_id']!, _apiaryIdMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -733,6 +781,8 @@ class $RaportTableTable extends RaportTable
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       hiveId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}hive_id']),
+      apiaryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -747,17 +797,20 @@ class $RaportTableTable extends RaportTable
 class RaportTableCompanion extends UpdateCompanion<Raport> {
   final Value<String> id;
   final Value<String?> hiveId;
+  final Value<String?> apiaryId;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const RaportTableCompanion({
     this.id = const Value.absent(),
     this.hiveId = const Value.absent(),
+    this.apiaryId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RaportTableCompanion.insert({
     required String id,
     this.hiveId = const Value.absent(),
+    this.apiaryId = const Value.absent(),
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -765,12 +818,14 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
   static Insertable<Raport> custom({
     Expression<String>? id,
     Expression<String>? hiveId,
+    Expression<String>? apiaryId,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (hiveId != null) 'hive_id': hiveId,
+      if (apiaryId != null) 'apiary_id': apiaryId,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -779,11 +834,13 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
   RaportTableCompanion copyWith(
       {Value<String>? id,
       Value<String?>? hiveId,
+      Value<String?>? apiaryId,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return RaportTableCompanion(
       id: id ?? this.id,
       hiveId: hiveId ?? this.hiveId,
+      apiaryId: apiaryId ?? this.apiaryId,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -797,6 +854,9 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
     }
     if (hiveId.present) {
       map['hive_id'] = Variable<String>(hiveId.value);
+    }
+    if (apiaryId.present) {
+      map['apiary_id'] = Variable<String>(apiaryId.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -812,6 +872,7 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
     return (StringBuffer('RaportTableCompanion(')
           ..write('id: $id, ')
           ..write('hiveId: $hiveId, ')
+          ..write('apiaryId: $apiaryId, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -2074,14 +2135,34 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
         todoTable,
         historyLogTable
       ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('queen_table',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('hive_table', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('apiary_table',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('hive_table', kind: UpdateKind.update),
+            ],
+          ),
+        ],
+      );
 }
 
 typedef $$ApiaryTableTableCreateCompanionBuilder = ApiaryTableCompanion
     Function({
   required String id,
   required String name,
-  Value<double?> latitude,
-  Value<double?> longitude,
+  required int order,
+  required int colorValue,
+  required bool isActive,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -2089,8 +2170,9 @@ typedef $$ApiaryTableTableUpdateCompanionBuilder = ApiaryTableCompanion
     Function({
   Value<String> id,
   Value<String> name,
-  Value<double?> latitude,
-  Value<double?> longitude,
+  Value<int> order,
+  Value<int> colorValue,
+  Value<bool> isActive,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -2113,6 +2195,21 @@ final class $$ApiaryTableTableReferences
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$RaportTableTable, List<Raport>>
+      _raportTableRefsTable(_$DriftAppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.raportTable,
+              aliasName: $_aliasNameGenerator(
+                  db.apiaryTable.id, db.raportTable.apiaryId));
+
+  $$RaportTableTableProcessedTableManager get raportTableRefs {
+    final manager = $$RaportTableTableTableManager($_db, $_db.raportTable)
+        .filter((f) => f.apiaryId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_raportTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ApiaryTableTableFilterComposer
@@ -2128,13 +2225,18 @@ class $$ApiaryTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<double> get latitude => $state.composableBuilder(
-      column: $state.table.latitude,
+  ColumnFilters<int> get order => $state.composableBuilder(
+      column: $state.table.order,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<double> get longitude => $state.composableBuilder(
-      column: $state.table.longitude,
+  ColumnFilters<int> get colorValue => $state.composableBuilder(
+      column: $state.table.colorValue,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isActive => $state.composableBuilder(
+      column: $state.table.isActive,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2155,6 +2257,19 @@ class $$ApiaryTableTableFilterComposer
                 $state.db, $state.db.hiveTable, joinBuilder, parentComposers)));
     return f(composer);
   }
+
+  ComposableFilter raportTableRefs(
+      ComposableFilter Function($$RaportTableTableFilterComposer f) f) {
+    final $$RaportTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.raportTable,
+        getReferencedColumn: (t) => t.apiaryId,
+        builder: (joinBuilder, parentComposers) =>
+            $$RaportTableTableFilterComposer(ComposerState($state.db,
+                $state.db.raportTable, joinBuilder, parentComposers)));
+    return f(composer);
+  }
 }
 
 class $$ApiaryTableTableOrderingComposer
@@ -2170,13 +2285,18 @@ class $$ApiaryTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<double> get latitude => $state.composableBuilder(
-      column: $state.table.latitude,
+  ColumnOrderings<int> get order => $state.composableBuilder(
+      column: $state.table.order,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<double> get longitude => $state.composableBuilder(
-      column: $state.table.longitude,
+  ColumnOrderings<int> get colorValue => $state.composableBuilder(
+      column: $state.table.colorValue,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isActive => $state.composableBuilder(
+      column: $state.table.isActive,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2196,7 +2316,7 @@ class $$ApiaryTableTableTableManager extends RootTableManager<
     $$ApiaryTableTableUpdateCompanionBuilder,
     (Apiary, $$ApiaryTableTableReferences),
     Apiary,
-    PrefetchHooks Function({bool hiveTableRefs})> {
+    PrefetchHooks Function({bool hiveTableRefs, bool raportTableRefs})> {
   $$ApiaryTableTableTableManager(_$DriftAppDatabase db, $ApiaryTableTable table)
       : super(TableManagerState(
           db: db,
@@ -2208,32 +2328,36 @@ class $$ApiaryTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
-            Value<double?> latitude = const Value.absent(),
-            Value<double?> longitude = const Value.absent(),
+            Value<int> order = const Value.absent(),
+            Value<int> colorValue = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               ApiaryTableCompanion(
             id: id,
             name: name,
-            latitude: latitude,
-            longitude: longitude,
+            order: order,
+            colorValue: colorValue,
+            isActive: isActive,
             createdAt: createdAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String id,
             required String name,
-            Value<double?> latitude = const Value.absent(),
-            Value<double?> longitude = const Value.absent(),
+            required int order,
+            required int colorValue,
+            required bool isActive,
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               ApiaryTableCompanion.insert(
             id: id,
             name: name,
-            latitude: latitude,
-            longitude: longitude,
+            order: order,
+            colorValue: colorValue,
+            isActive: isActive,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -2243,10 +2367,14 @@ class $$ApiaryTableTableTableManager extends RootTableManager<
                     $$ApiaryTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({hiveTableRefs = false}) {
+          prefetchHooksCallback: (
+              {hiveTableRefs = false, raportTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (hiveTableRefs) db.hiveTable],
+              explicitlyWatchedTables: [
+                if (hiveTableRefs) db.hiveTable,
+                if (raportTableRefs) db.raportTable
+              ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
@@ -2258,6 +2386,18 @@ class $$ApiaryTableTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$ApiaryTableTableReferences(db, table, p0)
                                 .hiveTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.apiaryId == item.id),
+                        typedResults: items),
+                  if (raportTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ApiaryTableTableReferences
+                            ._raportTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ApiaryTableTableReferences(db, table, p0)
+                                .raportTableRefs,
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.apiaryId == item.id),
@@ -2279,7 +2419,7 @@ typedef $$ApiaryTableTableProcessedTableManager = ProcessedTableManager<
     $$ApiaryTableTableUpdateCompanionBuilder,
     (Apiary, $$ApiaryTableTableReferences),
     Apiary,
-    PrefetchHooks Function({bool hiveTableRefs})>;
+    PrefetchHooks Function({bool hiveTableRefs, bool raportTableRefs})>;
 typedef $$QueenTableTableCreateCompanionBuilder = QueenTableCompanion Function({
   required String id,
   required String breed,
@@ -2488,7 +2628,7 @@ typedef $$HiveTableTableCreateCompanionBuilder = HiveTableCompanion Function({
   required int order,
   required String type,
   Value<String?> queenId,
-  required String apiaryId,
+  Value<String?> apiaryId,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -2498,7 +2638,7 @@ typedef $$HiveTableTableUpdateCompanionBuilder = HiveTableCompanion Function({
   Value<int> order,
   Value<String> type,
   Value<String?> queenId,
-  Value<String> apiaryId,
+  Value<String?> apiaryId,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -2696,7 +2836,7 @@ class $$HiveTableTableTableManager extends RootTableManager<
             Value<int> order = const Value.absent(),
             Value<String> type = const Value.absent(),
             Value<String?> queenId = const Value.absent(),
-            Value<String> apiaryId = const Value.absent(),
+            Value<String?> apiaryId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -2716,7 +2856,7 @@ class $$HiveTableTableTableManager extends RootTableManager<
             required int order,
             required String type,
             Value<String?> queenId = const Value.absent(),
-            required String apiaryId,
+            Value<String?> apiaryId = const Value.absent(),
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -2813,6 +2953,7 @@ typedef $$RaportTableTableCreateCompanionBuilder = RaportTableCompanion
     Function({
   required String id,
   Value<String?> hiveId,
+  Value<String?> apiaryId,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -2820,6 +2961,7 @@ typedef $$RaportTableTableUpdateCompanionBuilder = RaportTableCompanion
     Function({
   Value<String> id,
   Value<String?> hiveId,
+  Value<String?> apiaryId,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -2837,6 +2979,20 @@ final class $$RaportTableTableReferences
     final manager = $$HiveTableTableTableManager($_db, $_db.hiveTable)
         .filter((f) => f.id($_item.hiveId!));
     final item = $_typedResult.readTableOrNull(_hiveIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ApiaryTableTable _apiaryIdTable(_$DriftAppDatabase db) =>
+      db.apiaryTable.createAlias(
+          $_aliasNameGenerator(db.raportTable.apiaryId, db.apiaryTable.id));
+
+  $$ApiaryTableTableProcessedTableManager? get apiaryId {
+    if ($_item.apiaryId == null) return null;
+    final manager = $$ApiaryTableTableTableManager($_db, $_db.apiaryTable)
+        .filter((f) => f.id($_item.apiaryId!));
+    final item = $_typedResult.readTableOrNull(_apiaryIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
@@ -2917,6 +3073,18 @@ class $$RaportTableTableFilterComposer
     return composer;
   }
 
+  $$ApiaryTableTableFilterComposer get apiaryId {
+    final $$ApiaryTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.apiaryId,
+        referencedTable: $state.db.apiaryTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ApiaryTableTableFilterComposer(ComposerState($state.db,
+                $state.db.apiaryTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+
   ComposableFilter booleanEntryTableRefs(
       ComposableFilter Function($$BooleanEntryTableTableFilterComposer f) f) {
     final $$BooleanEntryTableTableFilterComposer composer =
@@ -2989,6 +3157,18 @@ class $$RaportTableTableOrderingComposer
                 $state.db, $state.db.hiveTable, joinBuilder, parentComposers)));
     return composer;
   }
+
+  $$ApiaryTableTableOrderingComposer get apiaryId {
+    final $$ApiaryTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.apiaryId,
+        referencedTable: $state.db.apiaryTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ApiaryTableTableOrderingComposer(ComposerState($state.db,
+                $state.db.apiaryTable, joinBuilder, parentComposers)));
+    return composer;
+  }
 }
 
 class $$RaportTableTableTableManager extends RootTableManager<
@@ -3003,6 +3183,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
     Raport,
     PrefetchHooks Function(
         {bool hiveId,
+        bool apiaryId,
         bool booleanEntryTableRefs,
         bool textEntryTableRefs,
         bool numericEntryTableRefs})> {
@@ -3017,24 +3198,28 @@ class $$RaportTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String?> hiveId = const Value.absent(),
+            Value<String?> apiaryId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               RaportTableCompanion(
             id: id,
             hiveId: hiveId,
+            apiaryId: apiaryId,
             createdAt: createdAt,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String id,
             Value<String?> hiveId = const Value.absent(),
+            Value<String?> apiaryId = const Value.absent(),
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
               RaportTableCompanion.insert(
             id: id,
             hiveId: hiveId,
+            apiaryId: apiaryId,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -3046,6 +3231,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
               .toList(),
           prefetchHooksCallback: (
               {hiveId = false,
+              apiaryId = false,
               booleanEntryTableRefs = false,
               textEntryTableRefs = false,
               numericEntryTableRefs = false}) {
@@ -3076,6 +3262,16 @@ class $$RaportTableTableTableManager extends RootTableManager<
                         $$RaportTableTableReferences._hiveIdTable(db),
                     referencedColumn:
                         $$RaportTableTableReferences._hiveIdTable(db).id,
+                  ) as T;
+                }
+                if (apiaryId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.apiaryId,
+                    referencedTable:
+                        $$RaportTableTableReferences._apiaryIdTable(db),
+                    referencedColumn:
+                        $$RaportTableTableReferences._apiaryIdTable(db).id,
                   ) as T;
                 }
 
@@ -3138,6 +3334,7 @@ typedef $$RaportTableTableProcessedTableManager = ProcessedTableManager<
     Raport,
     PrefetchHooks Function(
         {bool hiveId,
+        bool apiaryId,
         bool booleanEntryTableRefs,
         bool textEntryTableRefs,
         bool numericEntryTableRefs})>;

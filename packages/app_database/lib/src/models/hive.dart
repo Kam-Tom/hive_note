@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 class Hive extends Equatable {
   final String id;
   final String? queenId;
-  final String apiaryId;
+  final String? apiaryId;
   final String type; //Langstroth, Top Bar, Warre
   final String name;
   final int order; //order in apiary
@@ -15,7 +15,7 @@ class Hive extends Equatable {
   Hive({
     String? id,
     this.queenId,
-    required this.apiaryId,
+    this.apiaryId,
     required this.type,
     required this.name,
     required this.order,

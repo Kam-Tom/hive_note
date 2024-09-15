@@ -6,6 +6,7 @@ import 'package:drift_app_database/src/tabels/tabels.dart';
 class RaportTable extends Table{
   TextColumn get id => text()();
   TextColumn get hiveId => text().nullable().references(HiveTable, #id)();
+  TextColumn get apiaryId => text().nullable().references(ApiaryTable, #id)();
   DateTimeColumn get createdAt => dateTime()();
 
   @override

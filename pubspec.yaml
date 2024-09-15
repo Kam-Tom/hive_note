@@ -44,7 +44,10 @@ dependencies:
   logger:
   rxdart: ^0.28.0
   fluttertoast: ^8.2.8
-
+  reorderable_grid: ^1.0.10
+  go_router: ^14.2.7
+  uuid: ^4.4.2
+  
   drift_app_database:
     path: packages/drift_app_database  
   repositories:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
+import 'package:hive_note/core/configs/setup/app_router.dart';
 import 'package:hive_note/navigation/presentation/pages/feeding.dart';
 import 'package:hive_note/navigation/presentation/pages/finances.dart';
 import 'package:hive_note/navigation/presentation/pages/harvest.dart';
@@ -28,32 +29,32 @@ class RecordsPage extends StatelessWidget {
           ),
           children: [
             MenuButton(
-              newPage: const HarvestPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.harvest, width: 50),
               text: const Text('Harvest'),
             ),
             MenuButton(
-              newPage: const FinancesPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.finances, width: 50),
               text: const Text('Finances'),
             ),
             MenuButton(
-              newPage: const FeedingPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.feeding, width: 50),
               text: const Text('Feeding'),
             ),
             MenuButton(
-              newPage: const TreatmentPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.treatment, width: 50),
               text: const Text('Treatment'),
             ),
             MenuButton(
-              newPage: const HistoryPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.history, width: 50),
               text: const Text('History'),
             ),
             MenuButton(
-              newPage: const OtherPage(),
+              newPage: AppRouter.tmpPath,
               icon: SvgPicture.asset(AppVectors.other, width: 50),
               text: const Text('Other'),
             ),

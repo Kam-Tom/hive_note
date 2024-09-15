@@ -16,6 +16,16 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
 
   Future deleteHive(Hive hive) => (delete(hiveTable)..where((t) => t.id.equals(hive.id))).go();
 
+  Future updateHives(List<Hive> hivesToUpdate) {
+
+    return batch((batch) {
+      batch.replaceAll(hiveTable, 
+        hivesToUpdate.map((hive) => hive.toCompanion())
+      );
+    });
+
+  }
+
 }
 
 extension on Hive {

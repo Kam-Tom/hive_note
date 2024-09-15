@@ -6,22 +6,26 @@ import 'package:uuid/uuid.dart';
 class Raport extends Equatable {
   final String id;
   final String? hiveId;
+  final String? apiaryId;
   final DateTime createdAt;
 
   Raport({
     String? id,
     this.hiveId,
+    this.apiaryId,
     required DateTime createdAt,
   })  : id = id ?? Uuid().v4(),
         createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Raport copyWith({
     String? hiveId,
+    String? apiaryId,
     DateTime? createdAt,
   }) {
     return Raport(
       id: this.id,
       hiveId: hiveId ?? this.hiveId,
+      apiaryId: apiaryId ?? this.apiaryId,
       createdAt: createdAt ?? this.createdAt,
     );
   }

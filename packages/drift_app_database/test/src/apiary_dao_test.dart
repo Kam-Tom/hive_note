@@ -16,8 +16,8 @@ void main() {
     });
 
     test('stream emits updated list of apiaries when new apiary is added', () async {
-      final apiary1 = Apiary(id: '1', name: 'Apiary 1', createdAt: DateTime.now());
-      final apiary2 = Apiary(id: '2', name: 'Apiary 2', createdAt: DateTime.now());
+      final apiary1 = Apiary(id: '1', order: 1, name: 'Apiary 1', createdAt: DateTime.now());
+      final apiary2 = Apiary(id: '2', order: 2, name: 'Apiary 2', createdAt: DateTime.now());
 
       final expectation = expectLater(
         appDatabase.watchApiaries(),
@@ -30,8 +30,27 @@ void main() {
       await expectation;
 
     });
+    test('stream emits updated list of apiaries when apiaries order have changed', () async {
+      final apiary1 = Apiary(id: '1', order: 1, name: 'Apiary 1', createdAt: DateTime.now());
+      final apiary2 = Apiary(id: '2', order: 2, name: 'Apiary 2', createdAt: DateTime.now());
+
+      final updatedApiary1 = apiary1.copyWith(order: 3);
+
+      final expectation = expectLater(
+        appDatabase.watchApiaries(),
+        // We can't use emitsInOrder because [apiary1, apiary2] can be omitted when operations are done in the same transaction
+        emitsThrough([apiary2, updatedApiary1]),
+      );
+
+      await appDatabase.insertApiary(apiary1);
+      await appDatabase.insertApiary(apiary2);
+      await appDatabase.updateApiary(updatedApiary1);
+
+      await expectation;
+    });
+
     test('stream emits updated list of apiaries when new hive is added', () async {
-      final apiary = Apiary(id: '1', name: 'Apiary 1', createdAt: DateTime.now());
+      final apiary = Apiary(id: '1', name: 'Apiary 1', order: 0, createdAt: DateTime.now());
       final hive = Hive(id: '1', name: 'Hive 1', apiaryId: '1', type:'Langstroth', order: 1, createdAt: DateTime.now());
 
       final expectation = expectLater(
@@ -48,8 +67,8 @@ void main() {
 
     });
     test('stream emits updated list of apiaries when hive is updated', () async {
-      final apiary = Apiary(id: '1', name: 'Apiary 1', createdAt: DateTime.now());
-      final apiary2 = Apiary(id: '2', name: 'Apiary 1', createdAt: DateTime.now());
+      final apiary = Apiary(id: '1', order: 1, name: 'Apiary 1', createdAt: DateTime.now());
+      final apiary2 = Apiary(id: '2', order: 2, name: 'Apiary 1', createdAt: DateTime.now());
       final hive = Hive(id: '1', name: 'Hive 1', apiaryId: '1', type:'Langstroth', order: 1, createdAt: DateTime.now());
       final updatedhive = Hive(id: '1', name: 'Hive 1', apiaryId: '2', type:'Langstroth', order: 1, createdAt: DateTime.now());
 
@@ -70,5 +89,6 @@ void main() {
       await expectation;
 
     });
+    
   });
 }

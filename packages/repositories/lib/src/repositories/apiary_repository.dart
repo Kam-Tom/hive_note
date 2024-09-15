@@ -10,4 +10,14 @@ class ApiaryRepository {
   Future insertApiary(Apiary apiary) => _database.insertApiary(apiary);
   
   Future insertHive(Hive hive) => _database.insertHive(hive);
+
+  Future updateApiary(Apiary apiary)  => _database.updateApiary(apiary);
+
+  Future<void> updateApiaries(List<Apiary> apiariesToUpdate) => _database.updateApiaries(apiariesToUpdate);
+  
+  Future<void> updateHives(List<Hive> hivesToUpdate) => _database.updateHives(hivesToUpdate);
+
+  Stream<Apiary> watchApiary(String id) => _database.watchApiary(id);
+
+  Future<void> deleteApiary(Apiary apiary) => _database.deleteApiary(apiary);
 }

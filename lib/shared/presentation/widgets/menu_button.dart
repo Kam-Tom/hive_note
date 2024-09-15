@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 
 class MenuButton extends StatelessWidget {
-  final Widget newPage;
+  final String newPage;
   final Widget icon;
   final Widget text;
 
@@ -17,10 +17,7 @@ class MenuButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => 
       {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => newPage),
-        )
+        Navigator.pushNamed(context, newPage),
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.secondary,

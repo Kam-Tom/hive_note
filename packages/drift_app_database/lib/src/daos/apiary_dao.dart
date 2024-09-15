@@ -12,9 +12,11 @@ class ApiaryDao extends DatabaseAccessor<DriftAppDatabase> with _$ApiaryDaoMixin
   ApiaryDao(DriftAppDatabase db) : super(db);
 
   Stream<List<Apiary>> watchApiaries() {
-    final apiaryStream = select(apiaryTable).watch();
+    final apiaryStream = (select(apiaryTable)
+      ..orderBy([(a) => OrderingTerm(expression: a.order)])).watch();
 
-    final hiveStream = select(hiveTable).watch();
+    final hiveStream = (select(hiveTable)
+      ..orderBy([(h) => OrderingTerm(expression: h.order)])).watch();
 
     return Rx.combineLatest2(
         apiaryStream, hiveStream,
@@ -33,6 +35,34 @@ class ApiaryDao extends DatabaseAccessor<DriftAppDatabase> with _$ApiaryDaoMixin
   Future updateApiary(Apiary apiary) => update(apiaryTable).replace(apiary.toCompanion());
 
   Future deleteApiary(Apiary apiary) => (delete(apiaryTable)..where((t) => t.id.equals(apiary.id))).go();
+  
+  Future updateApiaries(List<Apiary> apiariesToUpdate) {
+
+    return batch((batch) {
+      batch.replaceAll(apiaryTable,
+       apiariesToUpdate.map((apiary) => apiary.toCompanion()),
+      );
+    });
+
+  }
+
+  Stream<Apiary> watchApiary(String id) {
+    final apiaryStream = (select(apiaryTable)
+      ..where((a) => a.id.equals(id))).watchSingle();
+
+    final hiveStream = (select(hiveTable)
+      ..where((h) => h.apiaryId.equals(id))
+      ..orderBy([(h) => OrderingTerm(expression: h.order)])).watch();
+
+    return Rx.combineLatest2(
+      apiaryStream,    
+      hiveStream,      
+      (Apiary apiary, List<Hive> hives) {
+        return apiary.copyWith(hives: hives);
+      },
+    );
+  }
+
 
 }
 
@@ -41,8 +71,9 @@ extension on Apiary {
     return ApiaryTableCompanion(
       id: Value(id),
       name: Value(name),
-      latitude: Value(latitude),
-      longitude: Value(longitude),
+      order: Value(order),
+      colorValue: Value(color.value),
+      isActive: Value(isActive),
       createdAt: Value(createdAt),
     );
   }

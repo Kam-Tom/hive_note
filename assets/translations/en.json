@@ -24,5 +24,15 @@
     "sell": "Sell",
     "buy": "Buy",
     "queen": "Queen",
-    "other": "Other"
+    "other": "Other",
+
+    "new_apiary": "New Apiary {number}",
+    "confirm_deletion": "Confirm Deletion",
+    "apiary_has_hives": "Remove all hives from this apiary before deleting",
+    "cancel": "Cancel",
+    "delete": "Delete",
+
+    "back": "Back",
+    "something_went_wrong": "Something went wrong!",
+    "please_try_again_later": "Please try again later."
 }

@@ -21,4 +21,6 @@ class AppVectors {
   static const String sell = '${_basePath}sell$_format';
   static const String buy = '${_basePath}buy$_format';
   static const String queen = '${_basePath}queen$_format';
+  
+  static const String manage_hives = '${_basePath}manage_hives$_format';
 }

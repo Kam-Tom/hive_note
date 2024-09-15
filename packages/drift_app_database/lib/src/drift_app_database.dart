@@ -67,10 +67,16 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Future insertTodo(Todo todo) => todoDao.insertTodo(todo);
 
   @override
-  Future updateApiary(Apiary apiary) => apiaryDao.updateApiary(apiary);
+  Future updateApiary(Apiary apiary) => apiaryDao.updateApiary(apiary);  
+  
+  @override
+  Future updateApiaries(List<Apiary> apiariesToUpdate) => apiaryDao.updateApiaries(apiariesToUpdate);
 
   @override
   Future updateHive(Hive hive) => hiveDao.updateHive(hive);
+
+  @override
+  Future updateHives(List<Hive> hivesToUpdate) => hiveDao.updateHives(hivesToUpdate);
 
   @override
   Future updateTodo(Todo todo) => todoDao.updateTodo(todo);
@@ -83,4 +89,7 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Stream<List<Todo>> watchNotCompletedTodos() => todoDao.watchNotCompletedTodos();
+  
+  @override
+  Stream<Apiary> watchApiary(String id) => apiaryDao.watchApiary(id);
 }

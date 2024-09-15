@@ -5,8 +5,9 @@ import 'package:drift/drift.dart';
 class ApiaryTable extends Table {
   TextColumn get id => text()();
   TextColumn get name => text().withLength(max: 32)();
-  RealColumn get latitude => real().nullable()();
-  RealColumn get longitude => real().nullable()();
+  IntColumn get order => integer()();
+  IntColumn get colorValue => integer()();
+  BoolColumn get isActive => boolean()();
   DateTimeColumn get createdAt => dateTime()();
 
   @override
