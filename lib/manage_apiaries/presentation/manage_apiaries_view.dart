@@ -65,28 +65,29 @@ class ManageApiariesView extends StatelessWidget {
       },
     );
   }
+
   Widget _builApiaryTile(BuildContext context, Apiary apiary) {
-    return             ApiaryTile(
-              key: ValueKey(apiary),
-              apiary: apiary,
-              onPressed: (apiary) {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.editApiaryPath,
-                  arguments: apiary.id,
-                );
-              },
-              confirmDismiss: (apiary) async {
-                if (apiary.hives.isNotEmpty) {
-                  _showApiaryHasHivesToast();
-                  return false;
-                }
-                return await showDeleteConfirmationDialog(context);
-              },
-              onDismissed: (apiary) {
-                context.read<ManageApiariesBloc>().add(DeleteApiary(apiary: apiary));
-              },
-            );
+    return ApiaryTile(
+      key: ValueKey(apiary),
+      apiary: apiary,
+      onPressed: (apiary) {
+        Navigator.pushNamed(
+          context,
+          AppRouter.editApiaryPath,
+          arguments: apiary.id,
+        );
+      },
+      confirmDismiss: (apiary) async {
+        if (apiary.hives.isNotEmpty) {
+          _showApiaryHasHivesToast();
+          return false;
+        }
+        return await showDeleteConfirmationDialog(context);
+      },
+      onDismissed: (apiary) {
+        context.read<ManageApiariesBloc>().add(DeleteApiary(apiary: apiary));
+      },
+    );
   }
 
   Widget _buildFailure(BuildContext context) {
@@ -132,6 +133,7 @@ class ManageApiariesView extends StatelessWidget {
       ),
     );
   }
+
   void _showApiaryHasHivesToast() {
     Fluttertoast.showToast(
       msg: "apiary_has_hives".tr(),
