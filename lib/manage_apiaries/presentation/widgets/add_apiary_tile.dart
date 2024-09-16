@@ -11,7 +11,6 @@ class AddApiaryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       margin: const EdgeInsets.all(5),
       child: ElevatedButton(
@@ -25,14 +24,9 @@ class AddApiaryTile extends StatelessWidget {
           ),
         ),
         child: const Column(
-          children: [
-            Icon(Icons.add_circle_outline)
-          ],
+          children: [Icon(Icons.add_circle_outline)],
         ),
       ),
     );
   }
 }
-
-
-

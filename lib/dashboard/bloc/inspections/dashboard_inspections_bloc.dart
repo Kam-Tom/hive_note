@@ -25,8 +25,8 @@ class DashboardInspectionsBloc
   ) async {
     emit(state.copyWith(status: DashboardInspectionsStatus.loading));
 
-    await emit.forEach<List<Apiary>>(
-      _apiaryRepository.watchApiaries(),
+    await emit.forEach<List<ApiaryWithHiveCount>>(
+      _apiaryRepository.watchApiariesWithHiveCount(),
       onData: (apiaries) => state.copyWith(
         status: apiaries.isEmpty
             ? DashboardInspectionsStatus.empty

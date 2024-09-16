@@ -5,7 +5,7 @@ class ApiaryRepository {
   final AppDatabase _database;
   const ApiaryRepository(AppDatabase database) : _database = database;
   
-  Stream<List<Apiary>> watchApiaries() => _database.watchApiaries();
+  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() => _database.watchApiariesWithHiveCount();
   
   Future insertApiary(Apiary apiary) => _database.insertApiary(apiary);
   
@@ -17,7 +17,8 @@ class ApiaryRepository {
   
   Future<void> updateHives(List<Hive> hivesToUpdate) => _database.updateHives(hivesToUpdate);
 
-  Stream<Apiary> watchApiary(String id) => _database.watchApiary(id);
 
   Future<void> deleteApiary(Apiary apiary) => _database.deleteApiary(apiary);
+
+ 
 }

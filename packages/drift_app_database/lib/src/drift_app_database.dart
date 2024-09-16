@@ -82,14 +82,11 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Future updateTodo(Todo todo) => todoDao.updateTodo(todo);
 
   @override
-  Stream<List<Apiary>> watchApiaries() => apiaryDao.watchApiaries();
-
-  @override
   Stream<List<Todo>> watchTodos() => todoDao.watchTodos();
   
   @override
   Stream<List<Todo>> watchNotCompletedTodos() => todoDao.watchNotCompletedTodos();
   
   @override
-  Stream<Apiary> watchApiary(String id) => apiaryDao.watchApiary(id);
+  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() => apiaryDao.watchApiariesWithHiveCount();
 }

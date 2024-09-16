@@ -31,7 +31,8 @@ class ManageApiariesView extends StatelessWidget {
     }
   }
 
-  Widget _buildApiariesList(BuildContext context, List<Apiary> apiaries) {
+  Widget _buildApiariesList(
+      BuildContext context, List<ApiaryWithHiveCount> apiaries) {
     return Center(
       child: ReorderableListView(
         onReorder: (oldIndex, newIndex) {
@@ -50,11 +51,12 @@ class ManageApiariesView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddApiaryTile(BuildContext context, List<Apiary> apiaries) {
+  Widget _buildAddApiaryTile(
+      BuildContext context, List<ApiaryWithHiveCount> apiaries) {
     return AddApiaryTile(
       key: const ValueKey("add_apiary_tile"),
       onPressed: () {
-        int order = (apiaries.lastOrNull?.order ?? -1) + 1;
+        int order = (apiaries.lastOrNull?.apiary.order ?? -1) + 1;
         context.read<ManageApiariesBloc>().add(InsertApiary(
               apiary: Apiary(
                   name:
@@ -66,10 +68,11 @@ class ManageApiariesView extends StatelessWidget {
     );
   }
 
-  Widget _builApiaryTile(BuildContext context, Apiary apiary) {
+  Widget _builApiaryTile(BuildContext context, ApiaryWithHiveCount apiary) {
     return ApiaryTile(
       key: ValueKey(apiary),
-      apiary: apiary,
+      apiary: apiary.apiary,
+      hiveCount: apiary.hiveCount,
       onPressed: (apiary) {
         Navigator.pushNamed(
           context,
@@ -77,14 +80,14 @@ class ManageApiariesView extends StatelessWidget {
           arguments: apiary.id,
         );
       },
-      confirmDismiss: (apiary) async {
-        if (apiary.hives.isNotEmpty) {
+      confirmDismiss: (a) async {
+        if (apiary.hiveCount > 0) {
           _showApiaryHasHivesToast();
           return false;
         }
         return await showDeleteConfirmationDialog(context);
       },
-      onDismissed: (apiary) {
+      onDismissed: (a) {
         context.read<ManageApiariesBloc>().add(DeleteApiary(apiary: apiary));
       },
     );

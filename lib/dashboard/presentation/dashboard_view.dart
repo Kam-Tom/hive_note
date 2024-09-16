@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
-import 'package:hive_note/manage_apiaries/presentation/manage_apiaries_page.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/dashboard/bloc/dashboard_blocs.dart';
@@ -49,17 +48,20 @@ class _TodoCarousel extends StatelessWidget {
         todosWidget = const TodoCardLoading();
         break;
       case DashboardTodosStatus.empty:
-        todosWidget = TodoCardEmpty(onAddTodo: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const TMPPage()),
-        ));
+        todosWidget = TodoCardEmpty(
+            onAddTodo: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TMPPage()),
+                ));
         break;
       case DashboardTodosStatus.success:
         todosWidget = _buildTodoCarousel(context, todos);
         break;
       case DashboardTodosStatus.failure:
         todosWidget = TodoCardError(
-          onRetry: () => context.read<DashboardTodosBloc>().add(const DashboardTodosRetryRequest()),
+          onRetry: () => context
+              .read<DashboardTodosBloc>()
+              .add(const DashboardTodosRetryRequest()),
         );
         break;
       default:
@@ -96,7 +98,9 @@ class _TodoCarousel extends StatelessWidget {
 
   void _completeTodoWithFeedback(BuildContext context, Todo todo) {
     HapticFeedback.vibrate();
-    context.read<DashboardTodosBloc>().add(DashboardTodosToggleIsComplete(todo: todo, isCompleted: true));
+    context
+        .read<DashboardTodosBloc>()
+        .add(DashboardTodosToggleIsComplete(todo: todo, isCompleted: true));
     Fluttertoast.showToast(
       msg: "complete_todo".tr(),
       toastLength: Toast.LENGTH_SHORT,
@@ -144,7 +148,9 @@ class _InspectionCarousel extends StatelessWidget {
       return const InspectionCardLoading();
     } else if (status == DashboardInspectionsStatus.failure) {
       return InspectionCardError(
-        onRetry: () => context.read<DashboardInspectionsBloc>().add(const DashboardInspectionsRetryRequest()),
+        onRetry: () => context
+            .read<DashboardInspectionsBloc>()
+            .add(const DashboardInspectionsRetryRequest()),
       );
     } else if (status == DashboardInspectionsStatus.empty) {
       return InspectionCardEmpty(
@@ -155,7 +161,8 @@ class _InspectionCarousel extends StatelessWidget {
     return _buildInspectionCarousel(apiaries, context);
   }
 
-  Widget _buildInspectionCarousel(List<Apiary> apiaries, BuildContext context) {
+  Widget _buildInspectionCarousel(
+      List<ApiaryWithHiveCount> apiaries, BuildContext context) {
     return CarouselSlider.builder(
       options: CarouselOptions(
         height: 125.0,
@@ -190,14 +197,18 @@ class _Buttons extends StatelessWidget {
           children: [
             _buildMenuButtonRow(
               buttons: [
-                _buildMenuButton(AppVectors.apiary, "apiaries".tr(), AppRouter.manageApiariesPath),
-                _buildMenuButton(AppVectors.statistics, "statistics".tr(), AppRouter.tmpPath),
+                _buildMenuButton(AppVectors.apiary, "apiaries".tr(),
+                    AppRouter.manageApiariesPath),
+                _buildMenuButton(AppVectors.statistics, "statistics".tr(),
+                    AppRouter.tmpPath),
               ],
             ),
             _buildMenuButtonRow(
               buttons: [
-                _buildMenuButton(AppVectors.calendar, "calendar".tr(), AppRouter.tmpPath),
-                _buildMenuButton(AppVectors.note, "records".tr(), AppRouter.tmpPath),
+                _buildMenuButton(
+                    AppVectors.calendar, "calendar".tr(), AppRouter.tmpPath),
+                _buildMenuButton(
+                    AppVectors.note, "records".tr(), AppRouter.tmpPath),
               ],
             ),
           ],

@@ -27,8 +27,8 @@ class ManageApiariesBloc
   ) async {
     emit(state.copyWith(status: ManageApiariesStatus.loading));
 
-    await emit.forEach<List<Apiary>>(
-      _apiaryRepository.watchApiaries(),
+    await emit.forEach<List<ApiaryWithHiveCount>>(
+      _apiaryRepository.watchApiariesWithHiveCount(),
       onData: (apiaries) => state.copyWith(
         status: ManageApiariesStatus.success,
         apiaries: apiaries,
@@ -51,37 +51,41 @@ class ManageApiariesBloc
 
   Future<void> _onDeleteApiary(
       DeleteApiary event, Emitter<ManageApiariesState> emit) async {
-    if (event.apiary.hives.isNotEmpty) {
+    if (event.apiary.hiveCount > 0) {
       emit(state.copyWith(status: ManageApiariesStatus.failure));
       return;
     }
-    var tmpApiaries = List<Apiary>.from(state.apiaries);
+    var tmpApiaries = List<ApiaryWithHiveCount>.from(state.apiaries);
 
-    tmpApiaries.removeAt(event.apiary.order);
+    tmpApiaries.removeAt(event.apiary.apiary.order);
     for (int i = 0; i < tmpApiaries.length; i++) {
-      tmpApiaries[i] = tmpApiaries[i].copyWith(order: i);
+      final updateApiary = tmpApiaries[i].apiary.copyWith(order: i);
+      tmpApiaries[i] = tmpApiaries[i].copyWith(apiary: updateApiary);
     }
 
     emit(state.copyWith(
         apiaries: tmpApiaries, status: ManageApiariesStatus.pending));
-    await _apiaryRepository.updateApiaries(tmpApiaries);
-    await _apiaryRepository.deleteApiary(event.apiary);
+    await _apiaryRepository
+        .updateApiaries(tmpApiaries.map((a) => a.apiary).toList());
+    await _apiaryRepository.deleteApiary(event.apiary.apiary);
   }
 
   Future<void> _onRearangeApiaries(
       RearrangeApiaries event, Emitter<ManageApiariesState> emit) async {
-    final List<Apiary> tmpApiaries = List<Apiary>.from(state.apiaries);
+    final tmpApiaries = List<ApiaryWithHiveCount>.from(state.apiaries);
 
-    tmpApiaries.removeAt(event.apiary1.order);
-    tmpApiaries.insert(event.apiary2.order, event.apiary1);
+    tmpApiaries.removeAt(event.apiary1.apiary.order);
+    tmpApiaries.insert(event.apiary2.apiary.order, event.apiary1);
 
     for (int i = 0; i < tmpApiaries.length; i++) {
-      tmpApiaries[i] = tmpApiaries[i].copyWith(order: i);
+      final updateApiary = tmpApiaries[i].apiary.copyWith(order: i);
+      tmpApiaries[i] = tmpApiaries[i].copyWith(apiary: updateApiary);
     }
 
     emit(state.copyWith(
         apiaries: tmpApiaries, status: ManageApiariesStatus.pending));
 
-    await _apiaryRepository.updateApiaries(tmpApiaries);
+    await _apiaryRepository
+        .updateApiaries(tmpApiaries.map((e) => e.apiary).toList());
   }
 }

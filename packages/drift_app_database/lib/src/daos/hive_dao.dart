@@ -2,6 +2,7 @@ import 'package:app_database/app_database.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_app_database/drift_app_database.dart';
 import 'package:drift_app_database/src/tabels/tabels.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'hive_dao.g.dart';
 
@@ -26,6 +27,7 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
 
   }
 
+
 }
 
 extension on Hive {
@@ -35,7 +37,6 @@ extension on Hive {
       name: Value(name),
       order: Value(order),
       type: Value(type),
-      queenId: Value(queenId),
       apiaryId: Value(apiaryId),
       createdAt: Value(createdAt),
     );

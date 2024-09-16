@@ -19,7 +19,7 @@ class EditApiaryPage extends StatelessWidget {
         create: (context) => EditApiaryBloc(
                apiaryRepository: context.read<ApiaryRepository>()
             )..add(LoadApiary(apiaryId: apiaryId)),
-        child: const EditApiaryView(),
+        //child: const EditApiaryView(),
       ),
       bottomNavigationBar: CustomAppFooter(),
     );

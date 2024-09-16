@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 @immutable
 class Queen extends Equatable {
   final String id;
+  final String? hiveId;
   final String breed;
   final String origin;
   final DateTime birthDate;
@@ -12,6 +13,7 @@ class Queen extends Equatable {
 
   Queen({
     String? id,
+    this.hiveId,
     required this.breed,
     required this.origin,
     required this.isAlive,
@@ -20,6 +22,7 @@ class Queen extends Equatable {
         birthDate = birthDate.copyWith(millisecond: 0, microsecond: 0);
 
   Queen copyWith({
+    String? hiveId,
     String? breed,
     String? origin,
     DateTime? birthDate,
@@ -27,6 +30,7 @@ class Queen extends Equatable {
   }) {
     return Queen(
       id: this.id,
+      hiveId: hiveId ?? this.hiveId,
       breed: breed ?? this.breed,
       origin: origin ?? this.origin,
       birthDate: birthDate ?? this.birthDate,
@@ -35,5 +39,5 @@ class Queen extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, breed, origin, isAlive, birthDate];
+  List<Object?> get props => [id, hiveId, breed, origin, isAlive, birthDate];
 }

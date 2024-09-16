@@ -27,35 +27,17 @@ final class InsertApiary extends ManageApiariesEvent {
 final class RearrangeApiaries extends ManageApiariesEvent {
   const RearrangeApiaries({required this.apiary1, required this.apiary2});
 
-  final Apiary apiary1;
-  final Apiary apiary2;
+  final ApiaryWithHiveCount apiary1;
+  final ApiaryWithHiveCount apiary2;
 
   @override
   List<Object> get props => [apiary1, apiary2];
 }
 
-final class UpdateApiary extends ManageApiariesEvent {
-  const UpdateApiary({required this.apiary});
-
-  final Apiary apiary;
-
-  @override
-  List<Object> get props => [apiary];
-}
-
 final class DeleteApiary extends ManageApiariesEvent {
   const DeleteApiary({required this.apiary});
 
-  final Apiary apiary;
-
-  @override
-  List<Object> get props => [apiary];
-}
-
-final class ConfirmDeletion extends ManageApiariesEvent {
-  const ConfirmDeletion({required this.apiary});
-
-  final Apiary apiary;
+  final ApiaryWithHiveCount apiary;
 
   @override
   List<Object> get props => [apiary];

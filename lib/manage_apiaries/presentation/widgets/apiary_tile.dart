@@ -8,6 +8,7 @@ import 'package:repositories/repositories.dart';
 
 class ApiaryTile extends StatelessWidget {
   final Apiary apiary;
+  final int hiveCount;
   final void Function(Apiary apiary) onPressed;
   final void Function(Apiary apiary) onDismissed;
   final Future<bool?> Function(Apiary apiary) confirmDismiss;
@@ -15,6 +16,7 @@ class ApiaryTile extends StatelessWidget {
   const ApiaryTile({
     super.key,
     required this.apiary,
+    required this.hiveCount,
     required this.onPressed,
     required this.onDismissed,
     required this.confirmDismiss,
@@ -63,7 +65,7 @@ class ApiaryTile extends StatelessWidget {
   List<Widget> _buildHiveWidgets(
       BuildContext context, double squareSize, int maxHivesToShow) {
     final List<Widget> hives = <Widget>[];
-    final count = apiary.hives.length;
+    final count = hiveCount;
     final int visibleHives = min(count, maxHivesToShow);
 
     for (int i = 0; i < visibleHives; i++) {

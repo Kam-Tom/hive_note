@@ -8,7 +8,7 @@ final class DashboardInspectionsState extends Equatable {
     this.status = DashboardInspectionsStatus.empty,
   });
 
-  final List<Apiary> apiaries;
+  final List<ApiaryWithHiveCount> apiaries;
   final DashboardInspectionsStatus status;
 
   @override
@@ -16,7 +16,7 @@ final class DashboardInspectionsState extends Equatable {
 
   DashboardInspectionsState copyWith({
     DashboardInspectionsStatus? status,
-    List<Apiary>? apiaries,
+    List<ApiaryWithHiveCount>? apiaries,
   }) {
     return DashboardInspectionsState(
       apiaries: apiaries ?? this.apiaries,

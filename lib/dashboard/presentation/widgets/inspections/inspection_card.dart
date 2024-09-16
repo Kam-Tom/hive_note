@@ -6,7 +6,7 @@ import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:repositories/repositories.dart';
 
 class InspectionCard extends StatelessWidget {
-  final Apiary apiary;
+  final ApiaryWithHiveCount apiary;
   final void Function(Apiary apiary) onPressed;
 
   const InspectionCard({
@@ -20,13 +20,14 @@ class InspectionCard extends StatelessWidget {
     const double squareSize = 10.0;
     const int maxHivesToShow = 39;
 
-    final List<Widget> hiveWidgets = _buildHiveWidgets(context, squareSize, maxHivesToShow);
+    final List<Widget> hiveWidgets =
+        _buildHiveWidgets(context, squareSize, maxHivesToShow);
 
     return Container(
       width: 300,
       margin: const EdgeInsets.all(20),
       child: ElevatedButton(
-        onPressed: () => onPressed(apiary),
+        onPressed: () => onPressed(apiary.apiary),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondary,
           foregroundColor: AppColors.white,
@@ -47,9 +48,10 @@ class InspectionCard extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildHiveWidgets(BuildContext context, double squareSize, int maxHivesToShow) {
+  List<Widget> _buildHiveWidgets(
+      BuildContext context, double squareSize, int maxHivesToShow) {
     final List<Widget> hives = <Widget>[];
-    final count = apiary.hives.length;
+    final count = apiary.hiveCount;
     final int visibleHives = min(count, maxHivesToShow);
 
     for (int i = 0; i < visibleHives; i++) {
@@ -71,9 +73,9 @@ class InspectionCard extends StatelessWidget {
           child: Text(
             '+${count - maxHivesToShow}',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -95,11 +97,11 @@ class InspectionCard extends StatelessWidget {
             width: 40,
           ),
           Text(
-            apiary.name,
+            apiary.apiary.name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -115,6 +117,3 @@ class InspectionCard extends StatelessWidget {
     );
   }
 }
-
-
-

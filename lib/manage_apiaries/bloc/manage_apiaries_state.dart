@@ -8,7 +8,7 @@ final class ManageApiariesState extends Equatable {
     this.status = ManageApiariesStatus.loading,
   });
 
-  final List<Apiary> apiaries;
+  final List<ApiaryWithHiveCount> apiaries;
   final ManageApiariesStatus status;
 
   @override
@@ -16,7 +16,7 @@ final class ManageApiariesState extends Equatable {
 
   ManageApiariesState copyWith({
     ManageApiariesStatus? status,
-    List<Apiary>? apiaries,
+    List<ApiaryWithHiveCount>? apiaries,
     Apiary? lastDeletedApiary,
   }) {
     return ManageApiariesState(

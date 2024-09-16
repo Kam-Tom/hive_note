@@ -239,6 +239,237 @@ class ApiaryTableCompanion extends UpdateCompanion<Apiary> {
   }
 }
 
+class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HiveTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _apiaryIdMeta =
+      const VerificationMeta('apiaryId');
+  @override
+  late final GeneratedColumn<String> apiaryId = GeneratedColumn<String>(
+      'apiary_id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES apiary_table (id) ON DELETE SET NULL'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, order, type, apiaryId, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'hive_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<Hive> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('apiary_id')) {
+      context.handle(_apiaryIdMeta,
+          apiaryId.isAcceptableOrUnknown(data['apiary_id']!, _apiaryIdMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Hive map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Hive(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      apiaryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $HiveTableTable createAlias(String alias) {
+    return $HiveTableTable(attachedDatabase, alias);
+  }
+}
+
+class HiveTableCompanion extends UpdateCompanion<Hive> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<int> order;
+  final Value<String> type;
+  final Value<String?> apiaryId;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const HiveTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.order = const Value.absent(),
+    this.type = const Value.absent(),
+    this.apiaryId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HiveTableCompanion.insert({
+    required String id,
+    required String name,
+    required int order,
+    required String type,
+    this.apiaryId = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        name = Value(name),
+        order = Value(order),
+        type = Value(type),
+        createdAt = Value(createdAt);
+  static Insertable<Hive> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<int>? order,
+    Expression<String>? type,
+    Expression<String>? apiaryId,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (order != null) 'order': order,
+      if (type != null) 'type': type,
+      if (apiaryId != null) 'apiary_id': apiaryId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HiveTableCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? name,
+      Value<int>? order,
+      Value<String>? type,
+      Value<String?>? apiaryId,
+      Value<DateTime>? createdAt,
+      Value<int>? rowid}) {
+    return HiveTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      order: order ?? this.order,
+      type: type ?? this.type,
+      apiaryId: apiaryId ?? this.apiaryId,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (apiaryId.present) {
+      map['apiary_id'] = Variable<String>(apiaryId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HiveTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('order: $order, ')
+          ..write('type: $type, ')
+          ..write('apiaryId: $apiaryId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $QueenTableTable extends QueenTable
     with TableInfo<$QueenTableTable, Queen> {
   @override
@@ -250,6 +481,14 @@ class $QueenTableTable extends QueenTable
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hiveIdMeta = const VerificationMeta('hiveId');
+  @override
+  late final GeneratedColumn<String> hiveId = GeneratedColumn<String>(
+      'hive_id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES hive_table (id) ON DELETE SET NULL'));
   static const VerificationMeta _breedMeta = const VerificationMeta('breed');
   @override
   late final GeneratedColumn<String> breed = GeneratedColumn<String>(
@@ -281,7 +520,8 @@ class $QueenTableTable extends QueenTable
           GeneratedColumn.constraintIsAlways('CHECK ("is_alive" IN (0, 1))'),
       defaultValue: Constant(true));
   @override
-  List<GeneratedColumn> get $columns => [id, breed, origin, birthDate, isAlive];
+  List<GeneratedColumn> get $columns =>
+      [id, hiveId, breed, origin, birthDate, isAlive];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -296,6 +536,10 @@ class $QueenTableTable extends QueenTable
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     } else if (isInserting) {
       context.missing(_idMeta);
+    }
+    if (data.containsKey('hive_id')) {
+      context.handle(_hiveIdMeta,
+          hiveId.isAcceptableOrUnknown(data['hive_id']!, _hiveIdMeta));
     }
     if (data.containsKey('breed')) {
       context.handle(
@@ -330,6 +574,8 @@ class $QueenTableTable extends QueenTable
     return Queen(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      hiveId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}hive_id']),
       breed: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}breed'])!,
       origin: attachedDatabase.typeMapping
@@ -349,6 +595,7 @@ class $QueenTableTable extends QueenTable
 
 class QueenTableCompanion extends UpdateCompanion<Queen> {
   final Value<String> id;
+  final Value<String?> hiveId;
   final Value<String> breed;
   final Value<String> origin;
   final Value<DateTime> birthDate;
@@ -356,6 +603,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
   final Value<int> rowid;
   const QueenTableCompanion({
     this.id = const Value.absent(),
+    this.hiveId = const Value.absent(),
     this.breed = const Value.absent(),
     this.origin = const Value.absent(),
     this.birthDate = const Value.absent(),
@@ -364,6 +612,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
   });
   QueenTableCompanion.insert({
     required String id,
+    this.hiveId = const Value.absent(),
     required String breed,
     required String origin,
     required DateTime birthDate,
@@ -375,6 +624,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
         birthDate = Value(birthDate);
   static Insertable<Queen> custom({
     Expression<String>? id,
+    Expression<String>? hiveId,
     Expression<String>? breed,
     Expression<String>? origin,
     Expression<DateTime>? birthDate,
@@ -383,6 +633,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (hiveId != null) 'hive_id': hiveId,
       if (breed != null) 'breed': breed,
       if (origin != null) 'origin': origin,
       if (birthDate != null) 'birth_date': birthDate,
@@ -393,6 +644,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
 
   QueenTableCompanion copyWith(
       {Value<String>? id,
+      Value<String?>? hiveId,
       Value<String>? breed,
       Value<String>? origin,
       Value<DateTime>? birthDate,
@@ -400,6 +652,7 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
       Value<int>? rowid}) {
     return QueenTableCompanion(
       id: id ?? this.id,
+      hiveId: hiveId ?? this.hiveId,
       breed: breed ?? this.breed,
       origin: origin ?? this.origin,
       birthDate: birthDate ?? this.birthDate,
@@ -413,6 +666,9 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<String>(id.value);
+    }
+    if (hiveId.present) {
+      map['hive_id'] = Variable<String>(hiveId.value);
     }
     if (breed.present) {
       map['breed'] = Variable<String>(breed.value);
@@ -436,267 +692,11 @@ class QueenTableCompanion extends UpdateCompanion<Queen> {
   String toString() {
     return (StringBuffer('QueenTableCompanion(')
           ..write('id: $id, ')
+          ..write('hiveId: $hiveId, ')
           ..write('breed: $breed, ')
           ..write('origin: $origin, ')
           ..write('birthDate: $birthDate, ')
           ..write('isAlive: $isAlive, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $HiveTableTable extends HiveTable with TableInfo<$HiveTableTable, Hive> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $HiveTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int> order = GeneratedColumn<int>(
-      'order', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _queenIdMeta =
-      const VerificationMeta('queenId');
-  @override
-  late final GeneratedColumn<String> queenId = GeneratedColumn<String>(
-      'queen_id', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES queen_table (id) ON DELETE SET NULL'));
-  static const VerificationMeta _apiaryIdMeta =
-      const VerificationMeta('apiaryId');
-  @override
-  late final GeneratedColumn<String> apiaryId = GeneratedColumn<String>(
-      'apiary_id', aliasedName, true,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES apiary_table (id) ON DELETE SET NULL'));
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, order, type, queenId, apiaryId, createdAt];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'hive_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<Hive> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
-    }
-    if (data.containsKey('queen_id')) {
-      context.handle(_queenIdMeta,
-          queenId.isAcceptableOrUnknown(data['queen_id']!, _queenIdMeta));
-    }
-    if (data.containsKey('apiary_id')) {
-      context.handle(_apiaryIdMeta,
-          apiaryId.isAcceptableOrUnknown(data['apiary_id']!, _apiaryIdMeta));
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Hive map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Hive(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      queenId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}queen_id']),
-      apiaryId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-    );
-  }
-
-  @override
-  $HiveTableTable createAlias(String alias) {
-    return $HiveTableTable(attachedDatabase, alias);
-  }
-}
-
-class HiveTableCompanion extends UpdateCompanion<Hive> {
-  final Value<String> id;
-  final Value<String> name;
-  final Value<int> order;
-  final Value<String> type;
-  final Value<String?> queenId;
-  final Value<String?> apiaryId;
-  final Value<DateTime> createdAt;
-  final Value<int> rowid;
-  const HiveTableCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.order = const Value.absent(),
-    this.type = const Value.absent(),
-    this.queenId = const Value.absent(),
-    this.apiaryId = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  HiveTableCompanion.insert({
-    required String id,
-    required String name,
-    required int order,
-    required String type,
-    this.queenId = const Value.absent(),
-    this.apiaryId = const Value.absent(),
-    required DateTime createdAt,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        name = Value(name),
-        order = Value(order),
-        type = Value(type),
-        createdAt = Value(createdAt);
-  static Insertable<Hive> custom({
-    Expression<String>? id,
-    Expression<String>? name,
-    Expression<int>? order,
-    Expression<String>? type,
-    Expression<String>? queenId,
-    Expression<String>? apiaryId,
-    Expression<DateTime>? createdAt,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (order != null) 'order': order,
-      if (type != null) 'type': type,
-      if (queenId != null) 'queen_id': queenId,
-      if (apiaryId != null) 'apiary_id': apiaryId,
-      if (createdAt != null) 'created_at': createdAt,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  HiveTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? name,
-      Value<int>? order,
-      Value<String>? type,
-      Value<String?>? queenId,
-      Value<String?>? apiaryId,
-      Value<DateTime>? createdAt,
-      Value<int>? rowid}) {
-    return HiveTableCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      order: order ?? this.order,
-      type: type ?? this.type,
-      queenId: queenId ?? this.queenId,
-      apiaryId: apiaryId ?? this.apiaryId,
-      createdAt: createdAt ?? this.createdAt,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    if (type.present) {
-      map['type'] = Variable<String>(type.value);
-    }
-    if (queenId.present) {
-      map['queen_id'] = Variable<String>(queenId.value);
-    }
-    if (apiaryId.present) {
-      map['apiary_id'] = Variable<String>(apiaryId.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HiveTableCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('order: $order, ')
-          ..write('type: $type, ')
-          ..write('queenId: $queenId, ')
-          ..write('apiaryId: $apiaryId, ')
-          ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2103,8 +2103,8 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   _$DriftAppDatabase(QueryExecutor e) : super(e);
   $DriftAppDatabaseManager get managers => $DriftAppDatabaseManager(this);
   late final $ApiaryTableTable apiaryTable = $ApiaryTableTable(this);
-  late final $QueenTableTable queenTable = $QueenTableTable(this);
   late final $HiveTableTable hiveTable = $HiveTableTable(this);
+  late final $QueenTableTable queenTable = $QueenTableTable(this);
   late final $RaportTableTable raportTable = $RaportTableTable(this);
   late final $EntryMetadataTableTable entryMetadataTable =
       $EntryMetadataTableTable(this);
@@ -2125,8 +2125,8 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         apiaryTable,
-        queenTable,
         hiveTable,
+        queenTable,
         raportTable,
         entryMetadataTable,
         booleanEntryTable,
@@ -2139,17 +2139,17 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
           WritePropagation(
-            on: TableUpdateQuery.onTableName('queen_table',
+            on: TableUpdateQuery.onTableName('apiary_table',
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('hive_table', kind: UpdateKind.update),
             ],
           ),
           WritePropagation(
-            on: TableUpdateQuery.onTableName('apiary_table',
+            on: TableUpdateQuery.onTableName('hive_table',
                 limitUpdateKind: UpdateKind.delete),
             result: [
-              TableUpdate('hive_table', kind: UpdateKind.update),
+              TableUpdate('queen_table', kind: UpdateKind.update),
             ],
           ),
         ],
@@ -2420,214 +2420,11 @@ typedef $$ApiaryTableTableProcessedTableManager = ProcessedTableManager<
     (Apiary, $$ApiaryTableTableReferences),
     Apiary,
     PrefetchHooks Function({bool hiveTableRefs, bool raportTableRefs})>;
-typedef $$QueenTableTableCreateCompanionBuilder = QueenTableCompanion Function({
-  required String id,
-  required String breed,
-  required String origin,
-  required DateTime birthDate,
-  Value<bool> isAlive,
-  Value<int> rowid,
-});
-typedef $$QueenTableTableUpdateCompanionBuilder = QueenTableCompanion Function({
-  Value<String> id,
-  Value<String> breed,
-  Value<String> origin,
-  Value<DateTime> birthDate,
-  Value<bool> isAlive,
-  Value<int> rowid,
-});
-
-final class $$QueenTableTableReferences
-    extends BaseReferences<_$DriftAppDatabase, $QueenTableTable, Queen> {
-  $$QueenTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$HiveTableTable, List<Hive>> _hiveTableRefsTable(
-          _$DriftAppDatabase db) =>
-      MultiTypedResultKey.fromTable(db.hiveTable,
-          aliasName:
-              $_aliasNameGenerator(db.queenTable.id, db.hiveTable.queenId));
-
-  $$HiveTableTableProcessedTableManager get hiveTableRefs {
-    final manager = $$HiveTableTableTableManager($_db, $_db.hiveTable)
-        .filter((f) => f.queenId.id($_item.id));
-
-    final cache = $_typedResult.readTableOrNull(_hiveTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
-class $$QueenTableTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $QueenTableTable> {
-  $$QueenTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get breed => $state.composableBuilder(
-      column: $state.table.breed,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get origin => $state.composableBuilder(
-      column: $state.table.origin,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get birthDate => $state.composableBuilder(
-      column: $state.table.birthDate,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isAlive => $state.composableBuilder(
-      column: $state.table.isAlive,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ComposableFilter hiveTableRefs(
-      ComposableFilter Function($$HiveTableTableFilterComposer f) f) {
-    final $$HiveTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.hiveTable,
-        getReferencedColumn: (t) => t.queenId,
-        builder: (joinBuilder, parentComposers) =>
-            $$HiveTableTableFilterComposer(ComposerState(
-                $state.db, $state.db.hiveTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-}
-
-class $$QueenTableTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $QueenTableTable> {
-  $$QueenTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get breed => $state.composableBuilder(
-      column: $state.table.breed,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get origin => $state.composableBuilder(
-      column: $state.table.origin,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get birthDate => $state.composableBuilder(
-      column: $state.table.birthDate,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isAlive => $state.composableBuilder(
-      column: $state.table.isAlive,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-class $$QueenTableTableTableManager extends RootTableManager<
-    _$DriftAppDatabase,
-    $QueenTableTable,
-    Queen,
-    $$QueenTableTableFilterComposer,
-    $$QueenTableTableOrderingComposer,
-    $$QueenTableTableCreateCompanionBuilder,
-    $$QueenTableTableUpdateCompanionBuilder,
-    (Queen, $$QueenTableTableReferences),
-    Queen,
-    PrefetchHooks Function({bool hiveTableRefs})> {
-  $$QueenTableTableTableManager(_$DriftAppDatabase db, $QueenTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$QueenTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$QueenTableTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> breed = const Value.absent(),
-            Value<String> origin = const Value.absent(),
-            Value<DateTime> birthDate = const Value.absent(),
-            Value<bool> isAlive = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              QueenTableCompanion(
-            id: id,
-            breed: breed,
-            origin: origin,
-            birthDate: birthDate,
-            isAlive: isAlive,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String breed,
-            required String origin,
-            required DateTime birthDate,
-            Value<bool> isAlive = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              QueenTableCompanion.insert(
-            id: id,
-            breed: breed,
-            origin: origin,
-            birthDate: birthDate,
-            isAlive: isAlive,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$QueenTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({hiveTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (hiveTableRefs) db.hiveTable],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (hiveTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable:
-                            $$QueenTableTableReferences._hiveTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$QueenTableTableReferences(db, table, p0)
-                                .hiveTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.queenId == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$QueenTableTableProcessedTableManager = ProcessedTableManager<
-    _$DriftAppDatabase,
-    $QueenTableTable,
-    Queen,
-    $$QueenTableTableFilterComposer,
-    $$QueenTableTableOrderingComposer,
-    $$QueenTableTableCreateCompanionBuilder,
-    $$QueenTableTableUpdateCompanionBuilder,
-    (Queen, $$QueenTableTableReferences),
-    Queen,
-    PrefetchHooks Function({bool hiveTableRefs})>;
 typedef $$HiveTableTableCreateCompanionBuilder = HiveTableCompanion Function({
   required String id,
   required String name,
   required int order,
   required String type,
-  Value<String?> queenId,
   Value<String?> apiaryId,
   required DateTime createdAt,
   Value<int> rowid,
@@ -2637,7 +2434,6 @@ typedef $$HiveTableTableUpdateCompanionBuilder = HiveTableCompanion Function({
   Value<String> name,
   Value<int> order,
   Value<String> type,
-  Value<String?> queenId,
   Value<String?> apiaryId,
   Value<DateTime> createdAt,
   Value<int> rowid,
@@ -2646,20 +2442,6 @@ typedef $$HiveTableTableUpdateCompanionBuilder = HiveTableCompanion Function({
 final class $$HiveTableTableReferences
     extends BaseReferences<_$DriftAppDatabase, $HiveTableTable, Hive> {
   $$HiveTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $QueenTableTable _queenIdTable(_$DriftAppDatabase db) =>
-      db.queenTable.createAlias(
-          $_aliasNameGenerator(db.hiveTable.queenId, db.queenTable.id));
-
-  $$QueenTableTableProcessedTableManager? get queenId {
-    if ($_item.queenId == null) return null;
-    final manager = $$QueenTableTableTableManager($_db, $_db.queenTable)
-        .filter((f) => f.id($_item.queenId!));
-    final item = $_typedResult.readTableOrNull(_queenIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
 
   static $ApiaryTableTable _apiaryIdTable(_$DriftAppDatabase db) =>
       db.apiaryTable.createAlias(
@@ -2673,6 +2455,21 @@ final class $$HiveTableTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$QueenTableTable, List<Queen>>
+      _queenTableRefsTable(_$DriftAppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.queenTable,
+              aliasName:
+                  $_aliasNameGenerator(db.hiveTable.id, db.queenTable.hiveId));
+
+  $$QueenTableTableProcessedTableManager get queenTableRefs {
+    final manager = $$QueenTableTableTableManager($_db, $_db.queenTable)
+        .filter((f) => f.hiveId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_queenTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
   }
 
   static MultiTypedResultKey<$RaportTableTable, List<Raport>>
@@ -2719,18 +2516,6 @@ class $$HiveTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  $$QueenTableTableFilterComposer get queenId {
-    final $$QueenTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.queenId,
-        referencedTable: $state.db.queenTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$QueenTableTableFilterComposer(ComposerState($state.db,
-                $state.db.queenTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
   $$ApiaryTableTableFilterComposer get apiaryId {
     final $$ApiaryTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -2741,6 +2526,19 @@ class $$HiveTableTableFilterComposer
             $$ApiaryTableTableFilterComposer(ComposerState($state.db,
                 $state.db.apiaryTable, joinBuilder, parentComposers)));
     return composer;
+  }
+
+  ComposableFilter queenTableRefs(
+      ComposableFilter Function($$QueenTableTableFilterComposer f) f) {
+    final $$QueenTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.queenTable,
+        getReferencedColumn: (t) => t.hiveId,
+        builder: (joinBuilder, parentComposers) =>
+            $$QueenTableTableFilterComposer(ComposerState($state.db,
+                $state.db.queenTable, joinBuilder, parentComposers)));
+    return f(composer);
   }
 
   ComposableFilter raportTableRefs(
@@ -2785,18 +2583,6 @@ class $$HiveTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  $$QueenTableTableOrderingComposer get queenId {
-    final $$QueenTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.queenId,
-        referencedTable: $state.db.queenTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$QueenTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.queenTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
   $$ApiaryTableTableOrderingComposer get apiaryId {
     final $$ApiaryTableTableOrderingComposer composer = $state.composerBuilder(
         composer: this,
@@ -2821,7 +2607,7 @@ class $$HiveTableTableTableManager extends RootTableManager<
     (Hive, $$HiveTableTableReferences),
     Hive,
     PrefetchHooks Function(
-        {bool queenId, bool apiaryId, bool raportTableRefs})> {
+        {bool apiaryId, bool queenTableRefs, bool raportTableRefs})> {
   $$HiveTableTableTableManager(_$DriftAppDatabase db, $HiveTableTable table)
       : super(TableManagerState(
           db: db,
@@ -2835,7 +2621,6 @@ class $$HiveTableTableTableManager extends RootTableManager<
             Value<String> name = const Value.absent(),
             Value<int> order = const Value.absent(),
             Value<String> type = const Value.absent(),
-            Value<String?> queenId = const Value.absent(),
             Value<String?> apiaryId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -2845,7 +2630,6 @@ class $$HiveTableTableTableManager extends RootTableManager<
             name: name,
             order: order,
             type: type,
-            queenId: queenId,
             apiaryId: apiaryId,
             createdAt: createdAt,
             rowid: rowid,
@@ -2855,7 +2639,6 @@ class $$HiveTableTableTableManager extends RootTableManager<
             required String name,
             required int order,
             required String type,
-            Value<String?> queenId = const Value.absent(),
             Value<String?> apiaryId = const Value.absent(),
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
@@ -2865,7 +2648,6 @@ class $$HiveTableTableTableManager extends RootTableManager<
             name: name,
             order: order,
             type: type,
-            queenId: queenId,
             apiaryId: apiaryId,
             createdAt: createdAt,
             rowid: rowid,
@@ -2877,10 +2659,15 @@ class $$HiveTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {queenId = false, apiaryId = false, raportTableRefs = false}) {
+              {apiaryId = false,
+              queenTableRefs = false,
+              raportTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (raportTableRefs) db.raportTable],
+              explicitlyWatchedTables: [
+                if (queenTableRefs) db.queenTable,
+                if (raportTableRefs) db.raportTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -2893,16 +2680,6 @@ class $$HiveTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (queenId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.queenId,
-                    referencedTable:
-                        $$HiveTableTableReferences._queenIdTable(db),
-                    referencedColumn:
-                        $$HiveTableTableReferences._queenIdTable(db).id,
-                  ) as T;
-                }
                 if (apiaryId) {
                   state = state.withJoin(
                     currentTable: table,
@@ -2918,6 +2695,18 @@ class $$HiveTableTableTableManager extends RootTableManager<
               },
               getPrefetchedDataCallback: (items) async {
                 return [
+                  if (queenTableRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$HiveTableTableReferences._queenTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$HiveTableTableReferences(db, table, p0)
+                                .queenTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.hiveId == item.id),
+                        typedResults: items),
                   if (raportTableRefs)
                     await $_getPrefetchedData(
                         currentTable: table,
@@ -2948,7 +2737,235 @@ typedef $$HiveTableTableProcessedTableManager = ProcessedTableManager<
     (Hive, $$HiveTableTableReferences),
     Hive,
     PrefetchHooks Function(
-        {bool queenId, bool apiaryId, bool raportTableRefs})>;
+        {bool apiaryId, bool queenTableRefs, bool raportTableRefs})>;
+typedef $$QueenTableTableCreateCompanionBuilder = QueenTableCompanion Function({
+  required String id,
+  Value<String?> hiveId,
+  required String breed,
+  required String origin,
+  required DateTime birthDate,
+  Value<bool> isAlive,
+  Value<int> rowid,
+});
+typedef $$QueenTableTableUpdateCompanionBuilder = QueenTableCompanion Function({
+  Value<String> id,
+  Value<String?> hiveId,
+  Value<String> breed,
+  Value<String> origin,
+  Value<DateTime> birthDate,
+  Value<bool> isAlive,
+  Value<int> rowid,
+});
+
+final class $$QueenTableTableReferences
+    extends BaseReferences<_$DriftAppDatabase, $QueenTableTable, Queen> {
+  $$QueenTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $HiveTableTable _hiveIdTable(_$DriftAppDatabase db) => db.hiveTable
+      .createAlias($_aliasNameGenerator(db.queenTable.hiveId, db.hiveTable.id));
+
+  $$HiveTableTableProcessedTableManager? get hiveId {
+    if ($_item.hiveId == null) return null;
+    final manager = $$HiveTableTableTableManager($_db, $_db.hiveTable)
+        .filter((f) => f.id($_item.hiveId!));
+    final item = $_typedResult.readTableOrNull(_hiveIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$QueenTableTableFilterComposer
+    extends FilterComposer<_$DriftAppDatabase, $QueenTableTable> {
+  $$QueenTableTableFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get breed => $state.composableBuilder(
+      column: $state.table.breed,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get origin => $state.composableBuilder(
+      column: $state.table.origin,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get birthDate => $state.composableBuilder(
+      column: $state.table.birthDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isAlive => $state.composableBuilder(
+      column: $state.table.isAlive,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$HiveTableTableFilterComposer get hiveId {
+    final $$HiveTableTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.hiveId,
+        referencedTable: $state.db.hiveTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$HiveTableTableFilterComposer(ComposerState(
+                $state.db, $state.db.hiveTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$QueenTableTableOrderingComposer
+    extends OrderingComposer<_$DriftAppDatabase, $QueenTableTable> {
+  $$QueenTableTableOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get breed => $state.composableBuilder(
+      column: $state.table.breed,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get origin => $state.composableBuilder(
+      column: $state.table.origin,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get birthDate => $state.composableBuilder(
+      column: $state.table.birthDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isAlive => $state.composableBuilder(
+      column: $state.table.isAlive,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$HiveTableTableOrderingComposer get hiveId {
+    final $$HiveTableTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.hiveId,
+        referencedTable: $state.db.hiveTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$HiveTableTableOrderingComposer(ComposerState(
+                $state.db, $state.db.hiveTable, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$QueenTableTableTableManager extends RootTableManager<
+    _$DriftAppDatabase,
+    $QueenTableTable,
+    Queen,
+    $$QueenTableTableFilterComposer,
+    $$QueenTableTableOrderingComposer,
+    $$QueenTableTableCreateCompanionBuilder,
+    $$QueenTableTableUpdateCompanionBuilder,
+    (Queen, $$QueenTableTableReferences),
+    Queen,
+    PrefetchHooks Function({bool hiveId})> {
+  $$QueenTableTableTableManager(_$DriftAppDatabase db, $QueenTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$QueenTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$QueenTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String?> hiveId = const Value.absent(),
+            Value<String> breed = const Value.absent(),
+            Value<String> origin = const Value.absent(),
+            Value<DateTime> birthDate = const Value.absent(),
+            Value<bool> isAlive = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              QueenTableCompanion(
+            id: id,
+            hiveId: hiveId,
+            breed: breed,
+            origin: origin,
+            birthDate: birthDate,
+            isAlive: isAlive,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            Value<String?> hiveId = const Value.absent(),
+            required String breed,
+            required String origin,
+            required DateTime birthDate,
+            Value<bool> isAlive = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              QueenTableCompanion.insert(
+            id: id,
+            hiveId: hiveId,
+            breed: breed,
+            origin: origin,
+            birthDate: birthDate,
+            isAlive: isAlive,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$QueenTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({hiveId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (hiveId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.hiveId,
+                    referencedTable:
+                        $$QueenTableTableReferences._hiveIdTable(db),
+                    referencedColumn:
+                        $$QueenTableTableReferences._hiveIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$QueenTableTableProcessedTableManager = ProcessedTableManager<
+    _$DriftAppDatabase,
+    $QueenTableTable,
+    Queen,
+    $$QueenTableTableFilterComposer,
+    $$QueenTableTableOrderingComposer,
+    $$QueenTableTableCreateCompanionBuilder,
+    $$QueenTableTableUpdateCompanionBuilder,
+    (Queen, $$QueenTableTableReferences),
+    Queen,
+    PrefetchHooks Function({bool hiveId})>;
 typedef $$RaportTableTableCreateCompanionBuilder = RaportTableCompanion
     Function({
   required String id,
@@ -4730,10 +4747,10 @@ class $DriftAppDatabaseManager {
   $DriftAppDatabaseManager(this._db);
   $$ApiaryTableTableTableManager get apiaryTable =>
       $$ApiaryTableTableTableManager(_db, _db.apiaryTable);
-  $$QueenTableTableTableManager get queenTable =>
-      $$QueenTableTableTableManager(_db, _db.queenTable);
   $$HiveTableTableTableManager get hiveTable =>
       $$HiveTableTableTableManager(_db, _db.hiveTable);
+  $$QueenTableTableTableManager get queenTable =>
+      $$QueenTableTableTableManager(_db, _db.queenTable);
   $$RaportTableTableTableManager get raportTable =>
       $$RaportTableTableTableManager(_db, _db.raportTable);
   $$EntryMetadataTableTableTableManager get entryMetadataTable =>

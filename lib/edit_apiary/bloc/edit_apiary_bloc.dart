@@ -27,20 +27,20 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
     RearangeHives event, Emitter<EditApiaryState> emit
     ) async {
     
-    final List<Hive> tmpHives = List<Hive>.from(state.apiary!.hives);
-    final start = event.hive1.order;
-    final end = event.hive2.order;
-    final direction = start < end ? 1 : -1;
+    //final List<Hive> tmpHives = List<Hive>.from(state.apiary!.hives);
+    // final start = event.hive1.order;
+    // final end = event.hive2.order;
+    // final direction = start < end ? 1 : -1;
 
-    for (int i = start + direction; i != end + direction; i += direction) {
-      final apiary = tmpHives[i];
-      final updatedApiary = apiary.copyWith(order: i - direction);
-      tmpHives[i - direction] = updatedApiary;
-    }
+    // for (int i = start + direction; i != end + direction; i += direction) {
+    //   final apiary = tmpHives[i];
+    //   final updatedApiary = apiary.copyWith(order: i - direction);
+    //   tmpHives[i - direction] = updatedApiary;
+    // }
 
-    tmpHives[end] = event.hive1.copyWith(order: end);
-    emit(state.copyWith(apiary: state.apiary!.copyWith(hives: tmpHives)));
-    await _apiaryRepository.updateHives(tmpHives);
+    // tmpHives[end] = event.hive1.copyWith(order: end);
+    // emit(state.copyWith(apiary: state.apiary!.copyWith(hives: tmpHives)));
+    // await _apiaryRepository.updateHives(tmpHives);
   
   }
 
@@ -49,15 +49,15 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
     
     emit(state.copyWith(status: EditApiaryStatus.loading));
 
-    await emit.forEach<Apiary>(
-      _apiaryRepository.watchApiary(event.apiaryId),
-      onData: (apiary) => state.copyWith(
-        apiary: apiary,
-        status: EditApiaryStatus.success
-      ),
-      onError: (_, __) => state.copyWith(
-        status: EditApiaryStatus.failure
-      ),
-    );
+    // await emit.forEach<Apiary>(
+    //   _apiaryRepository.watchApiary(event.apiaryId),
+    //   onData: (apiary) => state.copyWith(
+    //     apiary: apiary,
+    //     status: EditApiaryStatus.success
+    //   ),
+    //   onError: (_, __) => state.copyWith(
+    //     status: EditApiaryStatus.failure
+    //   ),
+    // );
   }
 }

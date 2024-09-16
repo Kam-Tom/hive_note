@@ -12,7 +12,6 @@ class Apiary extends Equatable {
   final bool isActive;
   final int order;
   final DateTime createdAt;
-  final List<Hive> hives;
 
   Apiary({
     String? id,
@@ -22,7 +21,6 @@ class Apiary extends Equatable {
     int? colorValue,
     bool? isActive,
     required DateTime createdAt,
-    this.hives = const [],
   })  : id = id ?? Uuid().v4(),
         color = color ?? Color(colorValue ?? 0xFF000000), // black by default
         isActive = isActive ?? false,
@@ -43,10 +41,9 @@ class Apiary extends Equatable {
       color: color ?? this.color,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
-      hives: hives ?? this.hives,
     );
   }
 
   @override
-  List<Object?> get props => [id, name, order, color, isActive, createdAt, hives];
+  List<Object?> get props => [id, name, order, color, isActive, createdAt];
 }
