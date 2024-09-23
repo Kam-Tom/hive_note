@@ -22,5 +22,7 @@ class AppVectors {
   static const String buy = '${_basePath}buy$_format';
   static const String queen = '${_basePath}queen$_format';
   
-  static const String manage_hives = '${_basePath}manage_hives$_format';
+  
+  static const String bee = '${_basePath}bee$_format';
+  static const String manageHives = '${_basePath}manage_hives$_format';
 }

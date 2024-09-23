@@ -9,6 +9,7 @@ class MultiRepositoryProviderSetup {
   MultiRepositoryProvider wrapWithRepositories({required Widget child}) {
     final todoRepository = TodoRepository(database);
     final apiaryRepository = ApiaryRepository(database);
+    final hiveRepository = HiveRepository(database);
 
     return MultiRepositoryProvider(
       providers: [
@@ -17,6 +18,9 @@ class MultiRepositoryProviderSetup {
         ),
         RepositoryProvider<ApiaryRepository>(
           create: (context) => apiaryRepository,
+        ),        
+        RepositoryProvider<HiveRepository>(
+          create: (context) => hiveRepository,
         ),
       ],
       child: child,

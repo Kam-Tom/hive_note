@@ -26,7 +26,7 @@
     "queen": "Queen",
     "other": "Other",
 
-    "new_apiary": "New Apiary {number}",
+    "new_apiary": "Apiary #{number}",
     "confirm_deletion": "Confirm Deletion",
     "apiary_has_hives": "Remove all hives from this apiary before deleting",
     "cancel": "Cancel",
@@ -34,5 +34,9 @@
 
     "back": "Back",
     "something_went_wrong": "Something went wrong!",
-    "please_try_again_later": "Please try again later."
+    "please_try_again_later": "Please try again later.",
+
+    "unassigned" : "Unassigned",
+    "no_queen" : "No queen",
+    "new_hive": "Hive #{number}"
 }

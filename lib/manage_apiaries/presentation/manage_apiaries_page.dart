@@ -29,7 +29,7 @@ class ManageApiariesPage extends StatelessWidget {
           Navigator.of(context).pushNamed(AppRouter.manageHivesPath);
         },
         child: SvgPicture.asset(
-          AppVectors.manage_hives,
+          AppVectors.manageHives,
           width: 36,
           height: 36,
         ),

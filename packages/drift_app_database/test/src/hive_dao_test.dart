@@ -1,4 +1,3 @@
-import 'package:app_database/app_database.dart';
 import 'package:drift_app_database/drift_app_database.dart';
 import 'package:drift/native.dart';
 import 'package:test/test.dart';

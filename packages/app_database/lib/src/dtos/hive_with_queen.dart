@@ -12,6 +12,16 @@ class HiveWithQueen extends Equatable {
     this.queen,
   });
 
+  HiveWithQueen copyWith({
+    Hive? hive,
+    Queen? queen,
+  }) {
+    return HiveWithQueen(
+      hive: hive ?? this.hive,
+      queen: queen ?? this.queen,
+    );
+  }
+
   @override
   List<Object?> get props => [hive, queen];
 }

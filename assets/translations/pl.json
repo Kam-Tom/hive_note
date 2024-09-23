@@ -26,7 +26,7 @@
     "queen": "Królowa",
     "other": "Inne",
 
-    "new_apiary": "Nowa Pasieka {number}",
+    "new_apiary": "Pasieka #{number}",
     "confirm_deletion": "Potwierdź usunięcie",
     "apiary_has_hives": "Usuń wszystkie ule z tej pasieki przed usunięciem",
     "cancel": "Anuluj",
@@ -34,6 +34,10 @@
 
     "back": "Powrót",
     "something_went_wrong": "Coś poszło nie tak!",
-    "please_try_again_later": "Spróbuj ponownie później."
+    "please_try_again_later": "Spróbuj ponownie później.",
+
+    "unassigned" : "Nieprzypisane",
+    "no_queen" : "Brak królowej",
+    "new_hive": "Ul #{number}"
     
 }

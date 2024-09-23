@@ -89,4 +89,10 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() => apiaryDao.watchApiariesWithHiveCount();
+  
+  @override
+  Stream<List<Apiary>> watchApiaries() => apiaryDao.watchApiaries();
+
+  @override
+  Stream<List<HiveWithQueen>> watchHivesWithQueenByApiary(Apiary? apiary) => hiveDao.watchHivesWithQueenByApiary(apiary);
 }

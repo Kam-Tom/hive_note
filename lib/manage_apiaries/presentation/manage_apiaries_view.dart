@@ -5,9 +5,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/manage_apiaries/bloc/manage_apiaries_bloc.dart';
-import 'package:hive_note/manage_apiaries/presentation/widgets/add_apiary_tile.dart';
 import 'package:hive_note/manage_apiaries/presentation/widgets/apiary_tile.dart';
 import 'package:hive_note/shared/presentation/dialogs/delete_confirmation_dialog.dart';
+import 'package:hive_note/shared/presentation/widgets/widgets.dart';
 import 'package:repositories/repositories.dart';
 
 class ManageApiariesView extends StatelessWidget {
@@ -23,11 +23,11 @@ class ManageApiariesView extends StatelessWidget {
       case ManageApiariesStatus.loading:
         return const Center(child: CircularProgressIndicator());
       case ManageApiariesStatus.failure:
-        return _buildFailure(context);
+        return const Failure();
       case ManageApiariesStatus.success || ManageApiariesStatus.pending:
         return _buildApiariesList(context, apiaries);
       default:
-        return _buildFailure(context);
+        return const Failure();
     }
   }
 
@@ -53,7 +53,7 @@ class ManageApiariesView extends StatelessWidget {
 
   Widget _buildAddApiaryTile(
       BuildContext context, List<ApiaryWithHiveCount> apiaries) {
-    return AddApiaryTile(
+    return AddTile(
       key: const ValueKey("add_apiary_tile"),
       onPressed: () {
         int order = (apiaries.lastOrNull?.apiary.order ?? -1) + 1;
@@ -93,49 +93,7 @@ class ManageApiariesView extends StatelessWidget {
     );
   }
 
-  Widget _buildFailure(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            color: AppColors.failure,
-            size: 100,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            "something_went_wrong".tr(),
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppColors.failure,
-                  fontSize: 24,
-                ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "please_try_again_later".tr(),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.failure,
-                ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.failure,
-              foregroundColor: AppColors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-            child: Text("back".tr()),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   void _showApiaryHasHivesToast() {
     Fluttertoast.showToast(

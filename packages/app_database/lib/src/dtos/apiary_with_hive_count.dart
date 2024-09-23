@@ -7,7 +7,7 @@ class ApiaryWithHiveCount extends Equatable {
   final Apiary apiary;
   final int hiveCount;
 
-  ApiaryWithHiveCount({
+  const ApiaryWithHiveCount({
     required this.apiary,
     required this.hiveCount,
   });

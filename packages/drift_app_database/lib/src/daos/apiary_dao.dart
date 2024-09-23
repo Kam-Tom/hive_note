@@ -27,6 +27,9 @@ Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() {
   });
 }
 
+  Stream<List<Apiary>> watchApiaries() =>
+      select(apiaryTable).watch();
+
   Future insertApiary(Apiary apiary) =>
       into(apiaryTable).insert(apiary.toCompanion());
 

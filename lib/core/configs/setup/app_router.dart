@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_note/dashboard/presentation/dashboard_page.dart';
 import 'package:hive_note/edit_apiary/presentation/edit_apiary_page.dart';
 import 'package:hive_note/manage_apiaries/presentation/manage_apiaries_page.dart';
+import 'package:hive_note/manage_hives/presentation/manage_hives_page.dart';
 import 'package:hive_note/shared/presentation/pages/tmp_page.dart';
 
 class AppRouter {
@@ -12,6 +13,7 @@ class AppRouter {
   static const String manageQueensPath = '/manage_hives';
   static const String tmpPath = '/tmp';
   static const String editApiaryPath = '/edit_apiary';
+  static const String editHivePath = '/edit_hive';
 
 
   static Route onGeneratedRoute(RouteSettings settings) {
@@ -36,11 +38,15 @@ class AppRouter {
       final apiaryId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => EditApiaryPage(apiaryId: apiaryId)
-        );
+        );      
       case AppRouter.manageHivesPath:
         return MaterialPageRoute(
-          builder: (_) => const TMPPage()
+          builder: (_) => const ManageHivesPage()
         );     
+      case AppRouter.editHivePath:
+        return MaterialPageRoute(
+          builder: (_) => const TMPPage()
+        );
       case AppRouter.manageQueensPath:
         return MaterialPageRoute(
           builder: (_) => const TMPPage()
