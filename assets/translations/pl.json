@@ -38,6 +38,10 @@
 
     "unassigned" : "Nieprzypisane",
     "no_queen" : "Brak królowej",
-    "new_hive": "Ul #{number}"
+    "new_hive": "Ul #{number}",
+
+    "no_hive": "Brak ula",
+    "default_queen": "Kraińska",
+    "default_origin": "Nieznane"
     
 }

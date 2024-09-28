@@ -25,6 +25,7 @@ part 'drift_app_database.g.dart';
     ApiaryDao,
     HiveDao,
     TodoDao,
+    QueenDao,
 
   ],
 )
@@ -95,4 +96,17 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
 
   @override
   Stream<List<HiveWithQueen>> watchHivesWithQueenByApiary(Apiary? apiary) => hiveDao.watchHivesWithQueenByApiary(apiary);
+  
+  @override
+  Stream<List<QueenWithHive>> watchQueensWithHiveByApiary(Apiary? apiary) => queenDao.watchQueensWithHiveByApiary(apiary);
+  
+  @override
+  Future<void> deleteQueen(Queen queen) => queenDao.deleteQueen(queen);
+  
+  @override
+  Future<void> insertQueen(Queen queen) => queenDao.insertQueen(queen);
+  
+  @override
+  Future<void> updateQueen(Queen queen) => queenDao.updateQueen(queen);
+
 }

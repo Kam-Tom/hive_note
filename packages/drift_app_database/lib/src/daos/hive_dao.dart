@@ -58,7 +58,7 @@ extension on Hive {
       name: Value(name),
       order: Value(order),
       type: Value(type),
-      apiaryId: Value(apiaryId),
+      apiaryId: apiaryId != null ? Value(apiaryId) : const Value.absent(),
       createdAt: Value(createdAt),
     );
   }

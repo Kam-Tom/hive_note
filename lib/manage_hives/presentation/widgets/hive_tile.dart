@@ -66,7 +66,7 @@ class HiveTile extends StatelessWidget {
       children: [
         Text(
           hive.name,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(),
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(),
         ),
         const SizedBox(width: 10),
         Text(

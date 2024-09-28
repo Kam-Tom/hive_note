@@ -10,6 +10,7 @@ class MultiRepositoryProviderSetup {
     final todoRepository = TodoRepository(database);
     final apiaryRepository = ApiaryRepository(database);
     final hiveRepository = HiveRepository(database);
+    final queenRepository = QueenRepository(database);
 
     return MultiRepositoryProvider(
       providers: [
@@ -21,6 +22,9 @@ class MultiRepositoryProviderSetup {
         ),        
         RepositoryProvider<HiveRepository>(
           create: (context) => hiveRepository,
+        ),        
+        RepositoryProvider<QueenRepository>(
+          create: (context) => queenRepository,
         ),
       ],
       child: child,

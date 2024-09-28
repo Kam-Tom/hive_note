@@ -2119,6 +2119,7 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   late final ApiaryDao apiaryDao = ApiaryDao(this as DriftAppDatabase);
   late final HiveDao hiveDao = HiveDao(this as DriftAppDatabase);
   late final TodoDao todoDao = TodoDao(this as DriftAppDatabase);
+  late final QueenDao queenDao = QueenDao(this as DriftAppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();

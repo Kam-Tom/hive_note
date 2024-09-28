@@ -25,10 +25,10 @@ class ManageHivesView extends StatelessWidget {
             context.read<ManageHivesBloc>().add(SelectApiary(apiary: apiary));
           },
         ),
-        if (status == Status.loading) const LinearProgressIndicator(),
-        if (status == Status.success || status == Status.updating)
+        if (status == Status.loading) const Expanded(child: Center(child: CircularProgressIndicator(color:AppColors.secondary)))
+        else if (status == Status.success || status == Status.updating)
           _bulidHiveList(context, state.hives)
-        else
+        else if (status == Status.failure)
           const Failure()
       ],
     );

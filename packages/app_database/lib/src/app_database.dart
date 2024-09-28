@@ -13,6 +13,13 @@ abstract class AppDatabase {
   /// - [apiary]: The [Apiary] to filter hives by. If null, returns hives without an apiary.
   Stream<List<HiveWithQueen>> watchHivesWithQueenByApiary(Apiary? apiary);
 
+  /// Returns a [List] of [QueenWithHive] where the `hive.apiaryId` matches the [apiary]'s id, or the hive is null.
+  /// 
+  /// If [apiary] is null, it returns only queens without an associated apiary.
+  /// 
+  /// - [apiary]: The [Apiary] to filter queens by hive.apiaryId. If null, returns queens without an apiary.
+  Stream<List<QueenWithHive>> watchQueensWithHiveByApiary(Apiary? apiary);
+
   Future<void> insertApiary(Apiary apiary);
   Future<void> updateApiary(Apiary apiary);
   Future<void> deleteApiary(Apiary apiary);
@@ -22,7 +29,11 @@ abstract class AppDatabase {
 
   Future<void> insertHive(Hive hive);
   Future<void> updateHive(Hive hive);
-  Future<void> deleteHive(Hive hive);
+  Future<void> deleteHive(Hive hive);  
+  
+  Future<void> insertQueen(Queen queen);
+  Future<void> updateQueen(Queen queen);
+  Future<void> deleteQueen(Queen queen);
 
   Future<void> insertTodo(Todo todo);
   Future<void> updateTodo(Todo todo);

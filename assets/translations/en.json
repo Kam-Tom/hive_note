@@ -38,5 +38,9 @@
 
     "unassigned" : "Unassigned",
     "no_queen" : "No queen",
-    "new_hive": "Hive #{number}"
+    "new_hive": "Hive #{number}",
+
+    "no_hive": "No hive",
+    "default_breed": "Italian",
+    "default_origin": "Unknown"
 }
