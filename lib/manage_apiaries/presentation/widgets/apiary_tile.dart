@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:repositories/repositories.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ApiaryTile extends StatelessWidget {
   final Apiary apiary;
@@ -41,20 +42,47 @@ class ApiaryTile extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => onPressed(apiary),
           style: ElevatedButton.styleFrom(
-            backgroundColor: apiary.color,
+            backgroundColor: apiary.isActive 
+                ? apiary.color 
+                : apiary.color.withOpacity(0.2),
             foregroundColor: AppColors.white,
-            elevation: 3,
+            elevation: apiary.isActive ? 3 : 1,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
           ),
-          child: Row(
+          child: Stack(
             children: [
-              _buildApiaryIconAndLabel(context),
-              Expanded(
-                child: _buildHives(context, hiveWidgets),
+              Row(
+                children: [
+                  _buildApiaryIconAndLabel(context),
+                  Expanded(
+                    child: _buildHives(context, hiveWidgets),
+                  ),
+                  const Icon(Icons.drag_indicator)
+                ],
               ),
-              const Icon(Icons.drag_indicator)
+              if (!apiary.isActive)
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'inactive_status'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

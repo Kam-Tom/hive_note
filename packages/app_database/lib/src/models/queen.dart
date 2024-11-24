@@ -22,7 +22,7 @@ class Queen extends Equatable {
         birthDate = birthDate.copyWith(millisecond: 0, microsecond: 0);
 
   Queen copyWith({
-    String? hiveId,
+    String? Function()? hiveId,
     String? breed,
     String? origin,
     DateTime? birthDate,
@@ -30,7 +30,7 @@ class Queen extends Equatable {
   }) {
     return Queen(
       id: this.id,
-      hiveId: hiveId ?? this.hiveId,
+      hiveId: hiveId != null ? hiveId() : this.hiveId,
       breed: breed ?? this.breed,
       origin: origin ?? this.origin,
       birthDate: birthDate ?? this.birthDate,

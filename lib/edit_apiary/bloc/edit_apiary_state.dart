@@ -1,23 +1,32 @@
 part of 'edit_apiary_bloc.dart';
 
-enum EditApiaryStatus { loading, success, failure, updated }
-
 class EditApiaryState extends Equatable {
-  const EditApiaryState({this.apiary, required this.status});
-
   final Apiary? apiary;
-  final EditApiaryStatus status;
+  final List<Hive> hives;
+  final Status status;
+  final String? errorMessage;
 
-  @override
-  List<Object?> get props => [apiary, status];
+  const EditApiaryState({
+    this.apiary,
+    this.hives = const [],
+    this.status = Status.initial,
+    this.errorMessage,
+  });
 
   EditApiaryState copyWith({
-    EditApiaryStatus? status,
     Apiary? apiary,
+    List<Hive>? hives,
+    Status? status,
+    String? errorMessage,
   }) {
     return EditApiaryState(
       apiary: apiary ?? this.apiary,
+      hives: hives ?? this.hives,
       status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  @override
+  List<Object?> get props => [apiary, hives, status, errorMessage];
 }

@@ -3,8 +3,9 @@ import 'package:app_database/app_database.dart';
 abstract class AppDatabase {
   Stream<List<Todo>> watchTodos();
   Stream<List<Todo>> watchNotCompletedTodos();
-  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount();
+  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount(bool onlyActive);
   Stream<List<Apiary>> watchApiaries();
+  Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId);
 
   /// Returns a [List] of [HiveWithQueen] where `hive.apiaryId` matches the [apiary]'s id.
   /// 
@@ -12,6 +13,8 @@ abstract class AppDatabase {
   /// 
   /// - [apiary]: The [Apiary] to filter hives by. If null, returns hives without an apiary.
   Stream<List<HiveWithQueen>> watchHivesWithQueenByApiary(Apiary? apiary);
+  
+  Stream<HiveWithQueen> watchHiveWithQueen(String hiveId);
 
   /// Returns a [List] of [QueenWithHive] where the `hive.apiaryId` matches the [apiary]'s id, or the hive is null.
   /// 
@@ -19,6 +22,7 @@ abstract class AppDatabase {
   /// 
   /// - [apiary]: The [Apiary] to filter queens by hive.apiaryId. If null, returns queens without an apiary.
   Stream<List<QueenWithHive>> watchQueensWithHiveByApiary(Apiary? apiary);
+  Stream<Queen> watchQueen(String queenId);
 
   Future<void> insertApiary(Apiary apiary);
   Future<void> updateApiary(Apiary apiary);
@@ -38,5 +42,7 @@ abstract class AppDatabase {
   Future<void> insertTodo(Todo todo);
   Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(Todo todo);
+
+  Stream<List<Queen>> watchAvailableQueens();
 
 }

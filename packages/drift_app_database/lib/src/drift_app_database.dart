@@ -89,7 +89,7 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Stream<List<Todo>> watchNotCompletedTodos() => todoDao.watchNotCompletedTodos();
   
   @override
-  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() => apiaryDao.watchApiariesWithHiveCount();
+  Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount(onlyActive) => apiaryDao.watchApiariesWithHiveCount(onlyActive);
   
   @override
   Stream<List<Apiary>> watchApiaries() => apiaryDao.watchApiaries();
@@ -108,5 +108,17 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Future<void> updateQueen(Queen queen) => queenDao.updateQueen(queen);
+  
+  @override
+  Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId) => apiaryDao.watchApiaryWithHives(apiaryId);
+
+  @override
+  Stream<HiveWithQueen> watchHiveWithQueen(String hiveId) => hiveDao.watchHiveWithQueen(hiveId);
+
+  @override
+  Stream<List<Queen>> watchAvailableQueens() => queenDao.watchAvailableQueens();
+  
+  @override
+  Stream<Queen> watchQueen(String queenId) => queenDao.watchQueen(queenId);
 
 }

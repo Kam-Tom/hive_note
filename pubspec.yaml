@@ -48,7 +48,8 @@ dependencies:
   go_router: ^14.2.7
   uuid: ^4.4.2
   bloc_concurrency: ^0.2.5
-  
+  flutter_colorpicker: ^1.1.0
+
   drift_app_database:
     path: packages/drift_app_database  
   repositories:

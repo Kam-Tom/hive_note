@@ -19,15 +19,12 @@ class ManageApiariesView extends StatelessWidget {
     final status = manageApiariesState.status;
     final apiaries = manageApiariesState.apiaries;
 
-    switch (status) {
-      case ManageApiariesStatus.loading:
-        return const Center(child: CircularProgressIndicator());
-      case ManageApiariesStatus.failure:
-        return const Failure();
-      case ManageApiariesStatus.success || ManageApiariesStatus.pending:
-        return _buildApiariesList(context, apiaries);
-      default:
-        return const Failure();
+    if (status == ManageApiariesStatus.loading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (status == ManageApiariesStatus.failure) {
+      return const Failure();
+    } else {
+      return _buildApiariesList(context, apiaries);
     }
   }
 
@@ -44,31 +41,28 @@ class ManageApiariesView extends StatelessWidget {
         },
         children: [
           for (int index = 0; index < apiaries.length; index++)
-            _builApiaryTile(context, apiaries[index]),
-          _buildAddApiaryTile(context, apiaries),
+            _buildApiaryTile(context, apiaries[index]),
+          _buildAddApiaryTile(context),
         ],
       ),
     );
   }
 
-  Widget _buildAddApiaryTile(
-      BuildContext context, List<ApiaryWithHiveCount> apiaries) {
+  Widget _buildAddApiaryTile(BuildContext context) {
     return AddTile(
       key: const ValueKey("add_apiary_tile"),
       onPressed: () {
-        int order = (apiaries.lastOrNull?.apiary.order ?? -1) + 1;
         context.read<ManageApiariesBloc>().add(InsertApiary(
-              apiary: Apiary(
-                  name:
-                      "new_apiary".tr(namedArgs: {"number": order.toString()}),
-                  order: order,
-                  createdAt: DateTime.now()),
+              name: "new_apiary".tr(),
+              color: AppColors.secondary,
+              createdAt: DateTime.now(),
+              isActive: false,
             ));
       },
     );
   }
 
-  Widget _builApiaryTile(BuildContext context, ApiaryWithHiveCount apiary) {
+  Widget _buildApiaryTile(BuildContext context, ApiaryWithHiveCount apiary) {
     return ApiaryTile(
       key: ValueKey(apiary),
       apiary: apiary.apiary,
@@ -80,20 +74,18 @@ class ManageApiariesView extends StatelessWidget {
           arguments: apiary.id,
         );
       },
-      confirmDismiss: (a) async {
+      confirmDismiss: (direction) async {
         if (apiary.hiveCount > 0) {
           _showApiaryHasHivesToast();
           return false;
         }
         return await showDeleteConfirmationDialog(context);
       },
-      onDismissed: (a) {
+      onDismissed: (direction) {
         context.read<ManageApiariesBloc>().add(DeleteApiary(apiary: apiary));
       },
     );
   }
-
-
 
   void _showApiaryHasHivesToast() {
     Fluttertoast.showToast(

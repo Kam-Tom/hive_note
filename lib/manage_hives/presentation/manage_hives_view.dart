@@ -20,6 +20,7 @@ class ManageHivesView extends StatelessWidget {
 
     return Column(
       children: [
+        const SizedBox(height: 8),
         ApiaryDropdown(
           onSelected: (Apiary? apiary) {
             context.read<ManageHivesBloc>().add(SelectApiary(apiary: apiary));
@@ -77,16 +78,10 @@ class ManageHivesView extends StatelessWidget {
     return AddTile(
       key: const ValueKey('add_hive_tile'),
       onPressed: () {
-        int order = (hives.lastOrNull?.hive.order ?? -1) + 1;
-        String? apiaryId = hives.lastOrNull?.hive.apiaryId;
         context.read<ManageHivesBloc>().add(InsertHive(
-              hive: Hive(
-                  type: "default_hive_type".tr(),
-                  name: "new_hive".tr(namedArgs: {"number": order.toString()}),
-                  order: order,
-                  apiaryId: apiaryId,
-                  createdAt: DateTime.now()),
-            ));
+                  defaultType: "default_hive_type".tr(),
+                  defaultName: "new_hive".tr(),
+        ));
       },
     );
   }

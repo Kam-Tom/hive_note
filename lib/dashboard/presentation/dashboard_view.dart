@@ -208,7 +208,7 @@ class _Buttons extends StatelessWidget {
                 _buildMenuButton(
                     AppVectors.calendar, "calendar".tr(), AppRouter.tmpPath),
                 _buildMenuButton(
-                    AppVectors.note, "records".tr(), AppRouter.tmpPath),
+                    AppVectors.note, "records".tr(), AppRouter.recordsPath),
               ],
             ),
           ],

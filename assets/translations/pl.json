@@ -26,7 +26,7 @@
     "queen": "Królowa",
     "other": "Inne",
 
-    "new_apiary": "Pasieka #{number}",
+    "new_apiary": "Pasieka",
     "confirm_deletion": "Potwierdź usunięcie",
     "apiary_has_hives": "Usuń wszystkie ule z tej pasieki przed usunięciem",
     "cancel": "Anuluj",
@@ -38,10 +38,32 @@
 
     "unassigned" : "Nieprzypisane",
     "no_queen" : "Brak królowej",
-    "new_hive": "Ul #{number}",
+    "new_hive": "Ul",
 
     "no_hive": "Brak ula",
     "default_queen": "Kraińska",
-    "default_origin": "Nieznane"
+    "default_origin": "Nieznane",
     
+    "failed_to_load_queen": "Nie udało się załadować królowej",
+    "breed": "Rasa",
+    "origin": "Pochodzenie",
+    "is_alive": "Żywa",
+    "birth_date": "Data urodzenia",
+    "failed_to_load_hive": "Nie udało się załadować ula",
+    "hive_name": "Nazwa ula",
+    "hive_type": "Typ ula",
+    "no_queen_selected": "Nie wybrano królowej",
+    "create_new_queen": "Utwórz nową królową",
+    "queen_name": "Nazwa królowej",
+    "create": "Utwórz",
+    "failed_to_load_apiary": "Nie udało się załadować pasieki",
+    "apiary_name": "Nazwa pasieki",
+    "active": "Aktywna",
+    "inactive_status": "Nieaktywna",
+    "change_color": "Zmień kolor",
+    "created": "Utworzono",
+    "add_hive": "Dodaj ul",
+    "pick_color": "Wybierz kolor",
+    "done": "Gotowe",
+    "order": "Kolejność"
 }

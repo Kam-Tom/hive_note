@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
-import 'package:logger/logger.dart';
 import 'package:repositories/repositories.dart';
 
 part 'manage_queens_event.dart';
@@ -26,20 +25,20 @@ class ManageQueensBloc extends Bloc<ManageQueensEvent, ManageQueensState> {
     Subscribe event,
     Emitter<ManageQueensState> emit,
   ) async {
-    Logger().i('Subscribing to ${state.selectedApiary?.name}');
     emit(state.copyWith(status: Status.loading));
 
     await emit.forEach(
       _queenRepository.watchQueensWithHiveByApiary(state.selectedApiary),
       onData: (queens)  
       {
-        Logger().i('queens to $queens');
         return state.copyWith(
         queens: queens,
         status: Status.success,
         );
       },
-      onError: (e, s) => state.copyWith(status: Status.failure),
+      onError: (e, s) {
+        return state.copyWith(status: Status.failure);
+      }
     );
   }
 

@@ -9,12 +9,13 @@ part 'apiary_dropdown_event.dart';
 part 'apiary_dropdown_state.dart';
 
 class ApiaryDropdownBloc extends Bloc<ApiaryDropdownEvent, ApiaryDropdownState> {
-  ApiaryDropdownBloc({required this.apiaryRepository})
+  ApiaryDropdownBloc({required this.apiaryRepository, this.defaultApiaryId})
       : super(const ApiaryDropdownState()) {
     on<Subscribe>(_onSubscribe);
     on<SelectApiary>(_onSelectApiary);
   }
 
+  final String? defaultApiaryId;
   final ApiaryRepository apiaryRepository;
 
   FutureOr<void> _onSubscribe(
@@ -22,16 +23,26 @@ class ApiaryDropdownBloc extends Bloc<ApiaryDropdownEvent, ApiaryDropdownState> 
     emit(state.copyWith(status: Status.loading));
 
     await emit.forEach<List<Apiary>>(apiaryRepository.watchApiaries(),
-        onData: (apiaries) => state.copyWith(
+        onData: (apiaries) {
+          if(state.selectedApiary == null && defaultApiaryId != null) {
+            return state.copyWith(
+              status: Status.success,
+              apiaries: apiaries,
+              selectedApiary: apiaries.firstWhere((element) => element.id == defaultApiaryId),
+            );
+          }
+          return state.copyWith(
               status: Status.success,
               apiaries: apiaries,
               selectedApiary: state.selectedApiary,
-            ),
+            );
+        },
         onError: (_, __) => state.copyWith(status: Status.failure));
   }
 
   FutureOr<void> _onSelectApiary(
       SelectApiary event, Emitter<ApiaryDropdownState> emit) {
     emit(state.copyWith(selectedApiary: event.apiary));
-  }
+  }  
+  
 }

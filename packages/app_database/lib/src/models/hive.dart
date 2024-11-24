@@ -22,7 +22,7 @@ class Hive extends Equatable {
         createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
 
   Hive copyWith({
-    String? apiaryId,
+    String? Function()?  apiaryId,
     DateTime? createdAt,
     String? type,
     String? name,
@@ -30,7 +30,7 @@ class Hive extends Equatable {
   }) {
     return Hive(
       id: this.id,
-      apiaryId: apiaryId ?? this.apiaryId,
+      apiaryId: apiaryId != null ? apiaryId() : this.apiaryId,
       createdAt: createdAt ?? this.createdAt,
       type: type ?? this.type,
       name: name ?? this.name,

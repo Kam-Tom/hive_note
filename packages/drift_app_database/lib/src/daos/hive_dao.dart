@@ -16,7 +16,6 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
           ..where((h) => h.apiaryId.equalsNullable(apiary?.id))).watch();
         
     final queenStream = select(queenTable).watch();
-
     final rx = Rx.combineLatest2(
       hiveStream,
       queenStream,
@@ -49,6 +48,50 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
           hiveTable, hivesToUpdate.map((hive) => hive.toCompanion()));
     });
   }
+
+  Stream<HiveWithQueen> watchHiveWithQueen(String hiveId) {
+    final hiveStream = (select(hiveTable)
+          ..where((h) => h.id.equals(hiveId)))
+        .watchSingle();
+
+    final queenStream = select(queenTable)
+      .watch();
+
+    return Rx.combineLatest2(
+      hiveStream,
+      queenStream,
+      (Hive hive, List<Queen> queens) {
+        Queen? queen = null;
+        for (final q in queens) {
+          if (q.hiveId == hive.id) {
+            queen = q;
+            break;
+          }
+        }
+        return HiveWithQueen(hive: hive, queen: queen);
+      }
+    );
+  }
+  
+  Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId) {
+    final apiaryStream = (select(apiaryTable)
+          ..where((a) => a.id.equals(apiaryId)))
+        .watchSingle();
+
+    final hivesStream = (select(hiveTable)
+          ..where((h) => h.apiaryId.equals(apiaryId))
+          ..orderBy([(h) => OrderingTerm(expression: h.order)]))
+        .watch();
+
+    return Rx.combineLatest2(
+      apiaryStream,
+      hivesStream,
+      (Apiary apiary, List<Hive> hives) => ApiaryWithHives(
+        apiary: apiary,
+        hives: hives,
+      ),
+    );
+  }
 }
 
 extension on Hive {
@@ -58,7 +101,7 @@ extension on Hive {
       name: Value(name),
       order: Value(order),
       type: Value(type),
-      apiaryId: apiaryId != null ? Value(apiaryId) : const Value.absent(),
+      apiaryId: Value(apiaryId),
       createdAt: Value(createdAt),
     );
   }

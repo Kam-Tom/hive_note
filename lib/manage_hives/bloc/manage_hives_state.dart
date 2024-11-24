@@ -18,11 +18,11 @@ final class ManageHivesState extends Equatable {
   ManageHivesState copyWith({
   List<HiveWithQueen>? hives,
   Status? status,
-  Apiary? selectedApiary,
+  Apiary? Function()? selectedApiary,
   }) {
     return ManageHivesState(
       status: status ?? this.status,
-      selectedApiary: selectedApiary ?? this.selectedApiary,
+      selectedApiary: selectedApiary != null ? selectedApiary() : this.selectedApiary,
       hives: hives ?? this.hives,
     );
   }

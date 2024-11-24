@@ -5,14 +5,16 @@ import 'package:hive_note/shared/presentation/widgets/apiary_dropdown/presentati
 import 'package:repositories/repositories.dart';
 
 class ApiaryDropdown extends StatelessWidget {
-  const ApiaryDropdown({required this.onSelected, super.key});
+  const ApiaryDropdown({required this.onSelected, this.defaultApiaryId, super.key});
 
   final void Function(Apiary? apiary) onSelected;
+  final String? defaultApiaryId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(create: (_) => ApiaryDropdownBloc(
       apiaryRepository: context.read<ApiaryRepository>(),
+      defaultApiaryId: defaultApiaryId,
     )..add(const Subscribe()),
     child: ApiaryDropdownView(onSelected: onSelected),
     );

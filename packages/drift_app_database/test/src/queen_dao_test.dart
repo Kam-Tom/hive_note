@@ -92,7 +92,7 @@ void main() {
           order: 1,
           createdAt: DateTime.now());
 
-      final updatedQueen = queen.copyWith(hiveId: hive.id);
+      final updatedQueen = queen.copyWith(hiveId: () => hive.id);
 
       final expectation = expectLater(
         appDatabase.watchQueensWithHiveByApiary(null),

@@ -49,41 +49,28 @@ class ApiaryDropdownView extends StatelessWidget {
   Widget _buildDropdown(
       BuildContext context, List<Apiary> apiaries, Apiary? selectedApiary) {
     return Center(
-      child: DropdownMenu<Apiary?>(
-        dropdownMenuEntries: [
-          DropdownMenuEntry(
+      child: DropdownButtonFormField<Apiary?>(
+        value: selectedApiary,
+        alignment : Alignment.bottomCenter,
+        items: [
+          DropdownMenuItem(
               value: null,
-              label: "unassigned".tr(),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.text,
-                backgroundColor: AppColors.background,
-              )),
-          ...apiaries.map((apiary) => DropdownMenuEntry(
-                label: apiary.name,
+              child: Text("unassigned".tr()),
+          ),
+          ...apiaries.map((apiary) => DropdownMenuItem(
                 value: apiary,
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.text,
-                  backgroundColor: AppColors.background,
-                ),
+
+                child: Text(apiary.name),
               ))
         ],
-        initialSelection: selectedApiary,
-        onSelected: (Apiary? apiary) {
+        
+        onChanged: (Apiary? apiary) {
           context
               .read<ApiaryDropdownBloc>()
               .add(SelectApiary(apiary: apiary));
 
           onSelected(apiary);
         },
-        width: double.infinity,
-        menuHeight: 300,
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.secondary),
-          ),
-        ),
-        menuStyle: const MenuStyle(
-            backgroundColor: WidgetStatePropertyAll(AppColors.backgroundDark)),
       ),
     );
   }

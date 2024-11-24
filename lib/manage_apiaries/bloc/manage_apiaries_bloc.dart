@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -28,7 +29,7 @@ class ManageApiariesBloc
     emit(state.copyWith(status: ManageApiariesStatus.loading));
 
     await emit.forEach<List<ApiaryWithHiveCount>>(
-      _apiaryRepository.watchApiariesWithHiveCount(),
+      _apiaryRepository.watchApiariesWithHiveCount(onlyActive: false),
       onData: (apiaries) => state.copyWith(
         status: ManageApiariesStatus.success,
         apiaries: apiaries,
@@ -40,13 +41,20 @@ class ManageApiariesBloc
   }
 
   Future<void> _onRetryRequest(
-      ManageApiariesRetryRequest event, Emitter<ManageApiariesState> emit) {
-    throw UnimplementedError();
+      ManageApiariesRetryRequest event, Emitter<ManageApiariesState> emit) async {
+    add(const ManageApiariesSubscriptionRequest());
   }
 
   Future<void> _onInsertApiary(
       InsertApiary event, Emitter<ManageApiariesState> emit) async {
-    await _apiaryRepository.insertApiary(event.apiary);
+    final newApiary = Apiary(
+      name: "${event.name} #${state.apiaries.length}",
+      color: event.color,
+      createdAt: event.createdAt,
+      order: state.apiaries.length,
+      isActive: event.isActive,
+    );
+    await _apiaryRepository.insertApiary(newApiary);
   }
 
   Future<void> _onDeleteApiary(
@@ -57,10 +65,10 @@ class ManageApiariesBloc
     }
     var tmpApiaries = List<ApiaryWithHiveCount>.from(state.apiaries);
 
-    tmpApiaries.removeAt(event.apiary.apiary.order);
+    tmpApiaries.removeWhere((a) => a.apiary.id == event.apiary.apiary.id);
     for (int i = 0; i < tmpApiaries.length; i++) {
-      final updateApiary = tmpApiaries[i].apiary.copyWith(order: i);
-      tmpApiaries[i] = tmpApiaries[i].copyWith(apiary: updateApiary);
+      final updatedApiary = tmpApiaries[i].apiary.copyWith(order: i);
+      tmpApiaries[i] = tmpApiaries[i].copyWith(apiary: updatedApiary);
     }
 
     emit(state.copyWith(

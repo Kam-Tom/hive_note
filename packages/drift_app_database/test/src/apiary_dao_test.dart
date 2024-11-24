@@ -23,7 +23,7 @@ void main() {
           id: '2', order: 2, name: 'Apiary 2', createdAt: DateTime.now());
 
       final expectation = expectLater(
-        appDatabase.watchApiariesWithHiveCount(),
+        appDatabase.watchApiariesWithHiveCount(false),
         emitsInOrder([
           [ApiaryWithHiveCount(apiary: apiary1, hiveCount: 0)],
           [
@@ -49,7 +49,7 @@ void main() {
       final updatedApiary1 = apiary1.copyWith(order: 3);
 
       final expectation = expectLater(
-        appDatabase.watchApiariesWithHiveCount(),
+        appDatabase.watchApiariesWithHiveCount(false),
         // We can't use emitsInOrder because [apiary1, apiary2] can be omitted when operations are done in the same transaction
         emitsThrough([
           ApiaryWithHiveCount(apiary: apiary2, hiveCount: 0),
@@ -77,7 +77,7 @@ void main() {
           createdAt: DateTime.now());
 
       final expectation = expectLater(
-        appDatabase.watchApiariesWithHiveCount(),
+        appDatabase.watchApiariesWithHiveCount(false),
         emitsInOrder([
           [ApiaryWithHiveCount(apiary: apiary, hiveCount: 0)],
           [ApiaryWithHiveCount(apiary: apiary, hiveCount: 1)]
@@ -110,7 +110,7 @@ void main() {
           order: 1,
           createdAt: DateTime.now());
 
-      final stream = appDatabase.watchApiariesWithHiveCount();
+      final stream = appDatabase.watchApiariesWithHiveCount(false);
 
       // We can't use one expectLater because some operations can be omitted when operations are done in the same transaction
       // act & assert for every operation

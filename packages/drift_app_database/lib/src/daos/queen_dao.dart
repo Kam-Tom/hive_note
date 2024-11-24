@@ -11,8 +11,7 @@ class QueenDao extends DatabaseAccessor<DriftAppDatabase> with _$QueenDaoMixin {
   QueenDao(DriftAppDatabase db) : super(db);
 
   Stream<List<QueenWithHive>> watchQueensWithHiveByApiary(Apiary? apiary) {
-    final hiveStream = (select(hiveTable)
-          ..where((h) => h.apiaryId.equalsNullable(apiary?.id)))
+    final hiveStream = select(hiveTable)
         .watch();
 
     final queenStream = (select(queenTable)
@@ -36,6 +35,7 @@ class QueenDao extends DatabaseAccessor<DriftAppDatabase> with _$QueenDaoMixin {
             if (hive?.apiaryId != apiary.id) continue;
             if (hive == null) continue;
           }
+          else if (hive?.apiaryId != null) continue;
           queenWithHive.add(QueenWithHive(queen: queen, hive: hive));
         }
 
@@ -54,13 +54,24 @@ class QueenDao extends DatabaseAccessor<DriftAppDatabase> with _$QueenDaoMixin {
 
   Future deleteQueen(Queen queen) =>
       (delete(queenTable)..where((q) => q.id.equals(queen.id))).go();
+
+  Stream<List<Queen>> watchAvailableQueens() {
+    return (select(queenTable)
+          ..orderBy([(t) => OrderingTerm(expression: t.birthDate, mode: OrderingMode.desc)]))
+        .watch()
+        .map((queens) => queens.where((queen) => queen.hiveId == null).toList());
+  }
+
+  Stream<Queen> watchQueen(String queenId) {
+    return (select(queenTable)..where((q) => q.id.equals(queenId))).watchSingle();
+  }
 }
 
 extension on Queen {
   QueenTableCompanion toCompanion() {
     return QueenTableCompanion(
       id: Value(id),
-      hiveId: hiveId != null ? Value(hiveId) : const Value.absent(),
+      hiveId: Value(hiveId),
       breed: Value(breed),
       origin: Value(origin),
       birthDate: Value(birthDate),

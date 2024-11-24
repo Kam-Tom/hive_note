@@ -40,7 +40,7 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
 
   FutureOr<void> _onSelectApiary(
       SelectApiary event, Emitter<ManageHivesState> emit) {
-    emit(state.copyWith(selectedApiary: event.apiary));
+    emit(state.copyWith(selectedApiary: () => event.apiary));
 
     add(const Subscribe());
   }
@@ -80,8 +80,15 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
   FutureOr<void> _onInsertHive(
       InsertHive event, Emitter<ManageHivesState> emit) async {
     var tmpHives = List<HiveWithQueen>.from(state.hives);
-    tmpHives.add(HiveWithQueen(hive: event.hive));
+    final newHive = Hive(
+      name: event.defaultName,
+      type: event.defaultType,
+      apiaryId: state.selectedApiary?.id,
+      order: tmpHives.length,
+      createdAt: DateTime.now(),
+    );
+    tmpHives.add(HiveWithQueen(hive: newHive));
     emit(state.copyWith(status: Status.updating, hives: tmpHives));
-    await _hiveRepository.insertHive(event.hive);
+    await _hiveRepository.insertHive(newHive);
   }
 }

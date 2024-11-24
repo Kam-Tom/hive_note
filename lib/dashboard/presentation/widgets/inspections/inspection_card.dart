@@ -29,7 +29,7 @@ class InspectionCard extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => onPressed(apiary.apiary),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.secondary,
+          backgroundColor: apiary.apiary.color,
           foregroundColor: AppColors.white,
           elevation: 3,
           shape: const RoundedRectangleBorder(

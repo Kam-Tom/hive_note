@@ -10,7 +10,6 @@ import 'package:hive_note/shared/presentation/dialogs/delete_confirmation_dialog
 import 'package:hive_note/shared/presentation/widgets/add_tile.dart';
 import 'package:hive_note/shared/presentation/widgets/apiary_dropdown/presentation/apiary_dropdown.dart';
 import 'package:hive_note/shared/presentation/widgets/failure.dart';
-import 'package:logger/logger.dart';
 import 'package:repositories/repositories.dart';
 
 class ManageQueensView extends StatelessWidget {
@@ -23,13 +22,15 @@ class ManageQueensView extends StatelessWidget {
 
     return Column(
       children: [
+        const SizedBox(height: 8),
         ApiaryDropdown(
           onSelected: (Apiary? apiary) {
             context.read<ManageQueensBloc>().add(SelectApiary(apiary: apiary));
           },
         ),
-        if (status == Status.loading) const LinearProgressIndicator(),
-        if (status == Status.success || status == Status.updating)
+        if (status == Status.loading || status == Status.initial) 
+          const LinearProgressIndicator()
+        else if (status == Status.success || status == Status.updating)
           _bulidQueenList(context, state.queens, state.selectedApiary)
         else
           const Failure()

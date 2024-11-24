@@ -2,6 +2,7 @@ import 'package:app_database/app_database.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_app_database/drift_app_database.dart';
 import 'package:drift_app_database/src/tabels/tabels.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'apiary_dao.g.dart';
 
@@ -10,13 +11,19 @@ class ApiaryDao extends DatabaseAccessor<DriftAppDatabase>
     with _$ApiaryDaoMixin {
   ApiaryDao(DriftAppDatabase db) : super(db);
 
-Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() {
+Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount(onlyActive) {
   final query = select(apiaryTable).join([
-    leftOuterJoin(hiveTable, hiveTable.apiaryId.equalsExp(apiaryTable.id),useColumns: false)
-  ])
-  ..groupBy([apiaryTable.id])
-  ..addColumns([hiveTable.id.count()])
-  ..orderBy([OrderingTerm(expression: apiaryTable.order)]);
+    leftOuterJoin(hiveTable, hiveTable.apiaryId.equalsExp(apiaryTable.id), useColumns: false)
+  ]);
+
+  if (onlyActive) {
+    query.where(apiaryTable.isActive.equals(true));
+  }
+
+  query
+    ..groupBy([apiaryTable.id])
+    ..addColumns([hiveTable.id.count()])
+    ..orderBy([OrderingTerm(expression: apiaryTable.order)]);
 
   return query.watch().map((rows) {
     return rows.map((row) {
@@ -46,6 +53,24 @@ Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount() {
         apiariesToUpdate.map((apiary) => apiary.toCompanion()),
       );
     });
+  }
+
+  Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId) {
+    final apiaryStream = (select(apiaryTable)
+          ..where((tbl) => tbl.id.equals(apiaryId)))
+        .watchSingle();
+
+    final hivesStream = (select(hiveTable)
+          ..where((tbl) => tbl.apiaryId.equals(apiaryId))
+          ..orderBy([(t) => OrderingTerm(expression: t.order)]))
+        .watch();
+
+    return Rx.combineLatest2(
+      apiaryStream,
+      hivesStream,
+      (Apiary apiary, List<Hive> hives) =>
+          ApiaryWithHives(apiary: apiary, hives: hives),
+    );
   }
 }
 
