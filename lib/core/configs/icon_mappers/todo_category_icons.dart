@@ -4,8 +4,8 @@ import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:repositories/repositories.dart';
 
 class TodoCategoryIcons {
-  static Map<CategoryType, SvgPicture> categoryIcons = {
-    CategoryType.feeding: SvgPicture.asset(AppVectors.feeding, width: 36, colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+  static Map<CategoryType, Widget> categoryIcons = {
+    CategoryType.feeding: SvgPicture.asset(AppVectors.feeding, width: 24, colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),),
     CategoryType.inspection: SvgPicture.asset(AppVectors.inspection, width: 36, colorFilter: const ColorFilter.mode(Colors.blue, BlendMode.srcIn),),
     CategoryType.harvest: SvgPicture.asset(AppVectors.harvest, width: 36, colorFilter: const ColorFilter.mode(Colors.deepOrange, BlendMode.srcIn),),
     CategoryType.winterize: SvgPicture.asset(AppVectors.winterize, width: 36, colorFilter: const ColorFilter.mode(Colors.cyan, BlendMode.srcIn),),

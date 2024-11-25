@@ -28,9 +28,10 @@ class Todo extends Equatable {
     CategoryType? categoryType,
     bool? isCompleted,
     DateTime? dueTo,
+    String? id,
   }) {
     return Todo(
-      id: this.id,
+      id: id ?? this.id,
       location: location ?? this.location,
       description: description ?? this.description,
       categoryType: categoryType ?? this.categoryType,

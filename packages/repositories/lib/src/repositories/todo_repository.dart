@@ -9,9 +9,6 @@ class TodoRepository {
   Stream<List<Todo>> watchNotCompletedTodos() => _database.watchNotCompletedTodos();
 
   Future insertTodo(Todo todo) => _database.insertTodo(todo);
-  Future updateTodo(Todo todo) 
-  {
-    print("WF");
-   return _database.updateTodo(todo);
-  }
+  Future updateTodo(Todo todo) => _database.updateTodo(todo);
+  Future removeTodo(Todo todo) => _database.removeTodo(todo);
 }

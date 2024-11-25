@@ -11,7 +11,6 @@ import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/dashboard/bloc/dashboard_blocs.dart';
 import 'package:hive_note/dashboard/presentation/widgets/inspections/inspections.dart';
 import 'package:hive_note/dashboard/presentation/widgets/todos/todos.dart';
-import 'package:hive_note/shared/presentation/pages/tmp_page.dart';
 import 'package:hive_note/shared/presentation/widgets/widgets.dart';
 import 'package:repositories/repositories.dart';
 
@@ -49,9 +48,9 @@ class _TodoCarousel extends StatelessWidget {
         break;
       case DashboardTodosStatus.empty:
         todosWidget = TodoCardEmpty(
-            onAddTodo: () => Navigator.push(
+            onAddTodo: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => const TMPPage()),
+                  AppRouter.manageTodosPath,
                 ));
         break;
       case DashboardTodosStatus.success:
@@ -154,7 +153,10 @@ class _InspectionCarousel extends StatelessWidget {
       );
     } else if (status == DashboardInspectionsStatus.empty) {
       return InspectionCardEmpty(
-        onPressed: () => _navigateToTMPPage(context),
+        onPressed: () => () => Navigator.pushNamed(
+              context,
+              AppRouter.manageTodosPath,
+            ),
       );
     }
 
@@ -173,16 +175,12 @@ class _InspectionCarousel extends StatelessWidget {
         final apiary = apiaries[itemIndex];
         return InspectionCard(
           apiary: apiary,
-          onPressed: (apiary) => _navigateToTMPPage(context),
+          onPressed: (apiary) => () => Navigator.pushNamed(
+                context,
+                AppRouter.tmpPath,
+              ),
         );
       },
-    );
-  }
-
-  void _navigateToTMPPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TMPPage()),
     );
   }
 }
@@ -206,7 +204,7 @@ class _Buttons extends StatelessWidget {
             _buildMenuButtonRow(
               buttons: [
                 _buildMenuButton(
-                    AppVectors.calendar, "calendar".tr(), AppRouter.tmpPath),
+                    AppVectors.calendar, "calendar".tr(), AppRouter.manageTodosPath),
                 _buildMenuButton(
                     AppVectors.note, "records".tr(), AppRouter.recordsPath),
               ],

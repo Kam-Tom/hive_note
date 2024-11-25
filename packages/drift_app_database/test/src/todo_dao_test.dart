@@ -59,7 +59,7 @@ void main() {
       );
 
       await appDatabase.insertTodo(todo);
-      await appDatabase.deleteTodo(todo);
+      await appDatabase.removeTodo(todo);
 
       await expectation;
 

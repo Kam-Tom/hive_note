@@ -6,6 +6,7 @@ import 'package:hive_note/edit_queen/presentation/edit_queen_page.dart';
 import 'package:hive_note/manage_apiaries/presentation/manage_apiaries_page.dart';
 import 'package:hive_note/manage_hives/presentation/manage_hives_page.dart';
 import 'package:hive_note/manage_queens/presentation/manage_queens_page.dart';
+import 'package:hive_note/manage_todos/presentation/manage_todos_page.dart';
 import 'package:hive_note/navigation/presentation/pages/records.dart';
 import 'package:hive_note/shared/presentation/pages/tmp_page.dart';
 
@@ -16,6 +17,7 @@ class AppRouter {
   static const String manageQueensPath = '/manage_queens';
   static const String manageHivesPath = '/manage_hives';
   static const String tmpPath = '/tmp';
+  static const String manageTodosPath = '/manage_todos_path';
   static const String recordsPath = '/records';
   static const String editApiaryPath = '/edit_apiary';
   static const String editHivePath = '/edit_hive';
@@ -31,6 +33,10 @@ class AppRouter {
       case AppRouter.tmpPath :
         return MaterialPageRoute(
           builder:  (_) => const TMPPage()
+        );         
+      case AppRouter.manageTodosPath:
+        return MaterialPageRoute(
+          builder:  (_) => const ManageTodosPage()
         );      
       case AppRouter.recordsPath :
         return MaterialPageRoute(

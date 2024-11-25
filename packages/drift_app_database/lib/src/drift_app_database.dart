@@ -56,7 +56,7 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Future deleteHive(Hive hive) => hiveDao.deleteHive(hive);
 
   @override
-  Future deleteTodo(Todo todo) => todoDao.deleteTodo(todo);
+  Future removeTodo(Todo todo) => todoDao.removeTodo(todo);
 
   @override
   Future insertApiary(Apiary apiary) => apiaryDao.insertApiary(apiary);

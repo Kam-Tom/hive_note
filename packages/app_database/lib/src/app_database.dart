@@ -41,7 +41,7 @@ abstract class AppDatabase {
 
   Future<void> insertTodo(Todo todo);
   Future<void> updateTodo(Todo todo);
-  Future<void> deleteTodo(Todo todo);
+  Future<void> removeTodo(Todo todo);
 
   Stream<List<Queen>> watchAvailableQueens();
 
