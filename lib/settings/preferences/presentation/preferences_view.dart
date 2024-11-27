@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/settings/preferences/bloc/preferences_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
 class PreferencesView extends StatelessWidget {
   const PreferencesView({super.key});
 

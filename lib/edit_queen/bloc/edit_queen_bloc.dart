@@ -15,13 +15,8 @@ class EditQueenBloc extends Bloc<EditQueenEvent, EditQueenState> {
   })  : _queenRepository = queenRepository,
         super(const EditQueenState()) {
     on<LoadQueen>(_onLoadQueen);
-    on<UpdateQueenImmediate>(_onUpdateQueenImmediate);
-    on<UpdateQueenDebounced>(
-      _onUpdateQueenDebounced,
-      transformer: (events, mapper) => events
-          .debounceTime(const Duration(milliseconds: 500))
-          .switchMap(mapper),
-    );
+    on<UpdateQueen>(_onUpdateQueen);
+    on<ToggleEditing>(_onToggleEditing);
   }
 
   final QueenRepository _queenRepository;
@@ -39,10 +34,12 @@ class EditQueenBloc extends Bloc<EditQueenEvent, EditQueenState> {
     );
   }
 
-  Future<void> _onUpdateQueenImmediate(UpdateQueenImmediate event, Emitter<EditQueenState> emit) async {
+  Future<void> _onUpdateQueen(UpdateQueen event, Emitter<EditQueenState> emit) async {
     try {
       await _queenRepository.updateQueen(
         state.queen!.copyWith(
+          breed: event.breed ?? state.queen!.breed,
+          origin: event.origin ?? state.queen!.origin,
           isAlive: event.isAlive ?? state.queen!.isAlive,
           birthDate: event.birthDate ?? state.queen!.birthDate,
         ),
@@ -52,16 +49,9 @@ class EditQueenBloc extends Bloc<EditQueenEvent, EditQueenState> {
     }
   }
 
-  Future<void> _onUpdateQueenDebounced(UpdateQueenDebounced event, Emitter<EditQueenState> emit) async {
-    try {
-      await _queenRepository.updateQueen(
-        state.queen!.copyWith(
-          breed: event.breed ?? state.queen!.breed,
-          origin: event.origin ?? state.queen!.origin,
-        ),
-      );
-    } catch (_) {
-      emit(state.copyWith(status: Status.failure));
-    }
+  void _onToggleEditing(ToggleEditing event, Emitter<EditQueenState> emit) {
+    final newEditingState = Map<String, bool>.from(state.isEditing);
+    newEditingState[event.field] = !(newEditingState[event.field] ?? false);
+    emit(state.copyWith(isEditing: newEditingState));
   }
 }

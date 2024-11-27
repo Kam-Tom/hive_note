@@ -71,3 +71,11 @@ final class UpdateApiaryCreatedAt extends EditApiaryEvent {
   @override
   List<Object> get props => [createdAt];
 }
+
+final class ToggleEditing extends EditApiaryEvent {
+  const ToggleEditing(this.field);
+  final String field;
+
+  @override
+  List<Object> get props => [field];
+}

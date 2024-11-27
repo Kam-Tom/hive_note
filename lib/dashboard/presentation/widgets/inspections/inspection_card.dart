@@ -25,6 +25,7 @@ class InspectionCard extends StatelessWidget {
 
     return Container(
       width: 300,
+      height: 170, // Increased height
       margin: const EdgeInsets.all(20),
       child: ElevatedButton(
         onPressed: () => onPressed(apiary.apiary),
@@ -103,6 +104,8 @@ class InspectionCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

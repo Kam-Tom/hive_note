@@ -15,17 +15,20 @@ class EditApiaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = context.watch<EditApiaryBloc>().state;
-    switch(state.status) {
-      case Status.loading || Status.initial:
-        return const Center(child: CircularProgressIndicator());
-      case Status.failure:
-        return Center(child: Text('failed_to_load_apiary'.tr()));
-      case Status.success:
-        return _buildSuccessView(context, state.apiary!, state.hives);
-      default:
-        return const SizedBox();
-    }
-
+    return BlocBuilder<EditApiaryBloc, EditApiaryState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case Status.loading || Status.initial:
+            return const Center(child: CircularProgressIndicator());
+          case Status.failure:
+            return Center(child: Text('failed_to_load_apiary'.tr()));
+          case Status.success:
+            return _buildSuccessView(context, state.apiary!, state.hives);
+          default:
+            return const SizedBox();
+        }
+      },
+    );
   }
 
   Widget _buildSuccessView(BuildContext context, Apiary apiary, List<Hive> hives) {
@@ -43,7 +46,6 @@ class EditApiaryView extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, Apiary apiary, List<Hive> hives) {
-    final nameController = TextEditingController(text: apiary.name);
     return Card(
       elevation: 2,
       child: Padding(
@@ -51,15 +53,13 @@ class EditApiaryView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'apiary_name'.tr(),
-                border: const OutlineInputBorder(),
-              ),
-              onChanged: (value) => context.read<EditApiaryBloc>().add(
-                    UpdateApiaryName(name: value),
-                  )
+            _buildToggleableTextField(
+              context: context,
+              label: 'apiary_name'.tr(),
+              value: apiary.name,
+              onSave: (newValue) {
+                context.read<EditApiaryBloc>().add(UpdateApiaryName(name: newValue));
+              },
             ),
             const SizedBox(height: 16),
             Row(
@@ -115,6 +115,50 @@ class EditApiaryView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildToggleableTextField({
+    required BuildContext context,
+    required String label,
+    required String value,
+    required ValueChanged<String> onSave,
+  }) {
+    TextEditingController controller = TextEditingController(text: value);
+    return BlocBuilder<EditApiaryBloc, EditApiaryState>(
+      builder: (context, state) {
+        bool isEditing = state.isEditing[label] ?? false;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Expanded(
+                  child: isEditing
+                      ? TextField(
+                          controller: controller,
+                          decoration: InputDecoration(
+                            hintText: 'Enter $label',
+                          ),
+                        )
+                      : Text(value),
+                ),
+                IconButton(
+                  icon: Icon(isEditing ? Icons.save : Icons.edit),
+                  onPressed: () {
+                    if (isEditing) {
+                      onSave(controller.text);
+                    }
+                    context.read<EditApiaryBloc>().add(ToggleEditing(label));
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColors.divider),
+          ],
+        );
+      },
     );
   }
 

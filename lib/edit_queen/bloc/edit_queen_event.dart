@@ -12,28 +12,28 @@ final class LoadQueen extends EditQueenEvent {
   List<Object?> get props => [queenId];
 }
 
-final class UpdateQueenImmediate extends EditQueenEvent {
-  const UpdateQueenImmediate({
+final class UpdateQueen extends EditQueenEvent {
+  const UpdateQueen({
+    this.breed,
+    this.origin,
     this.isAlive,
     this.birthDate,
   });
 
+  final String? breed;
+  final String? origin;
   final bool? isAlive;
   final DateTime? birthDate;
 
   @override
-  List<Object?> get props => [isAlive, birthDate];
+  List<Object?> get props => [breed, origin, isAlive, birthDate];
 }
 
-final class UpdateQueenDebounced extends EditQueenEvent {
-  const UpdateQueenDebounced({
-    this.breed,
-    this.origin,
-  });
+final class ToggleEditing extends EditQueenEvent {
+  const ToggleEditing(this.field);
 
-  final String? breed;
-  final String? origin;
+  final String field;
 
   @override
-  List<Object?> get props => [breed, origin];
+  List<Object?> get props => [field];
 }

@@ -7,7 +7,7 @@ import 'package:hive_note/shared/presentation/widgets/apiary_dropdown/presentati
 import 'package:repositories/repositories.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
-import 'package:intl/intl.dart'; // Ensure this import for DateFormat
+import 'package:hive_note/core/configs/theme/app_colors.dart';
 
 class EditHiveView extends StatelessWidget {
   const EditHiveView({super.key});
@@ -62,30 +62,22 @@ class EditHiveView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextField(
-                    controller: TextEditingController(
-                      text: hive.name,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'hive_name'.tr(),
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => context.read<EditHiveBloc>().add(
-                          UpdateHiveDetails(name: value),
-                        ),
+                  _buildToggleableTextField(
+                    context: context,
+                    label: 'Hive Name',
+                    value: hive.name,
+                    onSave: (newValue) {
+                      context.read<EditHiveBloc>().add(UpdateHiveDetails(name: newValue));
+                    },
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: TextEditingController(
-                      text: hive.type,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'hive_type'.tr(),
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (value) => context.read<EditHiveBloc>().add(
-                          UpdateHiveDetails(type: value),
-                        ),
+                  const SizedBox(height: 16.0),
+                  _buildToggleableTextField(
+                    context: context,
+                    label: 'Hive Type',
+                    value: hive.type,
+                    onSave: (newValue) {
+                      context.read<EditHiveBloc>().add(UpdateHiveDetails(type: newValue));
+                    },
                   ),
                   const SizedBox(height: 16),
                   ApiaryDropdown(
@@ -146,6 +138,50 @@ class EditHiveView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildToggleableTextField({
+    required BuildContext context,
+    required String label,
+    required String value,
+    required ValueChanged<String> onSave,
+  }) {
+    TextEditingController controller = TextEditingController(text: value);
+    return BlocBuilder<EditHiveBloc, EditHiveState>(
+      builder: (context, state) {
+        bool isEditing = state.isEditing[label] ?? false;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Expanded(
+                  child: isEditing
+                      ? TextField(
+                          controller: controller,
+                          decoration: InputDecoration(
+                            hintText: 'Enter $label',
+                          ),
+                        )
+                      : Text(value),
+                ),
+                IconButton(
+                  icon: Icon(isEditing ? Icons.save : Icons.edit),
+                  onPressed: () {
+                    if (isEditing) {
+                      onSave(controller.text);
+                    }
+                    context.read<EditHiveBloc>().add(ToggleEditing(label));
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColors.divider),
+          ],
+        );
+      },
     );
   }
 

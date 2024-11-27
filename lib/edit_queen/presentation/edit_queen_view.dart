@@ -1,3 +1,4 @@
+import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/edit_queen/bloc/edit_queen_bloc.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:hive_note/shared/extenstions/models/queen_get_color.dart';
@@ -25,9 +26,6 @@ class EditQueenView extends StatelessWidget {
   }
 
   Widget _buildSuccessView(BuildContext context, Queen queen) {
-    final breedController = TextEditingController(text: queen.breed);
-    final originController = TextEditingController(text: queen.origin);
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -47,33 +45,29 @@ class EditQueenView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField(
-                          controller: breedController,
-                          decoration: InputDecoration(
-                            labelText: 'breed'.tr(),
-                            border: const OutlineInputBorder(),
-                          ),
-                          onChanged: (value) => context.read<EditQueenBloc>().add(
-                                UpdateQueenDebounced(breed: value),
-                              ),
+                        _buildToggleableTextField(
+                          context: context,
+                          label: 'Breed',
+                          value: queen.breed,
+                          onSave: (newValue) {
+                            context.read<EditQueenBloc>().add(UpdateQueen(breed: newValue));
+                          },
                         ),
                         const SizedBox(height: 16),
-                        TextField(
-                          controller: originController,
-                          decoration: InputDecoration(
-                            labelText: 'origin'.tr(),
-                            border: const OutlineInputBorder(),
-                          ),
-                          onChanged: (value) => context.read<EditQueenBloc>().add(
-                                UpdateQueenDebounced(origin: value),
-                              ),
+                        _buildToggleableTextField(
+                          context: context,
+                          label: 'Origin',
+                          value: queen.origin,
+                          onSave: (newValue) {
+                            context.read<EditQueenBloc>().add(UpdateQueen(origin: newValue));
+                          },
                         ),
                         const SizedBox(height: 16),
                         SwitchListTile(
                           title: Text('is_alive'.tr()),
                           value: queen.isAlive,
                           onChanged: (value) => context.read<EditQueenBloc>().add(
-                                UpdateQueenImmediate(isAlive: value),
+                                UpdateQueen(isAlive: value),
                               ),
                         ),
                         const SizedBox(height: 16),
@@ -91,7 +85,7 @@ class EditQueenView extends StatelessWidget {
                                 lastDate: DateTime.now().add(const Duration(days: 365)),
                               );
                               if (date != null) {
-                                bloc.add(UpdateQueenImmediate(birthDate: date));
+                                bloc.add(UpdateQueen(birthDate: date));
                               }
                             },
                           ),
@@ -105,6 +99,50 @@ class EditQueenView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildToggleableTextField({
+    required BuildContext context,
+    required String label,
+    required String value,
+    required ValueChanged<String> onSave,
+  }) {
+    TextEditingController controller = TextEditingController(text: value);
+    return BlocBuilder<EditQueenBloc, EditQueenState>(
+      builder: (context, state) {
+        bool isEditing = state.isEditing[label] ?? false;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Expanded(
+                  child: isEditing
+                      ? TextField(
+                          controller: controller,
+                          decoration: InputDecoration(
+                            hintText: 'Enter $label',
+                          ),
+                        )
+                      : Text(value),
+                ),
+                IconButton(
+                  icon: Icon(isEditing ? Icons.save : Icons.edit),
+                  onPressed: () {
+                    if (isEditing) {
+                      onSave(controller.text);
+                    }
+                    context.read<EditQueenBloc>().add(ToggleEditing(label));
+                  },
+                ),
+              ],
+            ),
+            Divider(color: AppColors.divider),
+          ],
+        );
+      },
     );
   }
 }

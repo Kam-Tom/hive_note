@@ -18,15 +18,11 @@ class EditHiveBloc extends Bloc<EditHiveEvent, EditHiveState> {
         super(const EditHiveState()) {
     on<LoadHive>(_onLoadHive);
     on<LoadQueens>(_onLoadQueens);
-    on<UpdateHiveDetails>(
-      _onUpdateHiveDetails,
-      transformer: (events, mapper) => events
-          .debounceTime(const Duration(milliseconds: 750))
-          .switchMap(mapper),
-    );
+    on<UpdateHiveDetails>(_onUpdateHiveDetails);
     on<UpdateHiveQueen>(_onUpdateHiveQueen);
     on<CreateNewQueen>(_onCreateNewQueen);
     on<SelectApiary>(_onSelectApiary);
+    on<ToggleEditing>(_onToggleEditing);
   }
 
   final HiveRepository _hiveRepository;
@@ -142,4 +138,9 @@ class EditHiveBloc extends Bloc<EditHiveEvent, EditHiveState> {
     _hiveRepository.updateHive(updatedHive);
   }
 
+  void _onToggleEditing(ToggleEditing event, Emitter<EditHiveState> emit) {
+    final newEditingState = Map<String, bool>.from(state.isEditing);
+    newEditingState[event.field] = !(newEditingState[event.field] ?? false);
+    emit(state.copyWith(isEditing: newEditingState));
+  }
 }

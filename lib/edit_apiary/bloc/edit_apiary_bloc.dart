@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:repositories/repositories.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'edit_apiary_event.dart';
 part 'edit_apiary_state.dart';
@@ -17,17 +16,13 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
         _hiveRepository = hiveRepository,
         super(const EditApiaryState()) {
     on<LoadApiary>(_onLoadApiary);
-    on<UpdateApiaryName>(
-      _onUpdateApiaryName,
-      transformer: (events, mapper) => events
-          .debounceTime(const Duration(milliseconds: 750))
-          .switchMap(mapper),
-    );
+    on<UpdateApiaryName>(_onUpdateApiaryName);
     on<UpdateApiaryColor>(_onUpdateApiaryColor);
     on<UpdateApiaryIsActive>(_onUpdateApiaryIsActive);
     on<AddHive>(_onAddHive);
     on<RearrangeHives>(_onRearrangeHives);
     on<UpdateApiaryCreatedAt>(_onUpdateApiaryCreatedAt);
+    on<ToggleEditing>(_onToggleEditing);
   }
 
   final ApiaryRepository _apiaryRepository;
@@ -56,6 +51,7 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
   Future<void> _onUpdateApiaryName(
       UpdateApiaryName event, Emitter<EditApiaryState> emit) async {
     try {
+      emit(state.copyWith(apiary: state.apiary!.copyWith(name: event.name)));
       await _apiaryRepository.updateApiary(
         state.apiary!.copyWith(name: event.name),
       );
@@ -67,6 +63,7 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
   Future<void> _onUpdateApiaryColor(
       UpdateApiaryColor event, Emitter<EditApiaryState> emit) async {
     try {
+      emit(state.copyWith(apiary: state.apiary!.copyWith(color: event.color)));
       await _apiaryRepository.updateApiary(
         state.apiary!.copyWith(color: event.color),
       );
@@ -78,6 +75,7 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
   Future<void> _onUpdateApiaryIsActive(
       UpdateApiaryIsActive event, Emitter<EditApiaryState> emit) async {
     try {
+      emit(state.copyWith(apiary: state.apiary!.copyWith(isActive: event.isActive)));
       await _apiaryRepository.updateApiary(
         state.apiary!.copyWith(isActive: event.isActive),
       );
@@ -126,6 +124,7 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
     Emitter<EditApiaryState> emit,
   ) async {
     try {
+      emit(state.copyWith(apiary: state.apiary!.copyWith(createdAt: event.createdAt)));
       await _apiaryRepository.updateApiary(
         state.apiary!.copyWith(createdAt: event.createdAt),
       );
@@ -134,11 +133,10 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
     }
   }
 
-  EventTransformer<E> debounceRestartableTransformer<E>(Duration duration) {
-    return (events, mapper) {
-      return events
-          .debounceTime(duration)
-          .switchMap(mapper);
-    };
+  void _onToggleEditing(ToggleEditing event, Emitter<EditApiaryState> emit) {
+    final newEditingState = Map<String, bool>.from(state.isEditing);
+    newEditingState[event.field] = !(newEditingState[event.field] ?? false);
+    emit(state.copyWith(isEditing: newEditingState));
   }
+
 }

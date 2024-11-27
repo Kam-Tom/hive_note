@@ -57,3 +57,12 @@ class UpdateHiveDetails extends EditHiveEvent {
   @override
   List<Object?> get props => [name, type];
 }
+
+final class ToggleEditing extends EditHiveEvent {
+  const ToggleEditing(this.field);
+
+  final String field;
+
+  @override
+  List<Object?> get props => [field];
+}

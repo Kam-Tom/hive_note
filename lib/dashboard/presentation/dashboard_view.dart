@@ -167,18 +167,21 @@ class _InspectionCarousel extends StatelessWidget {
       List<ApiaryWithHiveCount> apiaries, BuildContext context) {
     return CarouselSlider.builder(
       options: CarouselOptions(
-        height: 125.0,
+        height: 170.0, // Increased height
         enableInfiniteScroll: false,
       ),
       itemCount: apiaries.length,
       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
         final apiary = apiaries[itemIndex];
-        return InspectionCard(
-          apiary: apiary,
-          onPressed: (apiary) => () => Navigator.pushNamed(
-                context,
-                AppRouter.tmpPath,
-              ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0), // Added padding
+          child: InspectionCard(
+            apiary: apiary,
+            onPressed: (apiary) => () => Navigator.pushNamed(
+                  context,
+                  AppRouter.tmpPath,
+                ),
+          ),
         );
       },
     );
