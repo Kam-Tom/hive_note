@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
+import 'package:hive_note/settings/preferences/presentation/preferences_page.dart';
 import 'package:hive_note/settings/bloc/bottom_navigation_cubit.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/sync/presentation/pages/sync.dart';
@@ -10,6 +11,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("TSD");
     return BlocProvider(
       create: (context) => BottomNavigationCubit(initialIndex: 1),
       child: BlocBuilder<BottomNavigationCubit, int>(
@@ -22,7 +24,7 @@ class SettingsPage extends StatelessWidget {
                   case 0:
                     return const SyncPage();
                   case 1:
-                    return Container(color: Colors.green,);
+                    return const PreferencesPage();
                   case 2:
                     return Container(color: Colors.blue,);
                   default:

@@ -10,7 +10,6 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   void _onToggleVoiceControl(ToggleVoiceControl event, Emitter<SyncState> emit) {
-    print('SyncBloc: Toggling voice control to ${event.isEnabled}');
     emit(state.copyWith(syncEnabled: () => event.isEnabled));
   }
 }
