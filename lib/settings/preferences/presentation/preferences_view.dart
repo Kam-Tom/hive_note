@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/settings/preferences/bloc/preferences_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:app_database/app_database.dart';
+
 class PreferencesView extends StatelessWidget {
   const PreferencesView({super.key});
 
@@ -14,8 +16,18 @@ class PreferencesView extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              // Report type selection
+              _buildDropdown<RaportType>(
+                label: 'Report Type',
+                value: RaportType.values[state.reportType],
+                items: RaportType.values.take(3).toList(),
+                onChanged: (newValue) {
+                  context.read<PreferencesBloc>().add(ReportTypeChanged(newValue!.index));
+                },
+              ),
+              const SizedBox(height: 16.0),
               // Language selection
-              _buildDropdown(
+              _buildDropdown<String>(
                 label: 'Language',
                 value: state.language,
                 items: ['en', 'pl'],
@@ -91,22 +103,22 @@ class PreferencesView extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdown({
+  Widget _buildDropdown<T>({
     required String label,
-    required String value,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
+    required T value,
+    required List<T> items,
+    required ValueChanged<T?> onChanged,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-        DropdownButton<String>(
+        DropdownButton<T>(
           value: value,
-          items: items.map((String value) {
-            return DropdownMenuItem<String>(
+          items: items.map((T value) {
+            return DropdownMenuItem<T>(
               value: value,
-              child: Text(value),
+              child: Text(value.toString().split('.').last),
             );
           }).toList(),
           onChanged: onChanged,

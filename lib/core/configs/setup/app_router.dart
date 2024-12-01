@@ -3,6 +3,7 @@ import 'package:hive_note/dashboard/presentation/dashboard_page.dart';
 import 'package:hive_note/edit_apiary/presentation/edit_apiary_page.dart';
 import 'package:hive_note/edit_hive/presentation/edit_hive_page.dart';
 import 'package:hive_note/edit_queen/presentation/edit_queen_page.dart';
+import 'package:hive_note/inspection/presentation/inspection_page.dart';
 import 'package:hive_note/manage_apiaries/presentation/manage_apiaries_page.dart';
 import 'package:hive_note/manage_hives/presentation/manage_hives_page.dart';
 import 'package:hive_note/manage_queens/presentation/manage_queens_page.dart';
@@ -22,6 +23,7 @@ class AppRouter {
   static const String editApiaryPath = '/edit_apiary';
   static const String editHivePath = '/edit_hive';
   static const String editQueenPath = '/edit_queen';
+  static const String inspectionPath = '/inspection_path';
 
 
   static Route onGeneratedRoute(RouteSettings settings) {
@@ -69,6 +71,10 @@ class AppRouter {
       case AppRouter.editQueenPath:
         return MaterialPageRoute(
           builder: (_) => EditQueenPage(queenId: settings.arguments as String)
+        );      
+      case AppRouter.inspectionPath:
+        return MaterialPageRoute(
+          builder: (_) => InspectionPage(apiaryId: settings.arguments as String)
         );
       default:
         return MaterialPageRoute(

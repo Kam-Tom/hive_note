@@ -52,6 +52,11 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
       emit(state.copyWith(isEditing: newEditingState));
     });
 
+    on<ReportTypeChanged>((event, emit) async {
+      await _preferencesRepository.saveReportType(event.reportType);
+      emit(state.copyWith(reportType: event.reportType));
+    });
+
     // Add more event handlers as needed
   }
 }

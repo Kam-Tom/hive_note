@@ -13,6 +13,7 @@ class MultiRepositoryProviderSetup {
     final queenRepository = QueenRepository(database);
     final preferencesRepository = PreferencesRepository();
     final entryMetadataRepository = EntryMetadataRepository(database);
+    final raportRepository = RaportRepository(database);
 
     return MultiRepositoryProvider(
       providers: [

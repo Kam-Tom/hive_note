@@ -2,6 +2,12 @@ part of 'preferences_bloc.dart';
 
 abstract class PreferencesEvent {}
 
+class ReportTypeChanged extends PreferencesEvent {
+  final int reportType;
+
+  ReportTypeChanged(this.reportType);
+}
+
 class LanguageChanged extends PreferencesEvent {
   final String language;
 

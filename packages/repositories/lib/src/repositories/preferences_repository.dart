@@ -62,5 +62,14 @@ class PreferencesRepository {
     return null;
   }
 
+  Future<void> saveReportType(int reportType) async {
+    // Save report type preference
+  }
+
+  Future<int?> getReportType() async {
+    // Retrieve report type preference
+    return null;
+  }
+
   // Add more methods for other preferences as needed
 }

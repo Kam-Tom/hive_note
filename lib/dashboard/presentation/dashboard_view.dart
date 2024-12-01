@@ -177,9 +177,10 @@ class _InspectionCarousel extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0), // Added padding
           child: InspectionCard(
             apiary: apiary,
-            onPressed: (apiary) => () => Navigator.pushNamed(
+            onPressed: (apiary) => Navigator.pushNamed(
                   context,
-                  AppRouter.tmpPath,
+                  arguments: apiary.id,
+                  AppRouter.inspectionPath,
                 ),
           ),
         );
