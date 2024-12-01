@@ -921,9 +921,14 @@ class $EntryMetadataTableTable extends EntryMetadataTable
               type: DriftSqlType.int, requiredDuringInsert: true)
           .withConverter<RaportType>(
               $EntryMetadataTableTable.$converterraportType);
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, label, hint, valueType, raportType];
+      [id, label, hint, valueType, raportType, order];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -953,6 +958,12 @@ class $EntryMetadataTableTable extends EntryMetadataTable
     }
     context.handle(_valueTypeMeta, const VerificationResult.success());
     context.handle(_raportTypeMeta, const VerificationResult.success());
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
     return context;
   }
 
@@ -968,6 +979,8 @@ class $EntryMetadataTableTable extends EntryMetadataTable
           .read(DriftSqlType.string, data['${effectivePrefix}label'])!,
       hint: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}hint'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       valueType: $EntryMetadataTableTable.$convertervalueType.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}value_type'])!),
@@ -994,6 +1007,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
   final Value<String> hint;
   final Value<EntryType> valueType;
   final Value<RaportType> raportType;
+  final Value<int> order;
   final Value<int> rowid;
   const EntryMetadataTableCompanion({
     this.id = const Value.absent(),
@@ -1001,6 +1015,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
     this.hint = const Value.absent(),
     this.valueType = const Value.absent(),
     this.raportType = const Value.absent(),
+    this.order = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   EntryMetadataTableCompanion.insert({
@@ -1009,18 +1024,21 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
     required String hint,
     required EntryType valueType,
     required RaportType raportType,
+    required int order,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         label = Value(label),
         hint = Value(hint),
         valueType = Value(valueType),
-        raportType = Value(raportType);
+        raportType = Value(raportType),
+        order = Value(order);
   static Insertable<EntryMetadata> custom({
     Expression<String>? id,
     Expression<String>? label,
     Expression<String>? hint,
     Expression<int>? valueType,
     Expression<int>? raportType,
+    Expression<int>? order,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1029,6 +1047,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
       if (hint != null) 'hint': hint,
       if (valueType != null) 'value_type': valueType,
       if (raportType != null) 'raport_type': raportType,
+      if (order != null) 'order': order,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1039,6 +1058,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
       Value<String>? hint,
       Value<EntryType>? valueType,
       Value<RaportType>? raportType,
+      Value<int>? order,
       Value<int>? rowid}) {
     return EntryMetadataTableCompanion(
       id: id ?? this.id,
@@ -1046,6 +1066,7 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
       hint: hint ?? this.hint,
       valueType: valueType ?? this.valueType,
       raportType: raportType ?? this.raportType,
+      order: order ?? this.order,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1071,6 +1092,9 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
           .$converterraportType
           .toSql(raportType.value));
     }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1085,206 +1109,19 @@ class EntryMetadataTableCompanion extends UpdateCompanion<EntryMetadata> {
           ..write('hint: $hint, ')
           ..write('valueType: $valueType, ')
           ..write('raportType: $raportType, ')
+          ..write('order: $order, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
 }
 
-class $BooleanEntryTableTable extends BooleanEntryTable
-    with TableInfo<$BooleanEntryTableTable, BooleanEntry> {
+class $EntryTableTable extends EntryTable
+    with TableInfo<$EntryTableTable, Entry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $BooleanEntryTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _raportIdMeta =
-      const VerificationMeta('raportId');
-  @override
-  late final GeneratedColumn<String> raportId = GeneratedColumn<String>(
-      'raport_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES raport_table (id)'));
-  static const VerificationMeta _entryMetadataIdMeta =
-      const VerificationMeta('entryMetadataId');
-  @override
-  late final GeneratedColumn<String> entryMetadataId = GeneratedColumn<String>(
-      'entry_metadata_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES entry_metadata_table (id)'));
-  static const VerificationMeta _valueMeta = const VerificationMeta('value');
-  @override
-  late final GeneratedColumn<bool> value = GeneratedColumn<bool>(
-      'value', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("value" IN (0, 1))'));
-  @override
-  List<GeneratedColumn> get $columns => [id, raportId, entryMetadataId, value];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'boolean_entry_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<BooleanEntry> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('raport_id')) {
-      context.handle(_raportIdMeta,
-          raportId.isAcceptableOrUnknown(data['raport_id']!, _raportIdMeta));
-    } else if (isInserting) {
-      context.missing(_raportIdMeta);
-    }
-    if (data.containsKey('entry_metadata_id')) {
-      context.handle(
-          _entryMetadataIdMeta,
-          entryMetadataId.isAcceptableOrUnknown(
-              data['entry_metadata_id']!, _entryMetadataIdMeta));
-    } else if (isInserting) {
-      context.missing(_entryMetadataIdMeta);
-    }
-    if (data.containsKey('value')) {
-      context.handle(
-          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
-    } else if (isInserting) {
-      context.missing(_valueMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  BooleanEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return BooleanEntry(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      raportId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}raport_id'])!,
-      entryMetadataId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}entry_metadata_id'])!,
-      value: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}value'])!,
-    );
-  }
-
-  @override
-  $BooleanEntryTableTable createAlias(String alias) {
-    return $BooleanEntryTableTable(attachedDatabase, alias);
-  }
-}
-
-class BooleanEntryTableCompanion extends UpdateCompanion<BooleanEntry> {
-  final Value<String> id;
-  final Value<String> raportId;
-  final Value<String> entryMetadataId;
-  final Value<bool> value;
-  final Value<int> rowid;
-  const BooleanEntryTableCompanion({
-    this.id = const Value.absent(),
-    this.raportId = const Value.absent(),
-    this.entryMetadataId = const Value.absent(),
-    this.value = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  BooleanEntryTableCompanion.insert({
-    required String id,
-    required String raportId,
-    required String entryMetadataId,
-    required bool value,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        raportId = Value(raportId),
-        entryMetadataId = Value(entryMetadataId),
-        value = Value(value);
-  static Insertable<BooleanEntry> custom({
-    Expression<String>? id,
-    Expression<String>? raportId,
-    Expression<String>? entryMetadataId,
-    Expression<bool>? value,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (raportId != null) 'raport_id': raportId,
-      if (entryMetadataId != null) 'entry_metadata_id': entryMetadataId,
-      if (value != null) 'value': value,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  BooleanEntryTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? raportId,
-      Value<String>? entryMetadataId,
-      Value<bool>? value,
-      Value<int>? rowid}) {
-    return BooleanEntryTableCompanion(
-      id: id ?? this.id,
-      raportId: raportId ?? this.raportId,
-      entryMetadataId: entryMetadataId ?? this.entryMetadataId,
-      value: value ?? this.value,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (raportId.present) {
-      map['raport_id'] = Variable<String>(raportId.value);
-    }
-    if (entryMetadataId.present) {
-      map['entry_metadata_id'] = Variable<String>(entryMetadataId.value);
-    }
-    if (value.present) {
-      map['value'] = Variable<bool>(value.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('BooleanEntryTableCompanion(')
-          ..write('id: $id, ')
-          ..write('raportId: $raportId, ')
-          ..write('entryMetadataId: $entryMetadataId, ')
-          ..write('value: $value, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $TextEntryTableTable extends TextEntryTable
-    with TableInfo<$TextEntryTableTable, TextEntry> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $TextEntryTableTable(this.attachedDatabase, [this._alias]);
+  $EntryTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -1319,9 +1156,9 @@ class $TextEntryTableTable extends TextEntryTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'text_entry_table';
+  static const String $name = 'entry_table';
   @override
-  VerificationContext validateIntegrity(Insertable<TextEntry> instance,
+  VerificationContext validateIntegrity(Insertable<Entry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1356,9 +1193,9 @@ class $TextEntryTableTable extends TextEntryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TextEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Entry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TextEntry(
+    return Entry(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       raportId: attachedDatabase.typeMapping
@@ -1371,25 +1208,25 @@ class $TextEntryTableTable extends TextEntryTable
   }
 
   @override
-  $TextEntryTableTable createAlias(String alias) {
-    return $TextEntryTableTable(attachedDatabase, alias);
+  $EntryTableTable createAlias(String alias) {
+    return $EntryTableTable(attachedDatabase, alias);
   }
 }
 
-class TextEntryTableCompanion extends UpdateCompanion<TextEntry> {
+class EntryTableCompanion extends UpdateCompanion<Entry> {
   final Value<String> id;
   final Value<String> raportId;
   final Value<String> entryMetadataId;
   final Value<String> value;
   final Value<int> rowid;
-  const TextEntryTableCompanion({
+  const EntryTableCompanion({
     this.id = const Value.absent(),
     this.raportId = const Value.absent(),
     this.entryMetadataId = const Value.absent(),
     this.value = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  TextEntryTableCompanion.insert({
+  EntryTableCompanion.insert({
     required String id,
     required String raportId,
     required String entryMetadataId,
@@ -1399,7 +1236,7 @@ class TextEntryTableCompanion extends UpdateCompanion<TextEntry> {
         raportId = Value(raportId),
         entryMetadataId = Value(entryMetadataId),
         value = Value(value);
-  static Insertable<TextEntry> custom({
+  static Insertable<Entry> custom({
     Expression<String>? id,
     Expression<String>? raportId,
     Expression<String>? entryMetadataId,
@@ -1415,13 +1252,13 @@ class TextEntryTableCompanion extends UpdateCompanion<TextEntry> {
     });
   }
 
-  TextEntryTableCompanion copyWith(
+  EntryTableCompanion copyWith(
       {Value<String>? id,
       Value<String>? raportId,
       Value<String>? entryMetadataId,
       Value<String>? value,
       Value<int>? rowid}) {
-    return TextEntryTableCompanion(
+    return EntryTableCompanion(
       id: id ?? this.id,
       raportId: raportId ?? this.raportId,
       entryMetadataId: entryMetadataId ?? this.entryMetadataId,
@@ -1453,192 +1290,7 @@ class TextEntryTableCompanion extends UpdateCompanion<TextEntry> {
 
   @override
   String toString() {
-    return (StringBuffer('TextEntryTableCompanion(')
-          ..write('id: $id, ')
-          ..write('raportId: $raportId, ')
-          ..write('entryMetadataId: $entryMetadataId, ')
-          ..write('value: $value, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $NumericEntryTableTable extends NumericEntryTable
-    with TableInfo<$NumericEntryTableTable, NumericEntry> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $NumericEntryTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _raportIdMeta =
-      const VerificationMeta('raportId');
-  @override
-  late final GeneratedColumn<String> raportId = GeneratedColumn<String>(
-      'raport_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES raport_table (id)'));
-  static const VerificationMeta _entryMetadataIdMeta =
-      const VerificationMeta('entryMetadataId');
-  @override
-  late final GeneratedColumn<String> entryMetadataId = GeneratedColumn<String>(
-      'entry_metadata_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES entry_metadata_table (id)'));
-  static const VerificationMeta _valueMeta = const VerificationMeta('value');
-  @override
-  late final GeneratedColumn<double> value = GeneratedColumn<double>(
-      'value', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, raportId, entryMetadataId, value];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'numeric_entry_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<NumericEntry> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('raport_id')) {
-      context.handle(_raportIdMeta,
-          raportId.isAcceptableOrUnknown(data['raport_id']!, _raportIdMeta));
-    } else if (isInserting) {
-      context.missing(_raportIdMeta);
-    }
-    if (data.containsKey('entry_metadata_id')) {
-      context.handle(
-          _entryMetadataIdMeta,
-          entryMetadataId.isAcceptableOrUnknown(
-              data['entry_metadata_id']!, _entryMetadataIdMeta));
-    } else if (isInserting) {
-      context.missing(_entryMetadataIdMeta);
-    }
-    if (data.containsKey('value')) {
-      context.handle(
-          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
-    } else if (isInserting) {
-      context.missing(_valueMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  NumericEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NumericEntry(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      raportId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}raport_id'])!,
-      entryMetadataId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}entry_metadata_id'])!,
-      value: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}value'])!,
-    );
-  }
-
-  @override
-  $NumericEntryTableTable createAlias(String alias) {
-    return $NumericEntryTableTable(attachedDatabase, alias);
-  }
-}
-
-class NumericEntryTableCompanion extends UpdateCompanion<NumericEntry> {
-  final Value<String> id;
-  final Value<String> raportId;
-  final Value<String> entryMetadataId;
-  final Value<double> value;
-  final Value<int> rowid;
-  const NumericEntryTableCompanion({
-    this.id = const Value.absent(),
-    this.raportId = const Value.absent(),
-    this.entryMetadataId = const Value.absent(),
-    this.value = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  NumericEntryTableCompanion.insert({
-    required String id,
-    required String raportId,
-    required String entryMetadataId,
-    required double value,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        raportId = Value(raportId),
-        entryMetadataId = Value(entryMetadataId),
-        value = Value(value);
-  static Insertable<NumericEntry> custom({
-    Expression<String>? id,
-    Expression<String>? raportId,
-    Expression<String>? entryMetadataId,
-    Expression<double>? value,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (raportId != null) 'raport_id': raportId,
-      if (entryMetadataId != null) 'entry_metadata_id': entryMetadataId,
-      if (value != null) 'value': value,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  NumericEntryTableCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? raportId,
-      Value<String>? entryMetadataId,
-      Value<double>? value,
-      Value<int>? rowid}) {
-    return NumericEntryTableCompanion(
-      id: id ?? this.id,
-      raportId: raportId ?? this.raportId,
-      entryMetadataId: entryMetadataId ?? this.entryMetadataId,
-      value: value ?? this.value,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (raportId.present) {
-      map['raport_id'] = Variable<String>(raportId.value);
-    }
-    if (entryMetadataId.present) {
-      map['entry_metadata_id'] = Variable<String>(entryMetadataId.value);
-    }
-    if (value.present) {
-      map['value'] = Variable<double>(value.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('NumericEntryTableCompanion(')
+    return (StringBuffer('EntryTableCompanion(')
           ..write('id: $id, ')
           ..write('raportId: $raportId, ')
           ..write('entryMetadataId: $entryMetadataId, ')
@@ -2108,11 +1760,7 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   late final $RaportTableTable raportTable = $RaportTableTable(this);
   late final $EntryMetadataTableTable entryMetadataTable =
       $EntryMetadataTableTable(this);
-  late final $BooleanEntryTableTable booleanEntryTable =
-      $BooleanEntryTableTable(this);
-  late final $TextEntryTableTable textEntryTable = $TextEntryTableTable(this);
-  late final $NumericEntryTableTable numericEntryTable =
-      $NumericEntryTableTable(this);
+  late final $EntryTableTable entryTable = $EntryTableTable(this);
   late final $TodoTableTable todoTable = $TodoTableTable(this);
   late final $HistoryLogTableTable historyLogTable =
       $HistoryLogTableTable(this);
@@ -2120,6 +1768,11 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   late final HiveDao hiveDao = HiveDao(this as DriftAppDatabase);
   late final TodoDao todoDao = TodoDao(this as DriftAppDatabase);
   late final QueenDao queenDao = QueenDao(this as DriftAppDatabase);
+  late final RaportDao raportDao = RaportDao(this as DriftAppDatabase);
+  late final EntryMetadataDao entryMetadataDao =
+      EntryMetadataDao(this as DriftAppDatabase);
+  late final HistoryLogDao historyLogDao =
+      HistoryLogDao(this as DriftAppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2130,9 +1783,7 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
         queenTable,
         raportTable,
         entryMetadataTable,
-        booleanEntryTable,
-        textEntryTable,
-        numericEntryTable,
+        entryTable,
         todoTable,
         historyLogTable
       ];
@@ -3016,51 +2667,17 @@ final class $$RaportTableTableReferences
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntry>>
-      _booleanEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.booleanEntryTable,
+  static MultiTypedResultKey<$EntryTableTable, List<Entry>>
+      _entryTableRefsTable(_$DriftAppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.entryTable,
               aliasName: $_aliasNameGenerator(
-                  db.raportTable.id, db.booleanEntryTable.raportId));
+                  db.raportTable.id, db.entryTable.raportId));
 
-  $$BooleanEntryTableTableProcessedTableManager get booleanEntryTableRefs {
-    final manager =
-        $$BooleanEntryTableTableTableManager($_db, $_db.booleanEntryTable)
-            .filter((f) => f.raportId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_booleanEntryTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntry>>
-      _textEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.textEntryTable,
-              aliasName: $_aliasNameGenerator(
-                  db.raportTable.id, db.textEntryTable.raportId));
-
-  $$TextEntryTableTableProcessedTableManager get textEntryTableRefs {
-    final manager = $$TextEntryTableTableTableManager($_db, $_db.textEntryTable)
+  $$EntryTableTableProcessedTableManager get entryTableRefs {
+    final manager = $$EntryTableTableTableManager($_db, $_db.entryTable)
         .filter((f) => f.raportId.id($_item.id));
 
-    final cache = $_typedResult.readTableOrNull(_textEntryTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntry>>
-      _numericEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.numericEntryTable,
-              aliasName: $_aliasNameGenerator(
-                  db.raportTable.id, db.numericEntryTable.raportId));
-
-  $$NumericEntryTableTableProcessedTableManager get numericEntryTableRefs {
-    final manager =
-        $$NumericEntryTableTableTableManager($_db, $_db.numericEntryTable)
-            .filter((f) => f.raportId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_numericEntryTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_entryTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3103,50 +2720,16 @@ class $$RaportTableTableFilterComposer
     return composer;
   }
 
-  ComposableFilter booleanEntryTableRefs(
-      ComposableFilter Function($$BooleanEntryTableTableFilterComposer f) f) {
-    final $$BooleanEntryTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.booleanEntryTable,
-            getReferencedColumn: (t) => t.raportId,
-            builder: (joinBuilder, parentComposers) =>
-                $$BooleanEntryTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.booleanEntryTable,
-                    joinBuilder,
-                    parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter textEntryTableRefs(
-      ComposableFilter Function($$TextEntryTableTableFilterComposer f) f) {
-    final $$TextEntryTableTableFilterComposer composer = $state.composerBuilder(
+  ComposableFilter entryTableRefs(
+      ComposableFilter Function($$EntryTableTableFilterComposer f) f) {
+    final $$EntryTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.textEntryTable,
+        referencedTable: $state.db.entryTable,
         getReferencedColumn: (t) => t.raportId,
         builder: (joinBuilder, parentComposers) =>
-            $$TextEntryTableTableFilterComposer(ComposerState($state.db,
-                $state.db.textEntryTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter numericEntryTableRefs(
-      ComposableFilter Function($$NumericEntryTableTableFilterComposer f) f) {
-    final $$NumericEntryTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.numericEntryTable,
-            getReferencedColumn: (t) => t.raportId,
-            builder: (joinBuilder, parentComposers) =>
-                $$NumericEntryTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.numericEntryTable,
-                    joinBuilder,
-                    parentComposers)));
+            $$EntryTableTableFilterComposer(ComposerState($state.db,
+                $state.db.entryTable, joinBuilder, parentComposers)));
     return f(composer);
   }
 }
@@ -3199,12 +2782,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
     $$RaportTableTableUpdateCompanionBuilder,
     (Raport, $$RaportTableTableReferences),
     Raport,
-    PrefetchHooks Function(
-        {bool hiveId,
-        bool apiaryId,
-        bool booleanEntryTableRefs,
-        bool textEntryTableRefs,
-        bool numericEntryTableRefs})> {
+    PrefetchHooks Function({bool hiveId, bool apiaryId, bool entryTableRefs})> {
   $$RaportTableTableTableManager(_$DriftAppDatabase db, $RaportTableTable table)
       : super(TableManagerState(
           db: db,
@@ -3248,18 +2826,10 @@ class $$RaportTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {hiveId = false,
-              apiaryId = false,
-              booleanEntryTableRefs = false,
-              textEntryTableRefs = false,
-              numericEntryTableRefs = false}) {
+              {hiveId = false, apiaryId = false, entryTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [
-                if (booleanEntryTableRefs) db.booleanEntryTable,
-                if (textEntryTableRefs) db.textEntryTable,
-                if (numericEntryTableRefs) db.numericEntryTable
-              ],
+              explicitlyWatchedTables: [if (entryTableRefs) db.entryTable],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -3297,38 +2867,14 @@ class $$RaportTableTableTableManager extends RootTableManager<
               },
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (booleanEntryTableRefs)
+                  if (entryTableRefs)
                     await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$RaportTableTableReferences
-                            ._booleanEntryTableRefsTable(db),
+                            ._entryTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$RaportTableTableReferences(db, table, p0)
-                                .booleanEntryTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.raportId == item.id),
-                        typedResults: items),
-                  if (textEntryTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$RaportTableTableReferences
-                            ._textEntryTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$RaportTableTableReferences(db, table, p0)
-                                .textEntryTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.raportId == item.id),
-                        typedResults: items),
-                  if (numericEntryTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$RaportTableTableReferences
-                            ._numericEntryTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$RaportTableTableReferences(db, table, p0)
-                                .numericEntryTableRefs,
+                                .entryTableRefs,
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.raportId == item.id),
@@ -3350,12 +2896,7 @@ typedef $$RaportTableTableProcessedTableManager = ProcessedTableManager<
     $$RaportTableTableUpdateCompanionBuilder,
     (Raport, $$RaportTableTableReferences),
     Raport,
-    PrefetchHooks Function(
-        {bool hiveId,
-        bool apiaryId,
-        bool booleanEntryTableRefs,
-        bool textEntryTableRefs,
-        bool numericEntryTableRefs})>;
+    PrefetchHooks Function({bool hiveId, bool apiaryId, bool entryTableRefs})>;
 typedef $$EntryMetadataTableTableCreateCompanionBuilder
     = EntryMetadataTableCompanion Function({
   required String id,
@@ -3363,6 +2904,7 @@ typedef $$EntryMetadataTableTableCreateCompanionBuilder
   required String hint,
   required EntryType valueType,
   required RaportType raportType,
+  required int order,
   Value<int> rowid,
 });
 typedef $$EntryMetadataTableTableUpdateCompanionBuilder
@@ -3372,6 +2914,7 @@ typedef $$EntryMetadataTableTableUpdateCompanionBuilder
   Value<String> hint,
   Value<EntryType> valueType,
   Value<RaportType> raportType,
+  Value<int> order,
   Value<int> rowid,
 });
 
@@ -3380,51 +2923,17 @@ final class $$EntryMetadataTableTableReferences extends BaseReferences<
   $$EntryMetadataTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$BooleanEntryTableTable, List<BooleanEntry>>
-      _booleanEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.booleanEntryTable,
-              aliasName: $_aliasNameGenerator(db.entryMetadataTable.id,
-                  db.booleanEntryTable.entryMetadataId));
-
-  $$BooleanEntryTableTableProcessedTableManager get booleanEntryTableRefs {
-    final manager =
-        $$BooleanEntryTableTableTableManager($_db, $_db.booleanEntryTable)
-            .filter((f) => f.entryMetadataId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_booleanEntryTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$TextEntryTableTable, List<TextEntry>>
-      _textEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.textEntryTable,
+  static MultiTypedResultKey<$EntryTableTable, List<Entry>>
+      _entryTableRefsTable(_$DriftAppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.entryTable,
               aliasName: $_aliasNameGenerator(
-                  db.entryMetadataTable.id, db.textEntryTable.entryMetadataId));
+                  db.entryMetadataTable.id, db.entryTable.entryMetadataId));
 
-  $$TextEntryTableTableProcessedTableManager get textEntryTableRefs {
-    final manager = $$TextEntryTableTableTableManager($_db, $_db.textEntryTable)
+  $$EntryTableTableProcessedTableManager get entryTableRefs {
+    final manager = $$EntryTableTableTableManager($_db, $_db.entryTable)
         .filter((f) => f.entryMetadataId.id($_item.id));
 
-    final cache = $_typedResult.readTableOrNull(_textEntryTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
-  static MultiTypedResultKey<$NumericEntryTableTable, List<NumericEntry>>
-      _numericEntryTableRefsTable(_$DriftAppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.numericEntryTable,
-              aliasName: $_aliasNameGenerator(db.entryMetadataTable.id,
-                  db.numericEntryTable.entryMetadataId));
-
-  $$NumericEntryTableTableProcessedTableManager get numericEntryTableRefs {
-    final manager =
-        $$NumericEntryTableTableTableManager($_db, $_db.numericEntryTable)
-            .filter((f) => f.entryMetadataId.id($_item.id));
-
-    final cache =
-        $_typedResult.readTableOrNull(_numericEntryTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_entryTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3462,50 +2971,21 @@ class $$EntryMetadataTableTableFilterComposer
               column,
               joinBuilders: joinBuilders));
 
-  ComposableFilter booleanEntryTableRefs(
-      ComposableFilter Function($$BooleanEntryTableTableFilterComposer f) f) {
-    final $$BooleanEntryTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.booleanEntryTable,
-            getReferencedColumn: (t) => t.entryMetadataId,
-            builder: (joinBuilder, parentComposers) =>
-                $$BooleanEntryTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.booleanEntryTable,
-                    joinBuilder,
-                    parentComposers)));
-    return f(composer);
-  }
+  ColumnFilters<int> get order => $state.composableBuilder(
+      column: $state.table.order,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ComposableFilter textEntryTableRefs(
-      ComposableFilter Function($$TextEntryTableTableFilterComposer f) f) {
-    final $$TextEntryTableTableFilterComposer composer = $state.composerBuilder(
+  ComposableFilter entryTableRefs(
+      ComposableFilter Function($$EntryTableTableFilterComposer f) f) {
+    final $$EntryTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
         getCurrentColumn: (t) => t.id,
-        referencedTable: $state.db.textEntryTable,
+        referencedTable: $state.db.entryTable,
         getReferencedColumn: (t) => t.entryMetadataId,
         builder: (joinBuilder, parentComposers) =>
-            $$TextEntryTableTableFilterComposer(ComposerState($state.db,
-                $state.db.textEntryTable, joinBuilder, parentComposers)));
-    return f(composer);
-  }
-
-  ComposableFilter numericEntryTableRefs(
-      ComposableFilter Function($$NumericEntryTableTableFilterComposer f) f) {
-    final $$NumericEntryTableTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.numericEntryTable,
-            getReferencedColumn: (t) => t.entryMetadataId,
-            builder: (joinBuilder, parentComposers) =>
-                $$NumericEntryTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.numericEntryTable,
-                    joinBuilder,
-                    parentComposers)));
+            $$EntryTableTableFilterComposer(ComposerState($state.db,
+                $state.db.entryTable, joinBuilder, parentComposers)));
     return f(composer);
   }
 }
@@ -3537,6 +3017,11 @@ class $$EntryMetadataTableTableOrderingComposer
       column: $state.table.raportType,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get order => $state.composableBuilder(
+      column: $state.table.order,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 class $$EntryMetadataTableTableTableManager extends RootTableManager<
@@ -3549,10 +3034,7 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
     $$EntryMetadataTableTableUpdateCompanionBuilder,
     (EntryMetadata, $$EntryMetadataTableTableReferences),
     EntryMetadata,
-    PrefetchHooks Function(
-        {bool booleanEntryTableRefs,
-        bool textEntryTableRefs,
-        bool numericEntryTableRefs})> {
+    PrefetchHooks Function({bool entryTableRefs})> {
   $$EntryMetadataTableTableTableManager(
       _$DriftAppDatabase db, $EntryMetadataTableTable table)
       : super(TableManagerState(
@@ -3568,6 +3050,7 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
             Value<String> hint = const Value.absent(),
             Value<EntryType> valueType = const Value.absent(),
             Value<RaportType> raportType = const Value.absent(),
+            Value<int> order = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               EntryMetadataTableCompanion(
@@ -3576,6 +3059,7 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
             hint: hint,
             valueType: valueType,
             raportType: raportType,
+            order: order,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -3584,6 +3068,7 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
             required String hint,
             required EntryType valueType,
             required RaportType raportType,
+            required int order,
             Value<int> rowid = const Value.absent(),
           }) =>
               EntryMetadataTableCompanion.insert(
@@ -3592,6 +3077,7 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
             hint: hint,
             valueType: valueType,
             raportType: raportType,
+            order: order,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -3600,52 +3086,21 @@ class $$EntryMetadataTableTableTableManager extends RootTableManager<
                     $$EntryMetadataTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: (
-              {booleanEntryTableRefs = false,
-              textEntryTableRefs = false,
-              numericEntryTableRefs = false}) {
+          prefetchHooksCallback: ({entryTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [
-                if (booleanEntryTableRefs) db.booleanEntryTable,
-                if (textEntryTableRefs) db.textEntryTable,
-                if (numericEntryTableRefs) db.numericEntryTable
-              ],
+              explicitlyWatchedTables: [if (entryTableRefs) db.entryTable],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (booleanEntryTableRefs)
+                  if (entryTableRefs)
                     await $_getPrefetchedData(
                         currentTable: table,
                         referencedTable: $$EntryMetadataTableTableReferences
-                            ._booleanEntryTableRefsTable(db),
+                            ._entryTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$EntryMetadataTableTableReferences(db, table, p0)
-                                .booleanEntryTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.entryMetadataId == item.id),
-                        typedResults: items),
-                  if (textEntryTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$EntryMetadataTableTableReferences
-                            ._textEntryTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$EntryMetadataTableTableReferences(db, table, p0)
-                                .textEntryTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.entryMetadataId == item.id),
-                        typedResults: items),
-                  if (numericEntryTableRefs)
-                    await $_getPrefetchedData(
-                        currentTable: table,
-                        referencedTable: $$EntryMetadataTableTableReferences
-                            ._numericEntryTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$EntryMetadataTableTableReferences(db, table, p0)
-                                .numericEntryTableRefs,
+                                .entryTableRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.entryMetadataId == item.id),
@@ -3667,271 +3122,15 @@ typedef $$EntryMetadataTableTableProcessedTableManager = ProcessedTableManager<
     $$EntryMetadataTableTableUpdateCompanionBuilder,
     (EntryMetadata, $$EntryMetadataTableTableReferences),
     EntryMetadata,
-    PrefetchHooks Function(
-        {bool booleanEntryTableRefs,
-        bool textEntryTableRefs,
-        bool numericEntryTableRefs})>;
-typedef $$BooleanEntryTableTableCreateCompanionBuilder
-    = BooleanEntryTableCompanion Function({
-  required String id,
-  required String raportId,
-  required String entryMetadataId,
-  required bool value,
-  Value<int> rowid,
-});
-typedef $$BooleanEntryTableTableUpdateCompanionBuilder
-    = BooleanEntryTableCompanion Function({
-  Value<String> id,
-  Value<String> raportId,
-  Value<String> entryMetadataId,
-  Value<bool> value,
-  Value<int> rowid,
-});
-
-final class $$BooleanEntryTableTableReferences extends BaseReferences<
-    _$DriftAppDatabase, $BooleanEntryTableTable, BooleanEntry> {
-  $$BooleanEntryTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $RaportTableTable _raportIdTable(_$DriftAppDatabase db) =>
-      db.raportTable.createAlias($_aliasNameGenerator(
-          db.booleanEntryTable.raportId, db.raportTable.id));
-
-  $$RaportTableTableProcessedTableManager? get raportId {
-    if ($_item.raportId == null) return null;
-    final manager = $$RaportTableTableTableManager($_db, $_db.raportTable)
-        .filter((f) => f.id($_item.raportId!));
-    final item = $_typedResult.readTableOrNull(_raportIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $EntryMetadataTableTable _entryMetadataIdTable(
-          _$DriftAppDatabase db) =>
-      db.entryMetadataTable.createAlias($_aliasNameGenerator(
-          db.booleanEntryTable.entryMetadataId, db.entryMetadataTable.id));
-
-  $$EntryMetadataTableTableProcessedTableManager? get entryMetadataId {
-    if ($_item.entryMetadataId == null) return null;
-    final manager =
-        $$EntryMetadataTableTableTableManager($_db, $_db.entryMetadataTable)
-            .filter((f) => f.id($_item.entryMetadataId!));
-    final item = $_typedResult.readTableOrNull(_entryMetadataIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
-class $$BooleanEntryTableTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $BooleanEntryTableTable> {
-  $$BooleanEntryTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$RaportTableTableFilterComposer get raportId {
-    final $$RaportTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.raportId,
-        referencedTable: $state.db.raportTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$RaportTableTableFilterComposer(ComposerState($state.db,
-                $state.db.raportTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$EntryMetadataTableTableFilterComposer get entryMetadataId {
-    final $$EntryMetadataTableTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.entryMetadataId,
-            referencedTable: $state.db.entryMetadataTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EntryMetadataTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.entryMetadataTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
-}
-
-class $$BooleanEntryTableTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $BooleanEntryTableTable> {
-  $$BooleanEntryTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$RaportTableTableOrderingComposer get raportId {
-    final $$RaportTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.raportId,
-        referencedTable: $state.db.raportTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$RaportTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.raportTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$EntryMetadataTableTableOrderingComposer get entryMetadataId {
-    final $$EntryMetadataTableTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.entryMetadataId,
-            referencedTable: $state.db.entryMetadataTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EntryMetadataTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.entryMetadataTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
-}
-
-class $$BooleanEntryTableTableTableManager extends RootTableManager<
-    _$DriftAppDatabase,
-    $BooleanEntryTableTable,
-    BooleanEntry,
-    $$BooleanEntryTableTableFilterComposer,
-    $$BooleanEntryTableTableOrderingComposer,
-    $$BooleanEntryTableTableCreateCompanionBuilder,
-    $$BooleanEntryTableTableUpdateCompanionBuilder,
-    (BooleanEntry, $$BooleanEntryTableTableReferences),
-    BooleanEntry,
-    PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
-  $$BooleanEntryTableTableTableManager(
-      _$DriftAppDatabase db, $BooleanEntryTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$BooleanEntryTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$BooleanEntryTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> raportId = const Value.absent(),
-            Value<String> entryMetadataId = const Value.absent(),
-            Value<bool> value = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              BooleanEntryTableCompanion(
-            id: id,
-            raportId: raportId,
-            entryMetadataId: entryMetadataId,
-            value: value,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String raportId,
-            required String entryMetadataId,
-            required bool value,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              BooleanEntryTableCompanion.insert(
-            id: id,
-            raportId: raportId,
-            entryMetadataId: entryMetadataId,
-            value: value,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$BooleanEntryTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({raportId = false, entryMetadataId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (raportId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.raportId,
-                    referencedTable:
-                        $$BooleanEntryTableTableReferences._raportIdTable(db),
-                    referencedColumn: $$BooleanEntryTableTableReferences
-                        ._raportIdTable(db)
-                        .id,
-                  ) as T;
-                }
-                if (entryMetadataId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.entryMetadataId,
-                    referencedTable: $$BooleanEntryTableTableReferences
-                        ._entryMetadataIdTable(db),
-                    referencedColumn: $$BooleanEntryTableTableReferences
-                        ._entryMetadataIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$BooleanEntryTableTableProcessedTableManager = ProcessedTableManager<
-    _$DriftAppDatabase,
-    $BooleanEntryTableTable,
-    BooleanEntry,
-    $$BooleanEntryTableTableFilterComposer,
-    $$BooleanEntryTableTableOrderingComposer,
-    $$BooleanEntryTableTableCreateCompanionBuilder,
-    $$BooleanEntryTableTableUpdateCompanionBuilder,
-    (BooleanEntry, $$BooleanEntryTableTableReferences),
-    BooleanEntry,
-    PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
-typedef $$TextEntryTableTableCreateCompanionBuilder = TextEntryTableCompanion
-    Function({
+    PrefetchHooks Function({bool entryTableRefs})>;
+typedef $$EntryTableTableCreateCompanionBuilder = EntryTableCompanion Function({
   required String id,
   required String raportId,
   required String entryMetadataId,
   required String value,
   Value<int> rowid,
 });
-typedef $$TextEntryTableTableUpdateCompanionBuilder = TextEntryTableCompanion
-    Function({
+typedef $$EntryTableTableUpdateCompanionBuilder = EntryTableCompanion Function({
   Value<String> id,
   Value<String> raportId,
   Value<String> entryMetadataId,
@@ -3939,14 +3138,13 @@ typedef $$TextEntryTableTableUpdateCompanionBuilder = TextEntryTableCompanion
   Value<int> rowid,
 });
 
-final class $$TextEntryTableTableReferences extends BaseReferences<
-    _$DriftAppDatabase, $TextEntryTableTable, TextEntry> {
-  $$TextEntryTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+final class $$EntryTableTableReferences
+    extends BaseReferences<_$DriftAppDatabase, $EntryTableTable, Entry> {
+  $$EntryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $RaportTableTable _raportIdTable(_$DriftAppDatabase db) =>
       db.raportTable.createAlias(
-          $_aliasNameGenerator(db.textEntryTable.raportId, db.raportTable.id));
+          $_aliasNameGenerator(db.entryTable.raportId, db.raportTable.id));
 
   $$RaportTableTableProcessedTableManager? get raportId {
     if ($_item.raportId == null) return null;
@@ -3961,7 +3159,7 @@ final class $$TextEntryTableTableReferences extends BaseReferences<
   static $EntryMetadataTableTable _entryMetadataIdTable(
           _$DriftAppDatabase db) =>
       db.entryMetadataTable.createAlias($_aliasNameGenerator(
-          db.textEntryTable.entryMetadataId, db.entryMetadataTable.id));
+          db.entryTable.entryMetadataId, db.entryMetadataTable.id));
 
   $$EntryMetadataTableTableProcessedTableManager? get entryMetadataId {
     if ($_item.entryMetadataId == null) return null;
@@ -3975,9 +3173,9 @@ final class $$TextEntryTableTableReferences extends BaseReferences<
   }
 }
 
-class $$TextEntryTableTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $TextEntryTableTable> {
-  $$TextEntryTableTableFilterComposer(super.$state);
+class $$EntryTableTableFilterComposer
+    extends FilterComposer<_$DriftAppDatabase, $EntryTableTable> {
+  $$EntryTableTableFilterComposer(super.$state);
   ColumnFilters<String> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -4017,9 +3215,9 @@ class $$TextEntryTableTableFilterComposer
   }
 }
 
-class $$TextEntryTableTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $TextEntryTableTable> {
-  $$TextEntryTableTableOrderingComposer(super.$state);
+class $$EntryTableTableOrderingComposer
+    extends OrderingComposer<_$DriftAppDatabase, $EntryTableTable> {
+  $$EntryTableTableOrderingComposer(super.$state);
   ColumnOrderings<String> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -4059,26 +3257,25 @@ class $$TextEntryTableTableOrderingComposer
   }
 }
 
-class $$TextEntryTableTableTableManager extends RootTableManager<
+class $$EntryTableTableTableManager extends RootTableManager<
     _$DriftAppDatabase,
-    $TextEntryTableTable,
-    TextEntry,
-    $$TextEntryTableTableFilterComposer,
-    $$TextEntryTableTableOrderingComposer,
-    $$TextEntryTableTableCreateCompanionBuilder,
-    $$TextEntryTableTableUpdateCompanionBuilder,
-    (TextEntry, $$TextEntryTableTableReferences),
-    TextEntry,
+    $EntryTableTable,
+    Entry,
+    $$EntryTableTableFilterComposer,
+    $$EntryTableTableOrderingComposer,
+    $$EntryTableTableCreateCompanionBuilder,
+    $$EntryTableTableUpdateCompanionBuilder,
+    (Entry, $$EntryTableTableReferences),
+    Entry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
-  $$TextEntryTableTableTableManager(
-      _$DriftAppDatabase db, $TextEntryTableTable table)
+  $$EntryTableTableTableManager(_$DriftAppDatabase db, $EntryTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer:
-              $$TextEntryTableTableFilterComposer(ComposerState(db, table)),
+              $$EntryTableTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
-              $$TextEntryTableTableOrderingComposer(ComposerState(db, table)),
+              $$EntryTableTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> raportId = const Value.absent(),
@@ -4086,7 +3283,7 @@ class $$TextEntryTableTableTableManager extends RootTableManager<
             Value<String> value = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
-              TextEntryTableCompanion(
+              EntryTableCompanion(
             id: id,
             raportId: raportId,
             entryMetadataId: entryMetadataId,
@@ -4100,7 +3297,7 @@ class $$TextEntryTableTableTableManager extends RootTableManager<
             required String value,
             Value<int> rowid = const Value.absent(),
           }) =>
-              TextEntryTableCompanion.insert(
+              EntryTableCompanion.insert(
             id: id,
             raportId: raportId,
             entryMetadataId: entryMetadataId,
@@ -4110,7 +3307,7 @@ class $$TextEntryTableTableTableManager extends RootTableManager<
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$TextEntryTableTableReferences(db, table, e)
+                    $$EntryTableTableReferences(db, table, e)
                   ))
               .toList(),
           prefetchHooksCallback: ({raportId = false, entryMetadataId = false}) {
@@ -4134,269 +3331,18 @@ class $$TextEntryTableTableTableManager extends RootTableManager<
                     currentTable: table,
                     currentColumn: table.raportId,
                     referencedTable:
-                        $$TextEntryTableTableReferences._raportIdTable(db),
+                        $$EntryTableTableReferences._raportIdTable(db),
                     referencedColumn:
-                        $$TextEntryTableTableReferences._raportIdTable(db).id,
+                        $$EntryTableTableReferences._raportIdTable(db).id,
                   ) as T;
                 }
                 if (entryMetadataId) {
                   state = state.withJoin(
                     currentTable: table,
                     currentColumn: table.entryMetadataId,
-                    referencedTable: $$TextEntryTableTableReferences
-                        ._entryMetadataIdTable(db),
-                    referencedColumn: $$TextEntryTableTableReferences
-                        ._entryMetadataIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$TextEntryTableTableProcessedTableManager = ProcessedTableManager<
-    _$DriftAppDatabase,
-    $TextEntryTableTable,
-    TextEntry,
-    $$TextEntryTableTableFilterComposer,
-    $$TextEntryTableTableOrderingComposer,
-    $$TextEntryTableTableCreateCompanionBuilder,
-    $$TextEntryTableTableUpdateCompanionBuilder,
-    (TextEntry, $$TextEntryTableTableReferences),
-    TextEntry,
-    PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
-typedef $$NumericEntryTableTableCreateCompanionBuilder
-    = NumericEntryTableCompanion Function({
-  required String id,
-  required String raportId,
-  required String entryMetadataId,
-  required double value,
-  Value<int> rowid,
-});
-typedef $$NumericEntryTableTableUpdateCompanionBuilder
-    = NumericEntryTableCompanion Function({
-  Value<String> id,
-  Value<String> raportId,
-  Value<String> entryMetadataId,
-  Value<double> value,
-  Value<int> rowid,
-});
-
-final class $$NumericEntryTableTableReferences extends BaseReferences<
-    _$DriftAppDatabase, $NumericEntryTableTable, NumericEntry> {
-  $$NumericEntryTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $RaportTableTable _raportIdTable(_$DriftAppDatabase db) =>
-      db.raportTable.createAlias($_aliasNameGenerator(
-          db.numericEntryTable.raportId, db.raportTable.id));
-
-  $$RaportTableTableProcessedTableManager? get raportId {
-    if ($_item.raportId == null) return null;
-    final manager = $$RaportTableTableTableManager($_db, $_db.raportTable)
-        .filter((f) => f.id($_item.raportId!));
-    final item = $_typedResult.readTableOrNull(_raportIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $EntryMetadataTableTable _entryMetadataIdTable(
-          _$DriftAppDatabase db) =>
-      db.entryMetadataTable.createAlias($_aliasNameGenerator(
-          db.numericEntryTable.entryMetadataId, db.entryMetadataTable.id));
-
-  $$EntryMetadataTableTableProcessedTableManager? get entryMetadataId {
-    if ($_item.entryMetadataId == null) return null;
-    final manager =
-        $$EntryMetadataTableTableTableManager($_db, $_db.entryMetadataTable)
-            .filter((f) => f.id($_item.entryMetadataId!));
-    final item = $_typedResult.readTableOrNull(_entryMetadataIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
-class $$NumericEntryTableTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $NumericEntryTableTable> {
-  $$NumericEntryTableTableFilterComposer(super.$state);
-  ColumnFilters<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  $$RaportTableTableFilterComposer get raportId {
-    final $$RaportTableTableFilterComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.raportId,
-        referencedTable: $state.db.raportTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$RaportTableTableFilterComposer(ComposerState($state.db,
-                $state.db.raportTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$EntryMetadataTableTableFilterComposer get entryMetadataId {
-    final $$EntryMetadataTableTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.entryMetadataId,
-            referencedTable: $state.db.entryMetadataTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EntryMetadataTableTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.entryMetadataTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
-}
-
-class $$NumericEntryTableTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $NumericEntryTableTable> {
-  $$NumericEntryTableTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get value => $state.composableBuilder(
-      column: $state.table.value,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  $$RaportTableTableOrderingComposer get raportId {
-    final $$RaportTableTableOrderingComposer composer = $state.composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.raportId,
-        referencedTable: $state.db.raportTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder, parentComposers) =>
-            $$RaportTableTableOrderingComposer(ComposerState($state.db,
-                $state.db.raportTable, joinBuilder, parentComposers)));
-    return composer;
-  }
-
-  $$EntryMetadataTableTableOrderingComposer get entryMetadataId {
-    final $$EntryMetadataTableTableOrderingComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.entryMetadataId,
-            referencedTable: $state.db.entryMetadataTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$EntryMetadataTableTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.entryMetadataTable,
-                    joinBuilder,
-                    parentComposers)));
-    return composer;
-  }
-}
-
-class $$NumericEntryTableTableTableManager extends RootTableManager<
-    _$DriftAppDatabase,
-    $NumericEntryTableTable,
-    NumericEntry,
-    $$NumericEntryTableTableFilterComposer,
-    $$NumericEntryTableTableOrderingComposer,
-    $$NumericEntryTableTableCreateCompanionBuilder,
-    $$NumericEntryTableTableUpdateCompanionBuilder,
-    (NumericEntry, $$NumericEntryTableTableReferences),
-    NumericEntry,
-    PrefetchHooks Function({bool raportId, bool entryMetadataId})> {
-  $$NumericEntryTableTableTableManager(
-      _$DriftAppDatabase db, $NumericEntryTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$NumericEntryTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$NumericEntryTableTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<String> id = const Value.absent(),
-            Value<String> raportId = const Value.absent(),
-            Value<String> entryMetadataId = const Value.absent(),
-            Value<double> value = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              NumericEntryTableCompanion(
-            id: id,
-            raportId: raportId,
-            entryMetadataId: entryMetadataId,
-            value: value,
-            rowid: rowid,
-          ),
-          createCompanionCallback: ({
-            required String id,
-            required String raportId,
-            required String entryMetadataId,
-            required double value,
-            Value<int> rowid = const Value.absent(),
-          }) =>
-              NumericEntryTableCompanion.insert(
-            id: id,
-            raportId: raportId,
-            entryMetadataId: entryMetadataId,
-            value: value,
-            rowid: rowid,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$NumericEntryTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({raportId = false, entryMetadataId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (raportId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.raportId,
                     referencedTable:
-                        $$NumericEntryTableTableReferences._raportIdTable(db),
-                    referencedColumn: $$NumericEntryTableTableReferences
-                        ._raportIdTable(db)
-                        .id,
-                  ) as T;
-                }
-                if (entryMetadataId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.entryMetadataId,
-                    referencedTable: $$NumericEntryTableTableReferences
-                        ._entryMetadataIdTable(db),
-                    referencedColumn: $$NumericEntryTableTableReferences
+                        $$EntryTableTableReferences._entryMetadataIdTable(db),
+                    referencedColumn: $$EntryTableTableReferences
                         ._entryMetadataIdTable(db)
                         .id,
                   ) as T;
@@ -4412,16 +3358,16 @@ class $$NumericEntryTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$NumericEntryTableTableProcessedTableManager = ProcessedTableManager<
+typedef $$EntryTableTableProcessedTableManager = ProcessedTableManager<
     _$DriftAppDatabase,
-    $NumericEntryTableTable,
-    NumericEntry,
-    $$NumericEntryTableTableFilterComposer,
-    $$NumericEntryTableTableOrderingComposer,
-    $$NumericEntryTableTableCreateCompanionBuilder,
-    $$NumericEntryTableTableUpdateCompanionBuilder,
-    (NumericEntry, $$NumericEntryTableTableReferences),
-    NumericEntry,
+    $EntryTableTable,
+    Entry,
+    $$EntryTableTableFilterComposer,
+    $$EntryTableTableOrderingComposer,
+    $$EntryTableTableCreateCompanionBuilder,
+    $$EntryTableTableUpdateCompanionBuilder,
+    (Entry, $$EntryTableTableReferences),
+    Entry,
     PrefetchHooks Function({bool raportId, bool entryMetadataId})>;
 typedef $$TodoTableTableCreateCompanionBuilder = TodoTableCompanion Function({
   required String id,
@@ -4756,12 +3702,8 @@ class $DriftAppDatabaseManager {
       $$RaportTableTableTableManager(_db, _db.raportTable);
   $$EntryMetadataTableTableTableManager get entryMetadataTable =>
       $$EntryMetadataTableTableTableManager(_db, _db.entryMetadataTable);
-  $$BooleanEntryTableTableTableManager get booleanEntryTable =>
-      $$BooleanEntryTableTableTableManager(_db, _db.booleanEntryTable);
-  $$TextEntryTableTableTableManager get textEntryTable =>
-      $$TextEntryTableTableTableManager(_db, _db.textEntryTable);
-  $$NumericEntryTableTableTableManager get numericEntryTable =>
-      $$NumericEntryTableTableTableManager(_db, _db.numericEntryTable);
+  $$EntryTableTableTableManager get entryTable =>
+      $$EntryTableTableTableManager(_db, _db.entryTable);
   $$TodoTableTableTableManager get todoTable =>
       $$TodoTableTableTableManager(_db, _db.todoTable);
   $$HistoryLogTableTableTableManager get historyLogTable =>

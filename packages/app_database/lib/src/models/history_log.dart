@@ -25,13 +25,11 @@ class HistoryLog extends Equatable {
 
 enum TableType {
   apiary,
-  boolean_entry,
-  entry_metadata,
   hive,
-  numeric_entry,
   queen,
+  todo,
+  entry_metadata,
   raport,
-  text_entry,
 }
 
 enum ActionType {

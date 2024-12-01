@@ -12,6 +12,7 @@ class MultiRepositoryProviderSetup {
     final hiveRepository = HiveRepository(database);
     final queenRepository = QueenRepository(database);
     final preferencesRepository = PreferencesRepository();
+    final entryMetadataRepository = EntryMetadataRepository(database);
 
     return MultiRepositoryProvider(
       providers: [
@@ -29,6 +30,9 @@ class MultiRepositoryProviderSetup {
         ),
         RepositoryProvider<PreferencesRepository>(
           create: (context) => preferencesRepository,
+        ),
+        RepositoryProvider<EntryMetadataRepository>(
+          create: (context) => entryMetadataRepository,
         ),
       ],
       child: child,

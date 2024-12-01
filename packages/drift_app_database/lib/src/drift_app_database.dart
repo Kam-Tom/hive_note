@@ -1,5 +1,8 @@
 import 'package:app_database/app_database.dart';
 import 'package:drift/drift.dart';
+import 'package:drift_app_database/src/daos/entry_metadata_dao.dart';
+import 'package:drift_app_database/src/daos/history_log_dao.dart';
+import 'package:drift_app_database/src/daos/raport_dao.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'tabels/tabels.dart';
 import 'daos/daos.dart';
@@ -15,9 +18,7 @@ part 'drift_app_database.g.dart';
   HiveTable,
   RaportTable,
   EntryMetadataTable,
-  BooleanEntryTable,
-  TextEntryTable,
-  NumericEntryTable,
+  EntryTable,
   TodoTable,
   HistoryLogTable,
 ],
@@ -26,6 +27,9 @@ part 'drift_app_database.g.dart';
     HiveDao,
     TodoDao,
     QueenDao,
+    RaportDao,
+    EntryMetadataDao,
+    HistoryLogDao
 
   ],
 )
@@ -120,5 +124,35 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Stream<Queen> watchQueen(String queenId) => queenDao.watchQueen(queenId);
+  
+  @override
+  Future<void> deleteEntryMetadata(EntryMetadata entryMetadata) => entryMetadataDao.deleteEntryMetadata(entryMetadata);
+  
+  @override
+  Future<void> deleteRaport(Raport raport) {
+    // TODO: implement deleteRaport
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> insertEntryMetadata(EntryMetadata entryMetadata) => entryMetadataDao.insertEntryMetadata(entryMetadata);
+  
+  @override
+  Stream<List<EntryMetadata>> watchEntryMetadatasOfRaportType(RaportType raportType) => entryMetadataDao.watchEntryMetadatasOfRaportType(raportType);
+  
+  @override
+  Future<void> insertRaport(Raport raport) {
+    // TODO: implement insertRaport
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateRaport(Raport raport) {
+    // TODO: implement updateRaport
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateEntriesMetadata(List<EntryMetadata> entriesMetadata) => entryMetadataDao.updateEntriesMetadata(entriesMetadata);
 
 }

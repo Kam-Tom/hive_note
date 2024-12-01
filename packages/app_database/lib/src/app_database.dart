@@ -43,6 +43,16 @@ abstract class AppDatabase {
   Future<void> updateTodo(Todo todo);
   Future<void> removeTodo(Todo todo);
 
+  Future<void> insertRaport(Raport raport);
+  Future<void> updateRaport(Raport raport);
+  Future<void> deleteRaport(Raport raport);
+
+  Future<void> insertEntryMetadata(EntryMetadata entryMetadata);
+  Stream<List<EntryMetadata>> watchEntryMetadatasOfRaportType(RaportType raportType);
+  Future<void> deleteEntryMetadata(EntryMetadata entryMetadata);
+
   Stream<List<Queen>> watchAvailableQueens();
+
+  Future<void> updateEntriesMetadata(List<EntryMetadata> entriesMetadata);
 
 }

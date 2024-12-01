@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
+import 'package:hive_note/settings/inspection_settings/presentation/inspection_settings_page.dart';
 import 'package:hive_note/settings/preferences/presentation/preferences_page.dart';
 import 'package:hive_note/settings/bloc/bottom_navigation_cubit.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
@@ -26,7 +27,7 @@ class SettingsPage extends StatelessWidget {
                   case 1:
                     return const PreferencesPage();
                   case 2:
-                    return Container(color: Colors.blue,);
+                    return const InspectionSettingsPage();
                   default:
                     return Container(color: Colors.red,);
                 }
