@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
-import 'package:hive_note/navigation/presentation/pages/feeding.dart';
-import 'package:hive_note/navigation/presentation/pages/finances.dart';
-import 'package:hive_note/navigation/presentation/pages/harvest.dart';
-import 'package:hive_note/navigation/presentation/pages/history.dart';
-import 'package:hive_note/navigation/presentation/pages/other.dart';
-import 'package:hive_note/navigation/presentation/pages/treatment.dart';
 import 'package:hive_note/shared/presentation/widgets/menu_button.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
@@ -29,7 +23,7 @@ class RecordsPage extends StatelessWidget {
           ),
           children: [
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.harvestPath,
               icon: SvgPicture.asset(AppVectors.harvest, width: 50),
               text: const Text('Harvest'),
             ),

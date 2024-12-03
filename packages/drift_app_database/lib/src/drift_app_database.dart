@@ -6,6 +6,7 @@ import 'package:drift_app_database/src/daos/raport_dao.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'tabels/tabels.dart';
 import 'daos/daos.dart';
+import 'defaults/entry_metadata_defaults.dart';
 part 'drift_app_database.g.dart';
 
 /// {@template drift_db_api}
@@ -48,10 +49,22 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   }
 
   @override
-  MigrationStrategy get migration =>
-      MigrationStrategy(beforeOpen: (details) async {
-        await customStatement('PRAGMA foreign_keys = ON');
-      });
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async {
+      await m.createAll();
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+      
+      // If this is first run (after clean install), add default entries
+      if (details.wasCreated) {
+        for (final entry in DefaultEntryMetadata.defaults) {
+          await entryMetadataDao.insertEntryMetadata(entry);
+        }
+      }
+    },
+  );
+
 
   @override
   Future deleteApiary(Apiary apiary) => apiaryDao.deleteApiary(apiary);
@@ -154,5 +167,11 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType) => entryMetadataDao.getEntryMetadatas(raportType);
+  
+  @override
+  Future<List<Apiary>> getApiaries() => apiaryDao.getApiaries();
+  
+  @override
+  Future<List<Hive>> getHivesByApiary(Apiary? apiaryId) => hiveDao.getHivesByApiary(apiaryId);
 
 }

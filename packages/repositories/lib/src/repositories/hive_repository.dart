@@ -19,4 +19,7 @@ class HiveRepository {
 
   Future<void> updateHives(List<Hive> hivesToUpdate) =>
       _database.updateHives(hivesToUpdate);
+
+  Future<List<Hive>> getHivesByApiary(Apiary? apiary) => _database.getHivesByApiary(apiary);
+
 }

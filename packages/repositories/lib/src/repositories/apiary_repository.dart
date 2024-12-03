@@ -20,4 +20,6 @@ class ApiaryRepository {
   Future<void> deleteApiary(Apiary apiary) => _database.deleteApiary(apiary);
 
   Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId) => _database.watchApiaryWithHives(apiaryId);
+
+  Future<List<Apiary>> getApiaries() => _database.getApiaries();
 }

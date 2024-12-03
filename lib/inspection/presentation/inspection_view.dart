@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/inspection/bloc/inspection_bloc.dart';
-import 'package:hive_note/inspection/bloc/widgets/entry_field.dart';
+import 'package:hive_note/shared/features/entry_field.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:hive_note/shared/presentation/widgets/failure.dart';
 import 'package:repositories/repositories.dart';
@@ -155,14 +155,11 @@ class EntryFieldsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("TEST: ${currentInspection} -> ${currentInspection?.raport} -> ${currentInspection?.raport != null}");
     var defaultValues = Map.fromEntries(entryMetadatas.map((e) => MapEntry(e.id, e.valueType.defaultValue)));
     if(currentInspection?.raport != null) {
       defaultValues = Map.fromEntries(currentInspection!.entries.map((e) => MapEntry(e.entryMetadataId, e.value)));
-      print("TEST: $defaultValues");
     }
     
-    // Initialize the cubit with default values
     context.read<EntryFieldCubit>().setDefaultValues(defaultValues);
     
     return ListView(

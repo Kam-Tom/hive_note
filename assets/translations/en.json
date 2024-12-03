@@ -64,5 +64,19 @@
     "add_hive": "Add Hive",
     "pick_color": "Pick a color",
     "done": "Done",
-    "order": "Order"
+    "order": "Order",
+    "jar_small": "Small Jar (0.7l)",
+    "jar_small_hint": "Number of 0.7l jars",
+    "jar_standard": "Standard Jar (1.0l)",
+    "jar_standard_hint": "Number of 1.0l jars",
+    "jar_large": "Large Jar (1.5l)",
+    "jar_large_hint": "Number of 1.5l jars",
+    "jar_xl": "XL Jar (2.0l)",
+    "jar_xl_hint": "Number of 2.0l jars",
+    "custom_amount": "Custom Amount",
+    "custom_amount_hint": "Amount in liters",
+    "honey_type": "Honey Type",
+    "honey_type_hint": "Type of honey harvested",
+    "select_jar_size": "Select Jar Size",
+    "select_honey_type": "Select Honey Type"
 }

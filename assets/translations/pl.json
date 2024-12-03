@@ -65,5 +65,19 @@
     "add_hive": "Dodaj ul",
     "pick_color": "Wybierz kolor",
     "done": "Gotowe",
-    "order": "Kolejność"
+    "order": "Kolejność",
+    "jar_small": "Mały słoik (0.7l)",
+    "jar_small_hint": "Ilość słoików 0.7l",
+    "jar_standard": "Standardowy słoik (1.0l)",
+    "jar_standard_hint": "Ilość słoików 1.0l",
+    "jar_large": "Duży słoik (1.5l)",
+    "jar_large_hint": "Ilość słoików 1.5l",
+    "jar_xl": "Słoik XL (2.0l)",
+    "jar_xl_hint": "Ilość słoików 2.0l",
+    "custom_amount": "Własna ilość",
+    "custom_amount_hint": "Ilość w litrach",
+    "honey_type": "Typ miodu",
+    "honey_type_hint": "Rodzaj zebranego miodu",
+    "select_jar_size": "Wybierz rozmiar słoików",
+    "select_honey_type": "Wybierz typ miodu"
 }

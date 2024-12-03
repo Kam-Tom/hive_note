@@ -61,4 +61,8 @@ abstract class AppDatabase {
 
   Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType);
 
+  Future<List<Apiary>> getApiaries();
+
+  Future<List<Hive>> getHivesByApiary(Apiary? apiaryId);
+
 }

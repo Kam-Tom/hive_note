@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:repositories/repositories.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EntryFieldCubit extends Cubit<Map<String, String?>> {
   EntryFieldCubit() : super({'_source': 'user'});
@@ -14,6 +15,20 @@ class EntryFieldCubit extends Cubit<Map<String, String?>> {
   }
   void setDefaultValues(Map<String, String?> defaultValues) {
     final newState = Map<String, String?>.from(defaultValues);
+    newState['_source'] = 'external';
+    emit(newState);
+  }
+  Map<String, String?> getValues() {
+    final newState = Map<String, String?>.from(state);
+    newState.remove('_source');
+    return newState;
+  }
+
+  void clear() {
+    final newState = Map<String, String?>.from(state);
+    for(final state in newState.keys) {
+      newState[state] = null;
+    }
     newState['_source'] = 'external';
     emit(newState);
   }
@@ -133,12 +148,12 @@ class _SliderEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         Slider(
@@ -168,14 +183,14 @@ class _CheckboxEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              entryMetadata.hint,
+              entryMetadata.hint.tr(),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Checkbox(
@@ -204,17 +219,17 @@ class _TextEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         TextField(
           decoration: InputDecoration(
-            hintText: entryMetadata.hint,
+            hintText: entryMetadata.hint.tr(),
           ),
           controller: controller,
           onChanged: (newValue) {
@@ -239,12 +254,12 @@ class _NumberEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         Row(
@@ -283,7 +298,7 @@ class _NumberEntryField extends StatelessWidget {
               child: TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: entryMetadata.hint,
+                  hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
                 controller: controller,
@@ -313,12 +328,12 @@ class _DecimalEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         Row(
@@ -357,7 +372,7 @@ class _DecimalEntryField extends StatelessWidget {
               child: TextField(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
-                  hintText: entryMetadata.hint,
+                  hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
                 controller: controller,
@@ -387,12 +402,12 @@ class _IntNegEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         Row(
@@ -431,7 +446,7 @@ class _IntNegEntryField extends StatelessWidget {
               child: TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: entryMetadata.hint,
+                  hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
                 controller: controller,
@@ -461,12 +476,12 @@ class _DecNegEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
           Text(
-            entryMetadata.hint,
+            entryMetadata.hint.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         Row(
@@ -505,7 +520,7 @@ class _DecNegEntryField extends StatelessWidget {
               child: TextField(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
-                  hintText: entryMetadata.hint,
+                  hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 ),
                 controller: controller,
@@ -534,14 +549,16 @@ class _ToggleEntryField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          entryMetadata.label,
+          entryMetadata.label.tr(),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(entryMetadata.hint,
-            style: Theme.of(context).textTheme.bodyMedium,),
+            Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             Switch(
               value: value != null ? value!.toLowerCase() == 'true' : false,
               onChanged: (newValue) {

@@ -108,6 +108,13 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
       return HiveWithQueen(hive: hive, queen: queen); 
     }).toList();
   }
+
+  Future<List<Hive>> getHivesByApiary(Apiary? apiary) async {
+    if(apiary == null) {
+      return (select(hiveTable)..where((h) => h.apiaryId.isNull())).get();
+    }
+    return (select(hiveTable)..where((h) => h.apiaryId.equals(apiary.id))).get();
+  }
 }
 
 extension on Hive {
