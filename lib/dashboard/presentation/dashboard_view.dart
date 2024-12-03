@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
+import 'package:hive_note/core/configs/setup/flutter_notifications.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/dashboard/bloc/dashboard_blocs.dart';
 import 'package:hive_note/dashboard/presentation/widgets/inspections/inspections.dart';
@@ -212,6 +213,17 @@ class _Buttons extends StatelessWidget {
                 _buildMenuButton(
                     AppVectors.note, "records".tr(), AppRouter.recordsPath),
               ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final scheduledDate = DateTime.now().add(Duration(seconds: 10));
+                NotificationService.scheduleNotification(
+                  "Scheduled Notification",
+                  "This notification was scheduled to appear after 10 seconds",
+                  scheduledDate,
+                );
+              },
+              child: Text("Send Notification"),
             ),
           ],
         ),

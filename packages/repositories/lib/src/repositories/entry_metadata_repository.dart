@@ -10,4 +10,5 @@ class EntryMetadataRepository {
 
   Future<void> updateEntriesMetadata(List<EntryMetadata> entriesMetadata) => _database.updateEntriesMetadata(entriesMetadata);
 
+  Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType) => _database.getEntryMetadatas(raportType);
 }

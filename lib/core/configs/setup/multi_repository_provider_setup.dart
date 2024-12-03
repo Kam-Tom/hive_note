@@ -34,6 +34,9 @@ class MultiRepositoryProviderSetup {
         ),
         RepositoryProvider<EntryMetadataRepository>(
           create: (context) => entryMetadataRepository,
+        ),        
+        RepositoryProvider<RaportRepository>(
+          create: (context) => raportRepository,
         ),
       ],
       child: child,

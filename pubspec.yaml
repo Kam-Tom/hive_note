@@ -50,6 +50,8 @@ dependencies:
   bloc_concurrency: ^0.2.5
   flutter_colorpicker: ^1.1.0
   table_calendar: ^3.1.2
+  flutter_local_notifications: ^18.0.1 
+  timezone: ^0.10.0
 
   drift_app_database:
     path: packages/drift_app_database  

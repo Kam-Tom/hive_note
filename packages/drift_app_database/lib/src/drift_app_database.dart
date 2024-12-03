@@ -129,10 +129,7 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Future<void> deleteEntryMetadata(EntryMetadata entryMetadata) => entryMetadataDao.deleteEntryMetadata(entryMetadata);
   
   @override
-  Future<void> deleteRaport(Raport raport) {
-    // TODO: implement deleteRaport
-    throw UnimplementedError();
-  }
+  Future<void> deleteRaport(Raport raport) => raportDao.deleteRaport(raport);
   
   @override
   Future<void> insertEntryMetadata(EntryMetadata entryMetadata) => entryMetadataDao.insertEntryMetadata(entryMetadata);
@@ -141,18 +138,21 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   Stream<List<EntryMetadata>> watchEntryMetadatasOfRaportType(RaportType raportType) => entryMetadataDao.watchEntryMetadatasOfRaportType(raportType);
   
   @override
-  Future<void> insertRaport(Raport raport) {
-    // TODO: implement insertRaport
-    throw UnimplementedError();
-  }
+  Future<void> insertRaport(Raport raport, List<Entry> entries) => raportDao.insertRaport(raport, entries);
   
   @override
-  Future<void> updateRaport(Raport raport) {
-    // TODO: implement updateRaport
-    throw UnimplementedError();
-  }
-  
+  Future<void> updateRaport(Raport raport, List<Entry> entries) => raportDao.updateRaport(raport, entries);
+
   @override
   Future<void> updateEntriesMetadata(List<EntryMetadata> entriesMetadata) => entryMetadataDao.updateEntriesMetadata(entriesMetadata);
+  
+  @override
+  Future<Apiary> getApiary(String apiaryId) => apiaryDao.getApiary(apiaryId);
+  
+  @override
+  Future<List<HiveWithQueen>> getHivesWithQueenByApiary(Apiary? apiary) => hiveDao.getHivesWithQueenByApiary(apiary);
+  
+  @override
+  Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType) => entryMetadataDao.getEntryMetadatas(raportType);
 
 }

@@ -43,8 +43,8 @@ abstract class AppDatabase {
   Future<void> updateTodo(Todo todo);
   Future<void> removeTodo(Todo todo);
 
-  Future<void> insertRaport(Raport raport);
-  Future<void> updateRaport(Raport raport);
+  Future<void> insertRaport(Raport raport, List<Entry> entries);
+  Future<void> updateRaport(Raport raport, List<Entry> entries);
   Future<void> deleteRaport(Raport raport);
 
   Future<void> insertEntryMetadata(EntryMetadata entryMetadata);
@@ -54,5 +54,11 @@ abstract class AppDatabase {
   Stream<List<Queen>> watchAvailableQueens();
 
   Future<void> updateEntriesMetadata(List<EntryMetadata> entriesMetadata);
+
+  Future<Apiary> getApiary(String apiaryId);
+
+  Future<List<HiveWithQueen>> getHivesWithQueenByApiary(Apiary? apiary);
+
+  Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType);
 
 }

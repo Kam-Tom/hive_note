@@ -31,6 +31,15 @@ class EntryMetadataDao extends DatabaseAccessor<DriftAppDatabase>
           entriesMetadata.map((entry) => entry.toCompanion()));
     });
   }
+
+  Future<List<EntryMetadata>> getEntryMetadatas(RaportType raportType) {
+    final query = (select(entryMetadataTable)
+          ..where((tbl) => tbl.raportType.equals(raportType.index))
+          ..orderBy([(t) => OrderingTerm(expression: t.order)]))
+        .get();
+
+    return query;
+  }
 }
 
 extension on EntryMetadata {

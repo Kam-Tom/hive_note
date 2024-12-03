@@ -8,6 +8,8 @@ class HiveRepository {
   
   Stream<HiveWithQueen> watchHiveWithQueen(String hiveId) => _database.watchHiveWithQueen(hiveId);
 
+  Future<List<HiveWithQueen>> getHivesWithQueenByApiary(Apiary? apiary) => _database.getHivesWithQueenByApiary(apiary);
+
   Future insertHive(Hive hive) => _database.insertHive(hive);
 
   Future deleteHive(Hive hive) => _database.deleteHive(hive);

@@ -5,16 +5,14 @@ import 'package:hive_note/settings/inspection_settings/presentation/inspection_s
 import 'package:hive_note/settings/preferences/presentation/preferences_page.dart';
 import 'package:hive_note/settings/bloc/bottom_navigation_cubit.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
-import 'package:hive_note/sync/presentation/pages/sync.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print("TSD");
     return BlocProvider(
-      create: (context) => BottomNavigationCubit(initialIndex: 1),
+      create: (context) => BottomNavigationCubit(initialIndex: 0),
       child: BlocBuilder<BottomNavigationCubit, int>(
         builder: (context, state) {
           return Scaffold(
@@ -23,10 +21,8 @@ class SettingsPage extends StatelessWidget {
               builder: (context) {
                 switch (state) {
                   case 0:
-                    return const SyncPage();
-                  case 1:
                     return const PreferencesPage();
-                  case 2:
+                  case 1:
                     return const InspectionSettingsPage();
                   default:
                     return Container(color: Colors.red,);
@@ -37,7 +33,7 @@ class SettingsPage extends StatelessWidget {
               selectedIndex: state,
               onDestinationSelected: (index) => context.read<BottomNavigationCubit>().changeTab(index),
               destinations: const [
-                NavigationDestination(icon: Icon(Icons.sync), label: 'Sync'),
+                // NavigationDestination(icon: Icon(Icons.sync), label: 'Sync'),
                 NavigationDestination(icon: Icon(Icons.room_preferences), label: 'Preferences'),
                 NavigationDestination(icon: Icon(Icons.edit), label: 'Inspections'),
               ],

@@ -72,6 +72,10 @@ Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount(onlyActive) {
           ApiaryWithHives(apiary: apiary, hives: hives),
     );
   }
+
+  Future<Apiary> getApiary(String apiaryId) {
+    return (select(apiaryTable)..where((tbl) => tbl.id.equals(apiaryId))).getSingle();
+  }
 }
 
 extension on Apiary {

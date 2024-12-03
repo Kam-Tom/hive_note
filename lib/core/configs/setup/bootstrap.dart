@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'setup.dart';
+import 'flutter_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void bootstrap() {
   Logger logger = Logger();
@@ -20,8 +22,10 @@ void bootstrap() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      tz.initializeTimeZones();
+      await NotificationService.init();
       await EasyLocalization.ensureInitialized();
-
+      
       runApp(
         EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('pl')],
