@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/settings/inspection_settings/bloc/inspection_settings_bloc.dart';
@@ -16,20 +17,20 @@ class AddEntryDialogView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Data'),
+      title: Text('add_new_data'.tr()),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: labelController,
-            decoration: InputDecoration(labelText: 'Label'),
+            decoration: InputDecoration(labelText: 'label'.tr()),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: hintController,
-            decoration: InputDecoration(labelText: 'Hint'),
+            decoration: InputDecoration(labelText: 'hint'.tr()),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           BlocBuilder<EntryTypeCubit, EntryType>(
             builder: (context, selectedType) {
               return DropdownButton<EntryType>(
@@ -53,7 +54,7 @@ class AddEntryDialogView extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          child: Text('cancel'.tr()),
         ),
         TextButton(
           onPressed: () {
@@ -69,7 +70,7 @@ class AddEntryDialogView extends StatelessWidget {
             ));
             Navigator.of(context).pop();
           },
-          child: Text('Add'),
+          child: Text('add'.tr()),
         ),
       ],
     );
@@ -79,7 +80,7 @@ class AddEntryDialogView extends StatelessWidget {
     return Row(
       children: [
         type.icon,
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(type.description),
       ],
     );

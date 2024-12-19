@@ -15,8 +15,7 @@ class EditApiaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var state = context.watch<EditApiaryBloc>().state;
-    return BlocBuilder<EditApiaryBloc, EditApiaryState>(
-      builder: (context, state) {
+    return BlocBuilder<EditApiaryBloc, EditApiaryState>(      builder: (context, state) {
         switch (state.status) {
           case Status.loading || Status.initial:
             return const Center(child: CircularProgressIndicator());
@@ -104,10 +103,7 @@ class EditApiaryView extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () => context.read<EditApiaryBloc>().add(
-                    const AddHive(
-                      defaultPrefix: 'Hive',
-                      defaultType: 'Langstroth',
-                    ),
+                    const AddHive(),
                   ),
               icon: const Icon(Icons.add),
               label: Text('add_hive'.tr()),

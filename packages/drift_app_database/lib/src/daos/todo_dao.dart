@@ -20,6 +20,8 @@ class TodoDao extends DatabaseAccessor<DriftAppDatabase> with _$TodoDaoMixin {
   
   Future removeTodo(Todo todo) => (delete(todoTable)..where((t) => t.id.equals(todo.id))).go();
 
+  Future<Todo> getTodo(String todoId) => (select(todoTable)..where((t) => t.id.equals(todoId))).getSingle();
+
 }
 
 extension on Todo {

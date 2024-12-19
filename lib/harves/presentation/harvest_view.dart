@@ -2,20 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/harves/bloc/harvest_bloc.dart';
+import 'package:hive_note/harves/bloc/models/jar_size.dart';
 import 'package:hive_note/shared/features/entry_field.dart';
 import 'package:repositories/repositories.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-
-
 class HarvestView extends StatelessWidget {
-  static const List<JarSize> jarSizes = [
-    JarSize('Undefined', -1, 'l'), // Add undefined option
-    JarSize('Small Jar', 0.7, 'l'),
-    JarSize('Standard Jar', 1.0, 'l'),
-    JarSize('Large Jar', 1.5, 'l'),
-    JarSize('XL Jar', 2.0, 'l'),
-  ];
+
+  const HarvestView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +20,6 @@ class HarvestView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Dropdowns section
               Row(
                 children: [
                   Expanded(
@@ -35,8 +28,12 @@ class HarvestView extends StatelessWidget {
                       items: state.apiaries
                           .map((e) => MultiSelectItem<Apiary>(e, e.name))
                           .toList(),
-                      title: const Text('Select Apiaries'),
-                      buttonText: const Text('Select Apiaries'),
+                      title: Text('select_apiaries'.tr()),
+                        buttonText: Text(
+                          state.selectedApiaries.isEmpty && state.selectedHives.isEmpty
+                              ? 'select_apiaries'.tr()
+                              : '${'selected_apiaries'.tr()} ${state.selectedApiaries.length}',
+                        ),
                       buttonIcon: const Icon(Icons.arrow_drop_down),
                       selectedItemsTextStyle: const TextStyle(fontWeight: FontWeight.bold),
                       onConfirm: (values) {
@@ -59,8 +56,12 @@ class HarvestView extends StatelessWidget {
                       items: state.hives
                           .map((e) => MultiSelectItem<Hive>(e, e.name))
                           .toList(),
-                      title: const Text('Select Hives'),
-                      buttonText: const Text('Select Hives'),
+                      title: Text('select_hives'.tr()),
+                        buttonText: Text(
+                          state.selectedHives.isEmpty
+                              ? 'select_hives'.tr()
+                              : '${'selected_hives'.tr()} ${state.selectedHives.length}',
+                        ),
                       buttonIcon: const Icon(Icons.arrow_drop_down),
                       selectedItemsTextStyle: const TextStyle(fontWeight: FontWeight.bold),
                       onConfirm: (values) {
@@ -88,12 +89,12 @@ class HarvestView extends StatelessWidget {
                 height: 80,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: HarvestView.jarSizes.length,
+                  itemCount: JarSize.jarSizes.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: InkWell(
-                        onTap: () => context.read<HarvestBloc>().add(AddJarEntry(HarvestView.jarSizes[index])),
+                        onTap: () => context.read<HarvestBloc>().add(AddJarEntry(JarSize.jarSizes[index])),
                         child: Card(
                           child: Container(
                             width: 80,
@@ -102,11 +103,11 @@ class HarvestView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  HarvestView.jarSizes[index].size == -1 ? 'X' : '${HarvestView.jarSizes[index].size}',
+                                  JarSize.jarSizes[index].size == -1 ? 'X' : '${JarSize.jarSizes[index].size}',
                                   style: Theme.of(context).textTheme.titleMedium,
                                 ),
                                 Text(
-                                  HarvestView.jarSizes[index].size == -1 ? '' : HarvestView.jarSizes[index].unit,
+                                  JarSize.jarSizes[index].size == -1 ? '' : JarSize.jarSizes[index].unit,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -128,7 +129,9 @@ class HarvestView extends StatelessWidget {
                     children: [
                       ...state.entries.map((metadata) => Column(
                         children: [
-                          EntryField(entryMetadata: metadata),
+                          EntryField(entryMetadata: metadata,
+                            hints: state.hints[metadata.id],
+                          ),
                           const Divider(),
                         ],
                       )).toList(),

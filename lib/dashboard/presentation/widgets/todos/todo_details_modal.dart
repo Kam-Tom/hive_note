@@ -32,7 +32,7 @@ class TodoDetailsModal extends StatelessWidget {
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Ensure it takes minimum height
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
@@ -62,7 +62,7 @@ class TodoDetailsModal extends StatelessWidget {
         ),
         const Icon(
           Icons.location_on,
-          color: Colors.grey, // Neutral color
+          color: Colors.grey,
         ),
       ],
     );

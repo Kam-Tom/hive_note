@@ -63,5 +63,5 @@ enum RaportType {
   finances,
   feeding,
   treatment,
-  other,
+  note,
 }

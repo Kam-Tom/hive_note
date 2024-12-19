@@ -11,15 +11,58 @@ class ApiaryRepository {
 
   Future<Apiary> getApiary(String apiaryId) => _database.getApiary(apiaryId);
   
-  Future insertApiary(Apiary apiary) => _database.insertApiary(apiary);
+  Future insertApiary(Apiary apiary) async {
+    await _database.insertApiary(apiary);
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: apiary.id,
+      logType: LogType.apiary,
+      actionType: ActionType.create,
+    ));
 
-  Future updateApiary(Apiary apiary)  => _database.updateApiary(apiary);
+  }
 
-  Future<void> updateApiaries(List<Apiary> apiariesToUpdate) => _database.updateApiaries(apiariesToUpdate);
+  Future updateApiary(Apiary apiary) async {
+    await _database.updateApiary(apiary);
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: apiary.id,
+      logType: LogType.apiary,
+      actionType: ActionType.update,
+    ));
+    
+  } 
+
+  Future<void> updateApiaries(List<Apiary> apiariesToUpdate) async {
+    await _database.updateApiaries(apiariesToUpdate);
+
+    for (final apiary in apiariesToUpdate) {
+      await _database.insertHistoryLog(HistoryLog(
+        referenceId: apiary.id,
+        logType: LogType.apiary,
+        actionType: ActionType.update,
+        shadowLog: true,
+      ));
+    }
+  }
   
-  Future<void> deleteApiary(Apiary apiary) => _database.deleteApiary(apiary);
+  Future<void> deleteApiary(Apiary apiary) async {
+    await _database.deleteApiary(apiary);
+
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: apiary.id,
+      logType: LogType.apiary,
+      actionType: ActionType.delete,
+    ));
+    
+  } 
 
   Stream<ApiaryWithHives> watchApiaryWithHives(String apiaryId) => _database.watchApiaryWithHives(apiaryId);
 
   Future<List<Apiary>> getApiaries() => _database.getApiaries();
+
+  Future<Apiary?> getApiaryForHive(Hive hive) {
+    if(hive.apiaryId == null) {
+      return Future.value(null);
+    }
+    return getApiary(hive.apiaryId!);
+  }
 }

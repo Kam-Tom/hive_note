@@ -8,6 +8,7 @@ class RaportTable extends Table{
   TextColumn get hiveId => text().nullable().references(HiveTable, #id)();
   TextColumn get apiaryId => text().nullable().references(ApiaryTable, #id)();
   DateTimeColumn get createdAt => dateTime()();
+  IntColumn get raportType => intEnum<RaportType>()();
 
   @override
   Set<Column> get primaryKey => {id};

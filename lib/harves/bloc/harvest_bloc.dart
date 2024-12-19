@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive_note/harves/presentation/harvest_view.dart';
+import 'package:hive_note/harves/bloc/models/jar_size.dart';
 import 'package:hive_note/shared/bloc/helpers/initial_state.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:repositories/repositories.dart';
@@ -40,22 +40,15 @@ class HarvestBloc extends Bloc<HarvestEvent, HarvestState> {
       final apiaries = await _apiaryRepository.getApiaries();
       final hives = await _hiveRepository.getHivesByApiary(null);
       
-      // Add default honey type entry
-      final entries = [
-        EntryMetadata(
-          id: 'honey_type',
-          label: 'honey_type',
-          hint: 'honey_type_hint',
-          valueType: EntryType.text,
-          raportType: RaportType.harvest,
-          order: 0,
-        )
-      ];
-      
+      final allEntries = await _entryMetadataRepository.getEntryMetadatas(RaportType.harvest);
+      final entries = allEntries.where((e) => e.id == 'honey_type').toList();
+      final hints = await _raportRepository.getHints(RaportType.harvest);
+
       emit(state.copyWith(
         apiaries: apiaries,
         hives: hives,
         entries: entries,
+        hints: hints,
         status: Status.success,
       ));
     } catch (e) {
@@ -68,19 +61,24 @@ class HarvestBloc extends Bloc<HarvestEvent, HarvestState> {
   Future<void> _onSelectApiaries(SelectApiaries event, Emitter<HarvestState> emit) async {
     try {
       List<Hive> allHives = [];
-      
+      List<Hive> selectedHives = [];
       if (event.apiaries.isEmpty) {
         // Get hives without apiaries
         allHives = await _hiveRepository.getHivesByApiary(null);
+        selectedHives = [];
       } else {
         // Get hives for selected apiaries
         for (var apiary in event.apiaries) {
           final hives = await _hiveRepository.getHivesByApiary(apiary);
           allHives.addAll(hives);
+          if(state.selectedApiaries.contains(apiary)) {
+            selectedHives.addAll(state.selectedHives.where((hive) => hives.contains(hive)).toList());
+          }
+          else {
+            selectedHives.addAll(hives);
+          }
         }
       }
-
-      final selectedHives = state.selectedHives.where((hive) => allHives.contains(hive)).toList();
       
       emit(state.copyWith(
         selectedApiaries: event.apiaries,
@@ -137,69 +135,68 @@ FutureOr<void> _onCreateRaport(CreateRaport event, Emitter<HarvestState> emit) a
   if(state.selectedApiaries.isEmpty && state.selectedHives.isEmpty) {
     return;
   }
-  await _createRaportForApiaries(event);
-  await _createRaportForHives(event);
-}
-
-Future<void> _createRaportForApiaries(CreateRaport event) async {
-  final apiariesCount = state.selectedApiaries.length;
-
-  for (int i = 0; i < apiariesCount; i++) {
-    final apiary = state.selectedApiaries[i];
-    final raport = Raport(
-      createdAt: DateTime.now(),
-      apiaryId: apiary.id,
-    );
-    final List<Entry> entries = [];
-
-    for (final entry in state.entries) {
-      dynamic value;
-
-      if (entry.valueType != EntryType.text) {
-        String entryValue = event.entries[entry.id] ?? '';
-        int totalValue = int.parse(entryValue.isEmpty ? '0' : entryValue);
-        int baseValue = totalValue ~/ apiariesCount;
-        int remainder = totalValue % apiariesCount;
-        value = baseValue + (i < remainder ? 1 : 0);
-      } else {
-        value = event.entries[entry.id];
-      }
-
-      entries.add(Entry(
-        entryMetadataId: entry.id,
-        raportId: raport.id,
-        value: value.toString(),
-      ));
-
-    }
-
-    await _raportRepository.insertRaport(raport, entries);
+  
+  // Format text value by removing parentheses and their contents, and handling case
+  String formatTextValue(String text) {
+    // Remove parentheses and their contents
+    final withoutParentheses = text.replaceAll(RegExp(r'\s*\([^)]*\)'), '');
+    // Trim whitespace
+    final trimmed = withoutParentheses.trim();
+    // Convert to lowercase but preserve L after numbers
+    final formatted = trimmed.replaceAllMapped(
+      RegExp(r'(\d+(\.\d+)?)\s*L\b', caseSensitive: false),
+      (match) => '${match[1]}L'
+    ).toLowerCase();
+    
+    return formatted;
   }
-}
-
-Future<void> _createRaportForHives(CreateRaport event) async {
 
   final selectedHives = state.selectedHives;
   final hivesCount = selectedHives.length;
 
-  for (int i = 0; i < hivesCount; i++) {
-    final hive = selectedHives[i];
+  // Calculate total values first
+  Map<String, dynamic> totalValues = {};
+  for (final entry in state.entries) {
+    if (entry.valueType == EntryType.number) {
+      totalValues[entry.id] = int.parse(event.entries[entry.id] ?? '0');
+    } else if (entry.valueType == EntryType.decimal) {
+      totalValues[entry.id] = double.parse(event.entries[entry.id] ?? '0');
+    }
+  }
+
+  int processedHives = 0;
+  for (final hive in selectedHives) {
     final raport = Raport(
+      raportType: RaportType.harvest,
       createdAt: DateTime.now(),
       hiveId: hive.id, 
+      apiaryId: hive.apiaryId,
     );
     final List<Entry> entries = [];
 
     for (final entry in state.entries) {
       dynamic value;
-
-      if (entry.valueType != EntryType.text) {
-        int totalValue = int.parse(event.entries[entry.id]!);
-        int baseValue = totalValue ~/ hivesCount;
-        int remainder = totalValue % hivesCount;
-        value = baseValue + (i < remainder ? 1 : 0);
+      
+      if (entry.valueType == EntryType.number || entry.valueType == EntryType.decimal) {
+        final remainingHives = hivesCount - processedHives;
+        final totalValue = totalValues[entry.id];
+        
+        if (remainingHives == 1) {
+          // Last hive gets all remaining value
+          value = totalValue;
+        } else {
+          // Distribute value evenly
+          value = totalValue / hivesCount;
+          if (entry.valueType == EntryType.number) {
+            value = value.round();
+          }
+        }
+        
+        // Update remaining total for next iterations
+        totalValues[entry.id] = totalValue - value;
       } else {
-        value = event.entries[entry.id];
+        // Format text values
+        value = formatTextValue(event.entries[entry.id] ?? 'default');
       }
 
       entries.add(Entry(
@@ -210,6 +207,7 @@ Future<void> _createRaportForHives(CreateRaport event) async {
     }
 
     await _raportRepository.insertRaport(raport, entries);
+    processedHives++;
   }
 }
 

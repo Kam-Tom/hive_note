@@ -173,5 +173,34 @@ class DriftAppDatabase extends _$DriftAppDatabase implements AppDatabase {
   
   @override
   Future<List<Hive>> getHivesByApiary(Apiary? apiaryId) => hiveDao.getHivesByApiary(apiaryId);
-
+  
+  @override
+  Future<List<HistoryLog>> getHistoryLogs(DateTime startDate, DateTime endDate, bool showShadow) => historyLogDao.getHistoryLogs(startDate, endDate,showShadow);
+  
+  @override
+  Future<void> insertHistoryLog(HistoryLog historyLog) => historyLogDao.insertHistoryLog(historyLog);
+  
+  @override
+  Future<Hive> getHive(String hiveId) => hiveDao.getHive(hiveId);
+  
+  @override
+  Future<Queen?> getQueenForHive(Hive hive) => queenDao.getQueenForHive(hive);
+  
+  @override
+  Future<Queen> getQueen(String queenId) => queenDao.getQueen(queenId);
+  
+  @override
+  Future<Raport> getRaport(String raportId) => raportDao.getRaport(raportId);
+  
+  @override
+  Future<List<Entry>> getEntries(Raport raport) => raportDao.getEntries(raport);
+  
+  @override
+  Future<Todo> getTodo(String todoId) => todoDao.getTodo(todoId);
+  
+  @override
+  Future<Map<String, List<String>>> getHints(RaportType raportType, bool withCount) => raportDao.getHints(raportType, withCount);
+  
+  @override
+  Future<List<Raport>> getRaports(RaportType raportType, DateTime? startDate, DateTime? endDate, List<Apiary>? apiaries, List<Hive>? hives) => raportDao.getRaports(raportType, startDate, endDate, apiaries, hives);
 }

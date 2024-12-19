@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/settings/inspection_settings/bloc/inspection_settings_bloc.dart';
@@ -25,7 +26,7 @@ class InspectionSettingsView extends StatelessWidget {
             children: [
               TabBar(
                 tabs: RaportType.values.take(3).map((type) {
-                  return Tab(text: type.toString().split('.').last);
+                  return Tab(text: type.toString().split('.').last.tr());
                 }).toList(),
                 onTap: (index) {
                   context.read<InspectionSettingsBloc>().add(LoadEntries(type: RaportType.values[index]));
@@ -58,7 +59,7 @@ class InspectionSettingsView extends StatelessWidget {
                             background: Container(
                               color: Colors.red,
                               alignment: Alignment.centerRight,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                             ),
                             child: _buildEntryTile(context, state.entries[index], index),
                           ),
@@ -100,7 +101,7 @@ class InspectionSettingsView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildEntryTypeRow(entry.valueType),
-          if (entry.hint.isNotEmpty) Text(entry.hint, style: TextStyle(color: Colors.grey)),
+          if (entry.hint.isNotEmpty) Text(entry.hint, style: const TextStyle(color: Colors.grey)),
         ],
       ),
       trailing: const Icon(Icons.drag_indicator),
@@ -111,22 +112,12 @@ class InspectionSettingsView extends StatelessWidget {
     return Row(
       children: [
         type.icon,
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(type.description),
       ],
     );
   }
 
-  void _confirmAndDelete(BuildContext context, EntryMetadata entry) async {
-    final bloc = context.read<InspectionSettingsBloc>();
-    final confirmed = await showDeleteConfirmationDialog(context);
-    if (confirmed == true) {
-      bloc.add(DeleteEntry(entry: entry));
-    } else {
-      // Reinsert the entry back into the list if deletion is not confirmed
-      bloc.add(LoadEntries(type: bloc.state.raportType));
-    }
-  }
 }
 
 

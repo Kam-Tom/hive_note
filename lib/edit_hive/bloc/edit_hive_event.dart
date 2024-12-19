@@ -21,12 +21,10 @@ final class UpdateHiveQueen extends EditHiveEvent {
 }
 
 final class CreateNewQueen extends EditHiveEvent {
-  const CreateNewQueen({required this.defaultBreed, required this.defaultOrigin});
-  final String defaultBreed;
-  final String defaultOrigin;
+  const CreateNewQueen();
 
   @override
-  List<Object?> get props => [defaultBreed, defaultOrigin];
+  List<Object?> get props => [];
 }
 
 final class LoadQueens extends EditHiveEvent {

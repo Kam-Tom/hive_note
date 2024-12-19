@@ -19,6 +19,7 @@ class ManageApiariesPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => ManageApiariesBloc(
           apiaryRepository: context.read<ApiaryRepository>(),
+          preferenceRepository: context.read<PreferencesRepository>(),
         )..add(const ManageApiariesSubscriptionRequest()),
         child: const ManageApiariesView(),
       ),

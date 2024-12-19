@@ -89,7 +89,7 @@ class _BorderProgressBarState extends State<BorderProgressBar>
     return GestureDetector(
       onTapDown: (_) => _handlePress(),
       onTapUp: (_) => _handleRelease(),
-      onTapCancel: _handleRelease, // Handle case when the press is canceled
+      onTapCancel: _handleRelease,
       child: CustomPaint(
         painter: _BackgroundPainter(
             strokeWidth: widget.strokeWidth,

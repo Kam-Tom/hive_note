@@ -47,8 +47,9 @@ class EditQueenView extends StatelessWidget {
                       children: [
                         _buildToggleableTextField(
                           context: context,
-                          label: 'Breed',
+                          label: 'breed'.tr(),
                           value: queen.breed,
+                          hintText: 'enter_breed'.tr(),
                           onSave: (newValue) {
                             context.read<EditQueenBloc>().add(UpdateQueen(breed: newValue));
                           },
@@ -56,8 +57,9 @@ class EditQueenView extends StatelessWidget {
                         const SizedBox(height: 16),
                         _buildToggleableTextField(
                           context: context,
-                          label: 'Origin',
+                          label: 'origin'.tr(),
                           value: queen.origin,
+                          hintText: 'enter_origin'.tr(),
                           onSave: (newValue) {
                             context.read<EditQueenBloc>().add(UpdateQueen(origin: newValue));
                           },
@@ -107,6 +109,7 @@ class EditQueenView extends StatelessWidget {
     required String label,
     required String value,
     required ValueChanged<String> onSave,
+    required String hintText,
   }) {
     TextEditingController controller = TextEditingController(text: value);
     return BlocBuilder<EditQueenBloc, EditQueenState>(
@@ -123,7 +126,7 @@ class EditQueenView extends StatelessWidget {
                       ? TextField(
                           controller: controller,
                           decoration: InputDecoration(
-                            hintText: 'Enter $label',
+                            hintText: hintText,
                           ),
                         )
                       : Text(value),

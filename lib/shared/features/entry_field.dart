@@ -37,8 +37,9 @@ class EntryFieldCubit extends Cubit<Map<String, String?>> {
 class EntryField extends StatelessWidget {
   final EntryMetadata entryMetadata;
   final String? value;
+  final List<String>? hints;
 
-  const EntryField({super.key, required this.entryMetadata, this.value});
+  const EntryField({super.key, required this.entryMetadata, this.value, this.hints});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,7 @@ class EntryField extends StatelessWidget {
       return EntryFieldView(
         entryMetadata: entryMetadata,
         value: value,
+        hints: hints,
       );
     
   }
@@ -54,11 +56,13 @@ class EntryField extends StatelessWidget {
 class EntryFieldView extends StatelessWidget {
   final EntryMetadata entryMetadata;
   final String? value;
+  final List<String>? hints;
 
   const EntryFieldView({
     super.key,
     required this.entryMetadata,
     this.value,
+    this.hints,
   });
 
   @override
@@ -82,7 +86,6 @@ class EntryFieldView extends StatelessWidget {
   }
 
   Widget _createEntryInput(EntryMetadata entryMetadata, String? value, BuildContext context) {
-    final cubit = context.read<EntryFieldCubit>();
     switch (entryMetadata.valueType) {
       case EntryType.slider0to3:
         return _SliderEntryField(entryMetadata: entryMetadata, min: 1, max: 3, divisions: 2, value: value);
@@ -95,7 +98,7 @@ class EntryFieldView extends StatelessWidget {
       case EntryType.checkbox:
         return _CheckboxEntryField(entryMetadata: entryMetadata, value: value);
       case EntryType.text:
-        return _TextEntryField(entryMetadata: entryMetadata, value: value);
+        return _TextEntryField(entryMetadata: entryMetadata, value: value, hints: hints);
       case EntryType.number:
         return _NumberEntryField(entryMetadata: entryMetadata, value: value);
       case EntryType.decimal:
@@ -129,13 +132,13 @@ class _SliderEntryField extends StatelessWidget {
 
   List<String> _getLabels() {
     if (min == 1 && max == 3) {
-      return ['Bad', 'Normal', 'Good'];
+      return ['slider_bad', 'slider_normal', 'slider_good'].map((e) => e.tr()).toList();
     } else if (min == 1 && max == 5) {
-      return ['Very Bad', 'Bad', 'Average', 'Good', 'Very Good'];
+      return ['slider_very_bad', 'slider_bad', 'slider_average', 'slider_good', 'slider_very_good'].map((e) => e.tr()).toList();
     } else if (min == 1 && max == 7) {
-      return ['Very Bad', 'Bad', 'Below Average', 'Average', 'Above Average', 'Good', 'Very Good'];
+      return ['slider_very_bad', 'slider_bad', 'slider_below_average', 'slider_average', 'slider_above_average', 'slider_good', 'slider_very_good'].map((e) => e.tr()).toList();
     } else if (min == 1 && max == 11) {
-      return ['Very Bad', 'Bad', 'Poor', 'Below Average', 'Average', 'Above Average', 'Good', 'Very Good', 'Excellent', 'Outstanding', 'Perfect'];
+      return ['slider_very_bad', 'slider_bad', 'slider_poor', 'slider_below_average', 'slider_average', 'slider_above_average', 'slider_good', 'slider_very_good', 'slider_excellent', 'slider_outstanding', 'slider_perfect'].map((e) => e.tr()).toList();
     } else {
       return [];
     }
@@ -152,9 +155,14 @@ class _SliderEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         Slider(
           value: value != null ? double.parse(value!) : min,
@@ -189,9 +197,16 @@ class _CheckboxEntryField extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              entryMetadata.hint.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
+            Expanded(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Text(
+                  entryMetadata.hint.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
             ),
             Checkbox(
               value: value != null ? value!.toLowerCase() == 'true' : false,
@@ -209,8 +224,9 @@ class _CheckboxEntryField extends StatelessWidget {
 class _TextEntryField extends StatelessWidget {
   final EntryMetadata entryMetadata;
   final String? value;
+  final List<String>? hints;
 
-  const _TextEntryField({required this.entryMetadata, this.value});
+  const _TextEntryField({required this.entryMetadata, this.value, this.hints});
 
   @override
   Widget build(BuildContext context) {
@@ -223,19 +239,55 @@ class _TextEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
-        TextField(
-          decoration: InputDecoration(
-            hintText: entryMetadata.hint.tr(),
+        if (hints != null && hints!.isNotEmpty)
+          Autocomplete<String>(
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return const Iterable<String>.empty();
+              }
+              return hints!.where((String option) {
+                return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+              });
+            },
+            onSelected: (String selection) {
+              controller.text = selection;
+              context.read<EntryFieldCubit>().updateValue(entryMetadata.id, selection);
+            },
+            fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+              textEditingController.text = controller.text;
+              return TextField(
+                controller: textEditingController,
+                focusNode: focusNode,
+                decoration: InputDecoration(
+                  hintText: entryMetadata.hint.tr(),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
+                ),
+                onChanged: (newValue) {
+                  context.read<EntryFieldCubit>().updateValue(entryMetadata.id, newValue);
+                },
+              );
+            },
+          )
+        else
+          TextField(
+            decoration: InputDecoration(
+              hintText: entryMetadata.hint.tr(),
+              hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
+            ),
+            controller: controller,
+            onChanged: (newValue) {
+              context.read<EntryFieldCubit>().updateValue(entryMetadata.id, newValue);
+            },
           ),
-          controller: controller,
-          onChanged: (newValue) {
-            context.read<EntryFieldCubit>().updateValue(entryMetadata.id, newValue);
-          },
-        ),
       ],
     );
   }
@@ -258,9 +310,14 @@ class _NumberEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         Row(
           children: [
@@ -271,8 +328,10 @@ class _NumberEntryField extends StatelessWidget {
               iconSize: 20,
               onPressed: () {
                 final currentValue = int.tryParse(controller.text) ?? 0;
-                controller.text = (currentValue - 1).toString();
-                context.read<EntryFieldCubit>().updateValue(entryMetadata.id, controller.text);
+                if (currentValue > 0) {  // Only decrement if result would be non-negative
+                  controller.text = (currentValue - 1).toString();
+                  context.read<EntryFieldCubit>().updateValue(entryMetadata.id, controller.text);
+                }
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
@@ -297,13 +356,19 @@ class _NumberEntryField extends StatelessWidget {
             Expanded(
               child: TextField(
                 keyboardType: TextInputType.number,
+                style: Theme.of(context).textTheme.bodyMedium,  // Add this line
                 decoration: InputDecoration(
                   hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
                 ),
                 controller: controller,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.deny(RegExp(r'^0+(?=\d)')), // Prevent leading zeros
+                ],
                 onChanged: (newValue) {
+                  if (newValue.isEmpty) newValue = '0';
                   context.read<EntryFieldCubit>().updateValue(entryMetadata.id, newValue);
                 },
               ),
@@ -332,9 +397,14 @@ class _DecimalEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         Row(
           children: [
@@ -345,8 +415,10 @@ class _DecimalEntryField extends StatelessWidget {
               iconSize: 20,
               onPressed: () {
                 final currentValue = double.tryParse(controller.text) ?? 0.0;
-                controller.text = (currentValue - 1).toString();
-                context.read<EntryFieldCubit>().updateValue(entryMetadata.id, controller.text);
+                if (currentValue > 0) {  // Only decrement if result would be non-negative
+                  controller.text = (currentValue - 1).toString();
+                  context.read<EntryFieldCubit>().updateValue(entryMetadata.id, controller.text);
+                }
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
@@ -371,13 +443,19 @@ class _DecimalEntryField extends StatelessWidget {
             Expanded(
               child: TextField(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                style: Theme.of(context).textTheme.bodyMedium,  // Add this line
                 decoration: InputDecoration(
                   hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
                 ),
                 controller: controller,
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                  FilteringTextInputFormatter.deny(RegExp(r'^0+(?=\d)')), // Prevent leading zeros
+                ],
                 onChanged: (newValue) {
+                  if (newValue.isEmpty) newValue = '0';
                   context.read<EntryFieldCubit>().updateValue(entryMetadata.id, newValue);
                 },
               ),
@@ -406,9 +484,14 @@ class _IntNegEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         Row(
           children: [
@@ -445,9 +528,11 @@ class _IntNegEntryField extends StatelessWidget {
             Expanded(
               child: TextField(
                 keyboardType: TextInputType.number,
+                style: Theme.of(context).textTheme.bodyMedium,  // Add this line
                 decoration: InputDecoration(
                   hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
                 ),
                 controller: controller,
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d+'))],
@@ -480,9 +565,14 @@ class _DecNegEntryField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         if (entryMetadata.hint.isNotEmpty)
-          Text(
-            entryMetadata.hint.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              entryMetadata.hint.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
           ),
         Row(
           children: [
@@ -519,9 +609,11 @@ class _DecNegEntryField extends StatelessWidget {
             Expanded(
               child: TextField(
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                style: Theme.of(context).textTheme.bodyMedium,  // Add this line
                 decoration: InputDecoration(
                   hintText: entryMetadata.hint.tr(),
                   contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,  // Add this line to make hint text smaller
                 ),
                 controller: controller,
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d+\.?\d*'))],
@@ -555,9 +647,14 @@ class _ToggleEntryField extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              entryMetadata.hint.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Text(
+                entryMetadata.hint.tr(),
+                style: Theme.of(context).textTheme.bodyMedium,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
             ),
             Switch(
               value: value != null ? value!.toLowerCase() == 'true' : false,

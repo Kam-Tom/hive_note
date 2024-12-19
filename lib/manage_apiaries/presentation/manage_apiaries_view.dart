@@ -53,8 +53,6 @@ class ManageApiariesView extends StatelessWidget {
       key: const ValueKey("add_apiary_tile"),
       onPressed: () {
         context.read<ManageApiariesBloc>().add(InsertApiary(
-              name: "new_apiary".tr(),
-              color: AppColors.secondary,
               createdAt: DateTime.now(),
               isActive: false,
             ));

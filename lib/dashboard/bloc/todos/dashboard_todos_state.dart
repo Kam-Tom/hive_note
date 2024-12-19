@@ -9,7 +9,7 @@ final class DashboardTodosState extends Equatable {
   final List<Todo> todos;
   final DashboardTodosStatus status;
 
-  copyWith({
+  DashboardTodosState copyWith({
     List<Todo>? todos,
     DashboardTodosStatus? status,
   }) {

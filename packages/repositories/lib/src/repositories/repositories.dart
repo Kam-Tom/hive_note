@@ -5,3 +5,4 @@ export 'queen_repository.dart';
 export 'preferences_repository.dart';
 export 'entry_metadata_repository.dart';
 export 'raport_repository.dart';
+export 'history_log_repository.dart';

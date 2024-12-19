@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/shared/bloc/helpers/initial_state.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
@@ -10,15 +12,55 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
   final PreferencesRepository _preferencesRepository;
 
   PreferencesBloc({required PreferencesRepository preferencesRepository}) : 
-    _preferencesRepository = preferencesRepository, super(const PreferencesState()) {
-    on<LanguageChanged>((event, emit) async {
-      await _preferencesRepository.saveLanguage(event.language);
-      emit(state.copyWith(language: event.language));
+    _preferencesRepository = preferencesRepository, 
+    super(const PreferencesState()) {
+    
+    on<LoadPreferences>((event, emit) async {
+      emit(state.copyWith(status: Status.loading));
+      try {
+        final isFirstLaunch = await _preferencesRepository.isFirstLaunch();
+        String? language = await _preferencesRepository.getLanguage();
+
+        if (isFirstLaunch) {
+          // Get system locale and save it as default
+          final deviceLocale = event.deviceLocale ?? const Locale('en');
+          language = deviceLocale.languageCode;
+          await _preferencesRepository.saveLanguage(language);
+          await _preferencesRepository.setDefaultsForLanguage(language);  // Only set defaults on first launch
+          await _preferencesRepository.setFirstLaunchComplete();
+        }
+
+        // Load other preferences
+        final queenBreed = await _preferencesRepository.getQueenDefaultBreed();
+        final queenOrigin = await _preferencesRepository.getQueenDefaultOrigin();
+        final hiveName = await _preferencesRepository.getHiveDefaultName();
+        final hiveType = await _preferencesRepository.getHiveDefaultType();
+        final apiaryName = await _preferencesRepository.getApiaryDefaultName();
+        final apiaryColor = await _preferencesRepository.getApiaryDefaultColor();
+        final reportType = await _preferencesRepository.getReportType();
+
+        emit(state.copyWith(
+          language: language,
+          queenDefaultBreed: queenBreed,
+          queenDefaultOrigin: queenOrigin,
+          hiveDefaultName: hiveName,
+          hiveDefaultType: hiveType,
+          apiaryDefaultName: apiaryName,
+          apiaryDefaultColor: apiaryColor,
+          reportType: reportType,
+          status: Status.success,
+        ));
+      } catch (e) {
+        emit(state.copyWith(
+          status: Status.failure,
+          errorMessage: e.toString(),
+        ));
+      }
     });
 
-    on<NotificationToggled>((event, emit) async {
-      await _preferencesRepository.saveNotificationEnabled(event.enabled);
-      emit(state.copyWith(notificationsEnabled: event.enabled));
+    on<LanguageChanged>((event, emit) async {
+      await _preferencesRepository.saveLanguage(event.language);  // Remove setDefaultsForLanguage here
+      emit(state.copyWith(language: event.language));
     });
 
     on<QueenDefaultBreedChanged>((event, emit) async {
@@ -34,6 +76,11 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
     on<HiveDefaultNameChanged>((event, emit) async {
       await _preferencesRepository.saveHiveDefaultName(event.name);
       emit(state.copyWith(hiveDefaultName: event.name));
+    });
+
+    on<HiveDefaultTypeChanged>((event, emit) async {
+      await _preferencesRepository.saveHiveDefaultType(event.type);
+      emit(state.copyWith(hiveDefaultType: event.type));
     });
 
     on<ApiaryDefaultNameChanged>((event, emit) async {
@@ -57,6 +104,5 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
       emit(state.copyWith(reportType: event.reportType));
     });
 
-    // Add more event handlers as needed
   }
 }

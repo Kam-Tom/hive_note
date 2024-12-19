@@ -31,6 +31,7 @@ class TodoCardEmpty extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 "no_todos".tr(),
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: AppColors.secondary,
                   fontWeight: FontWeight.bold,
@@ -39,6 +40,7 @@ class TodoCardEmpty extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 "tap_to_add_todo".tr(),
+                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.secondary,
                   decoration: TextDecoration.underline,
@@ -65,7 +67,7 @@ class TodoCardEmpty extends StatelessWidget {
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 5,
           blurRadius: 7,
-          offset: const Offset(0, 3), // Changes the position of the shadow.
+          offset: const Offset(0, 3),
         ),
       ],
     );

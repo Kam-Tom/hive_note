@@ -20,6 +20,7 @@ class EditHivePage extends StatelessWidget {
           final bloc = EditHiveBloc(
             hiveRepository: context.read<HiveRepository>(),
             queenRepository: context.read<QueenRepository>(),
+            preferencesRepository: context.read<PreferencesRepository>(),
           );
           bloc.add(LoadHive(hiveId: hiveId));
           bloc.add(const LoadQueens());

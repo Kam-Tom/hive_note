@@ -2,6 +2,12 @@ part of 'preferences_bloc.dart';
 
 abstract class PreferencesEvent {}
 
+class LoadPreferences extends PreferencesEvent {
+  final Locale? deviceLocale;
+  
+  LoadPreferences([this.deviceLocale]);
+}
+
 class ReportTypeChanged extends PreferencesEvent {
   final int reportType;
 
@@ -12,12 +18,6 @@ class LanguageChanged extends PreferencesEvent {
   final String language;
 
   LanguageChanged(this.language);
-}
-
-class NotificationToggled extends PreferencesEvent {
-  final bool enabled;
-
-  NotificationToggled(this.enabled);
 }
 
 class QueenDefaultBreedChanged extends PreferencesEvent {
@@ -36,6 +36,12 @@ class HiveDefaultNameChanged extends PreferencesEvent {
   final String name;
 
   HiveDefaultNameChanged(this.name);
+}
+
+class HiveDefaultTypeChanged extends PreferencesEvent {
+  final String type;
+
+  HiveDefaultTypeChanged(this.type);
 }
 
 class ApiaryDefaultNameChanged extends PreferencesEvent {

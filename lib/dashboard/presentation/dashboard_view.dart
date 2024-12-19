@@ -1,13 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_note/core/configs/setup/app_router.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
-import 'package:hive_note/core/configs/setup/flutter_notifications.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/dashboard/bloc/dashboard_blocs.dart';
 import 'package:hive_note/dashboard/presentation/widgets/inspections/inspections.dart';
@@ -19,19 +18,17 @@ class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            _TodoCarousel(),
-            _InspectionCarousel(),
-            _Buttons(),
-          ],
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              _TodoCarousel(),
+              _InspectionCarousel(),
+              _Buttons(),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _TodoCarousel extends StatelessWidget {
@@ -41,34 +38,29 @@ class _TodoCarousel extends StatelessWidget {
     final todos = todosState.todos;
     final status = todosState.status;
 
-    Widget todosWidget;
+    return _buildTodoCarouselContainer(_buildTodoContent(context, status, todos));
+  }
 
+  Widget _buildTodoContent(
+      BuildContext context, DashboardTodosStatus status, List<Todo> todos) {
     switch (status) {
       case DashboardTodosStatus.loading:
-        todosWidget = const TodoCardLoading();
-        break;
+        return const TodoCardLoading();
       case DashboardTodosStatus.empty:
-        todosWidget = TodoCardEmpty(
-            onAddTodo: () => Navigator.pushNamed(
-                  context,
-                  AppRouter.manageTodosPath,
-                ));
-        break;
+        return TodoCardEmpty(
+            onAddTodo: () =>
+                Navigator.pushNamed(context, AppRouter.manageTodosPath));
       case DashboardTodosStatus.success:
-        todosWidget = _buildTodoCarousel(context, todos);
-        break;
+        return _buildTodoCarousel(context, todos);
       case DashboardTodosStatus.failure:
-        todosWidget = TodoCardError(
+        return TodoCardError(
           onRetry: () => context
               .read<DashboardTodosBloc>()
               .add(const DashboardTodosRetryRequest()),
         );
-        break;
       default:
-        todosWidget = const SizedBox.shrink();
+        return const SizedBox.shrink();
     }
-
-    return _buildTodoCarouselContainer(todosWidget);
   }
 
   Widget _buildTodoCarousel(BuildContext context, List<Todo> todos) {
@@ -82,7 +74,7 @@ class _TodoCarousel extends StatelessWidget {
         enlargeStrategy: CenterPageEnlargeStrategy.height,
       ),
       itemCount: todos.length,
-      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+      itemBuilder: (context, itemIndex, pageViewIndex) {
         final todo = todos[itemIndex];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -96,8 +88,21 @@ class _TodoCarousel extends StatelessWidget {
     );
   }
 
+  Widget _buildTodoCarouselContainer(Widget content) => Container(
+        height: 225,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+        child: content,
+      );
+
   void _completeTodoWithFeedback(BuildContext context, Todo todo) {
-    HapticFeedback.vibrate();
+    HapticFeedback.heavyImpact();
     context
         .read<DashboardTodosBloc>()
         .add(DashboardTodosToggleIsComplete(todo: todo, isCompleted: true));
@@ -115,24 +120,7 @@ class _TodoCarousel extends StatelessWidget {
   void _showTodoDetails(BuildContext context, Todo todo) {
     showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) {
-        return TodoDetailsModal(todo: todo);
-      },
-    );
-  }
-
-  Widget _buildTodoCarouselContainer(Widget todosWidget) {
-    return Container(
-      height: 225,
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25),
-        ),
-      ),
-      child: todosWidget,
+      builder: (context) => TodoDetailsModal(todo: todo),
     );
   }
 }
@@ -141,108 +129,97 @@ class _InspectionCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiariesState = context.watch<DashboardInspectionsBloc>().state;
-    final apiaries = apiariesState.apiaries;
-    final status = apiariesState.status;
+    return _buildContent(context, apiariesState);
+  }
 
-    if (status == DashboardInspectionsStatus.loading) {
-      return const InspectionCardLoading();
-    } else if (status == DashboardInspectionsStatus.failure) {
-      return InspectionCardError(
-        onRetry: () => context
-            .read<DashboardInspectionsBloc>()
-            .add(const DashboardInspectionsRetryRequest()),
-      );
-    } else if (status == DashboardInspectionsStatus.empty) {
-      return InspectionCardEmpty(
-        onPressed: () => () => Navigator.pushNamed(
-              context,
-              AppRouter.manageTodosPath,
-            ),
-      );
+  Widget _buildContent(BuildContext context, DashboardInspectionsState state) {
+    switch (state.status) {
+      case DashboardInspectionsStatus.loading:
+        return const InspectionCardLoading();
+      case DashboardInspectionsStatus.failure:
+        return InspectionCardError(
+          onRetry: () => context
+              .read<DashboardInspectionsBloc>()
+              .add(const DashboardInspectionsRetryRequest()),
+        );
+      case DashboardInspectionsStatus.empty:
+        return InspectionCardEmpty(
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRouter.manageApiariesPath),
+        );
+      default:
+        return _buildInspectionCarousel(state.apiaries, context);
     }
-
-    return _buildInspectionCarousel(apiaries, context);
   }
 
   Widget _buildInspectionCarousel(
-      List<ApiaryWithHiveCount> apiaries, BuildContext context) {
-    return CarouselSlider.builder(
-      options: CarouselOptions(
-        height: 170.0, // Increased height
-        enableInfiniteScroll: false,
-      ),
-      itemCount: apiaries.length,
-      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-        final apiary = apiaries[itemIndex];
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0), // Added padding
-          child: InspectionCard(
-            apiary: apiary,
-            onPressed: (apiary) => Navigator.pushNamed(
-                  context,
-                  arguments: apiary.id,
-                  AppRouter.inspectionPath,
-                ),
-          ),
-        );
-      },
-    );
-  }
+          List<ApiaryWithHiveCount> apiaries, BuildContext context) =>
+      CarouselSlider.builder(
+        options: CarouselOptions(
+          height: 170.0,
+          enableInfiniteScroll: false,
+        ),
+        itemCount: apiaries.length,
+        itemBuilder: (context, itemIndex, pageViewIndex) {
+          final apiary = apiaries[itemIndex];
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: InspectionCard(
+              apiary: apiary,
+              onPressed: (apiary) => Navigator.pushNamed(
+                context,
+                AppRouter.inspectionPath,
+                arguments: apiary.id,
+              ),
+            ),
+          );
+        },
+      );
 }
 
 class _Buttons extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildMenuButtonRow(
-              buttons: [
-                _buildMenuButton(AppVectors.apiary, "apiaries".tr(),
-                    AppRouter.manageApiariesPath),
-                _buildMenuButton(AppVectors.statistics, "statistics".tr(),
-                    AppRouter.tmpPath),
-              ],
-            ),
-            _buildMenuButtonRow(
-              buttons: [
-                _buildMenuButton(
-                    AppVectors.calendar, "calendar".tr(), AppRouter.manageTodosPath),
-                _buildMenuButton(
-                    AppVectors.note, "records".tr(), AppRouter.recordsPath),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final scheduledDate = DateTime.now().add(Duration(seconds: 10));
-                NotificationService.scheduleNotification(
-                  "Scheduled Notification",
-                  "This notification was scheduled to appear after 10 seconds",
-                  scheduledDate,
-                );
-              },
-              child: Text("Send Notification"),
-            ),
-          ],
+  Widget build(BuildContext context) => Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildMenuButtonRow(
+                buttons: [
+                  _buildMenuButton(
+                      AppVectors.apiary, "apiaries".tr(), AppRouter.manageApiariesPath),
+                  _buildMenuButton(
+                      AppVectors.statistics, "statistics".tr(), AppRouter.statisticsPath),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _buildMenuButtonRow(
+                buttons: [
+                  _buildMenuButton(
+                      AppVectors.calendar, "calendar".tr(), AppRouter.manageTodosPath),
+                  _buildMenuButton(
+                      AppVectors.note, "records".tr(), AppRouter.recordsPath),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildMenuButtonRow({required List<Widget> buttons}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: buttons,
-    );
-  }
+  Widget _buildMenuButtonRow({required List<Widget> buttons}) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          buttons[0],
+          const SizedBox(width: 20),
+          buttons[1],
+        ],
+      );
 
-  Widget _buildMenuButton(String asset, String label, String newPage) {
-    return MenuButton(
-      newPage: newPage,
-      icon: SvgPicture.asset(asset, width: 50),
-      text: Text(label),
-    );
-  }
+  Widget _buildMenuButton(String asset, String label, String newPage) =>
+      MenuButton(
+        newPage: newPage,
+        icon: SvgPicture.asset(asset, width: 50),
+        text: Text(label),
+      );
 }

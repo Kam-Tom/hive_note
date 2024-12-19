@@ -40,11 +40,9 @@ final class DeleteHive extends ManageHivesEvent {
 }
 
 final class InsertHive extends ManageHivesEvent {
-  const InsertHive({required this.defaultName, required this.defaultType});
+  const InsertHive();
 
-  final String defaultName;
-  final String defaultType;
 
   @override
-  List<Object> get props => [defaultName, defaultType];
+  List<Object> get props => [];
 }

@@ -1,75 +1,37 @@
+import 'package:user_pref/user_pref.dart';
+
 class PreferencesRepository {
-  Future<void> saveLanguage(String language) async {
-    // Save language preference
-  }
+  final UserPref _userPref;
 
-  Future<String?> getLanguage() async {
-    // Retrieve language preference
-    return null;
-  }
+  PreferencesRepository(this._userPref);
 
-  Future<void> saveNotificationEnabled(bool enabled) async {
-    // Save notification preference
-  }
+  Future<String> getLanguage() => _userPref.getLanguage();
+  Future<void> saveLanguage(String language) => _userPref.saveLanguage(language);
 
-  Future<bool?> getNotificationEnabled() async {
-    // Retrieve notification preference
-    return null;
-  }
+  Future<String> getQueenDefaultBreed() => _userPref.getQueenDefaultBreed();
+  Future<void> saveQueenDefaultBreed(String breed) => _userPref.saveQueenDefaultBreed(breed);
 
-  Future<void> saveQueenDefaultBreed(String breed) async {
-    // Save queen default breed preference
-  }
+  Future<String> getQueenDefaultOrigin() => _userPref.getQueenDefaultOrigin();
+  Future<void> saveQueenDefaultOrigin(String origin) => _userPref.saveQueenDefaultOrigin(origin);
 
-  Future<String?> getQueenDefaultBreed() async {
-    // Retrieve queen default breed preference
-    return null;
-  }
+  Future<String> getHiveDefaultName() => _userPref.getHiveDefaultName();
+  Future<void> saveHiveDefaultName(String name) => _userPref.saveHiveDefaultName(name);
 
-  Future<void> saveQueenDefaultOrigin(String origin) async {
-    // Save queen default origin preference
-  }
+  Future<String> getHiveDefaultType() => _userPref.getHiveDefaultType();
+  Future<void> saveHiveDefaultType(String type) => _userPref.saveHiveDefaultType(type);
 
-  Future<String?> getQueenDefaultOrigin() async {
-    // Retrieve queen default origin preference
-    return null;
-  }
+  Future<String> getApiaryDefaultName() => _userPref.getApiaryDefaultName();
+  Future<void> saveApiaryDefaultName(String name) => _userPref.saveApiaryDefaultName(name);
 
-  Future<void> saveHiveDefaultName(String name) async {
-    // Save hive default name preference
-  }
+  Future<String> getApiaryDefaultColor() => _userPref.getApiaryDefaultColor();
+  Future<void> saveApiaryDefaultColor(String color) => _userPref.saveApiaryDefaultColor(color);
 
-  Future<String?> getHiveDefaultName() async {
-    // Retrieve hive default name preference
-    return null;
-  }
+  Future<int?> getReportType() => _userPref.getReportType();
+  Future<void> saveReportType(int reportType) => _userPref.saveReportType(reportType);
 
-  Future<void> saveApiaryDefaultName(String name) async {
-    // Save apiary default name preference
-  }
+  Future<bool> isFirstLaunch() => _userPref.isFirstLaunch();
+  Future<void> setFirstLaunchComplete() => _userPref.setFirstLaunchComplete();
 
-  Future<String?> getApiaryDefaultName() async {
-    // Retrieve apiary default name preference
-    return null;
-  }
+  Future<void> setDefaultsForLanguage(String language) => _userPref.setDefaultsForLanguage(language);
 
-  Future<void> saveApiaryDefaultColor(String color) async {
-    // Save apiary default color preference
-  }
-
-  Future<String?> getApiaryDefaultColor() async {
-    // Retrieve apiary default color preference
-    return null;
-  }
-
-  Future<void> saveReportType(int reportType) async {
-    // Save report type preference
-  }
-
-  Future<int?> getReportType() async {
-    // Retrieve report type preference
-    return null;
-  }
-
-  // Add more methods for other preferences as needed
 }

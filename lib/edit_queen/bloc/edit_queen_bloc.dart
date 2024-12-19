@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:hive_note/shared/bloc/helpers/initial_state.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:repositories/repositories.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'edit_queen_event.dart';
 part 'edit_queen_state.dart';

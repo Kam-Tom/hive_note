@@ -10,8 +10,11 @@ part 'manage_apiaries_state.dart';
 
 class ManageApiariesBloc
     extends Bloc<ManageApiariesEvent, ManageApiariesState> {
-  ManageApiariesBloc({required ApiaryRepository apiaryRepository})
-      : _apiaryRepository = apiaryRepository,
+  ManageApiariesBloc({
+    required ApiaryRepository apiaryRepository,
+    required PreferencesRepository preferenceRepository,
+  })  : _apiaryRepository = apiaryRepository,
+        _preferenceRepository = preferenceRepository,
         super(const ManageApiariesState()) {
     on<ManageApiariesSubscriptionRequest>(_onSubscriptionRequest);
     on<ManageApiariesRetryRequest>(_onRetryRequest);
@@ -21,6 +24,7 @@ class ManageApiariesBloc
   }
 
   final ApiaryRepository _apiaryRepository;
+  final PreferencesRepository _preferenceRepository;
 
   Future<void> _onSubscriptionRequest(
     ManageApiariesSubscriptionRequest event,
@@ -47,9 +51,15 @@ class ManageApiariesBloc
 
   Future<void> _onInsertApiary(
       InsertApiary event, Emitter<ManageApiariesState> emit) async {
+    final defaultName = await _preferenceRepository.getApiaryDefaultName();
+    final defaultColorString = await _preferenceRepository.getApiaryDefaultColor();
+    
+    // Convert hex string to Color
+    final defaultColor = Color(int.parse(defaultColorString.replaceAll('#', '0x')));
+    
     final newApiary = Apiary(
-      name: "${event.name} #${state.apiaries.length}",
-      color: event.color,
+      name: "$defaultName #${state.apiaries.length}",
+      color: defaultColor,
       createdAt: event.createdAt,
       order: state.apiaries.length,
       isActive: event.isActive,

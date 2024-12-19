@@ -40,7 +40,7 @@ class InspectionView extends StatelessWidget {
 class InspectionHeader extends StatelessWidget {
   final InspectionState state;
 
-  const InspectionHeader({required this.state});
+  const InspectionHeader({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,8 @@ class InspectionHeader extends StatelessWidget {
                       colorFilter: state.selectedHiveInspection!.queen == null
                           ? const ColorFilter.mode(
                               Color.fromARGB(60, 0, 0, 0), BlendMode.srcIn)
-                          : null,
+                          : const ColorFilter.mode(
+                              Color.fromARGB(190, 0, 0, 0), BlendMode.srcIn),
                     ),
                     const SizedBox(width: 5),
                     Text(

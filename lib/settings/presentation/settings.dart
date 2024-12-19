@@ -5,6 +5,7 @@ import 'package:hive_note/settings/inspection_settings/presentation/inspection_s
 import 'package:hive_note/settings/preferences/presentation/preferences_page.dart';
 import 'package:hive_note/settings/bloc/bottom_navigation_cubit.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -32,16 +33,19 @@ class SettingsPage extends StatelessWidget {
             bottomNavigationBar: NavigationBar(
               selectedIndex: state,
               onDestinationSelected: (index) => context.read<BottomNavigationCubit>().changeTab(index),
-              destinations: const [
-                // NavigationDestination(icon: Icon(Icons.sync), label: 'Sync'),
-                NavigationDestination(icon: Icon(Icons.room_preferences), label: 'Preferences'),
-                NavigationDestination(icon: Icon(Icons.edit), label: 'Inspections'),
+              destinations: [
+                NavigationDestination(
+                  icon: const Icon(Icons.room_preferences), 
+                  label: 'preferences'.tr()
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.edit), 
+                  label: 'inspections'.tr()
+                ),
               ],
               backgroundColor: AppColors.primary,
               indicatorColor: AppColors.primaryLight,
               surfaceTintColor: AppColors.white,
-
-
             ),
           );
         },

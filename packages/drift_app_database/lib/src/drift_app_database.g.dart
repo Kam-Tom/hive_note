@@ -737,8 +737,16 @@ class $RaportTableTable extends RaportTable
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _raportTypeMeta =
+      const VerificationMeta('raportType');
   @override
-  List<GeneratedColumn> get $columns => [id, hiveId, apiaryId, createdAt];
+  late final GeneratedColumnWithTypeConverter<RaportType, int> raportType =
+      GeneratedColumn<int>('raport_type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<RaportType>($RaportTableTable.$converterraportType);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, hiveId, apiaryId, createdAt, raportType];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -768,6 +776,7 @@ class $RaportTableTable extends RaportTable
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    context.handle(_raportTypeMeta, const VerificationResult.success());
     return context;
   }
 
@@ -783,6 +792,9 @@ class $RaportTableTable extends RaportTable
           .read(DriftSqlType.string, data['${effectivePrefix}hive_id']),
       apiaryId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}apiary_id']),
+      raportType: $RaportTableTable.$converterraportType.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.int, data['${effectivePrefix}raport_type'])!),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -792,6 +804,9 @@ class $RaportTableTable extends RaportTable
   $RaportTableTable createAlias(String alias) {
     return $RaportTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<RaportType, int, int> $converterraportType =
+      const EnumIndexConverter<RaportType>(RaportType.values);
 }
 
 class RaportTableCompanion extends UpdateCompanion<Raport> {
@@ -799,12 +814,14 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
   final Value<String?> hiveId;
   final Value<String?> apiaryId;
   final Value<DateTime> createdAt;
+  final Value<RaportType> raportType;
   final Value<int> rowid;
   const RaportTableCompanion({
     this.id = const Value.absent(),
     this.hiveId = const Value.absent(),
     this.apiaryId = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.raportType = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RaportTableCompanion.insert({
@@ -812,14 +829,17 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
     this.hiveId = const Value.absent(),
     this.apiaryId = const Value.absent(),
     required DateTime createdAt,
+    required RaportType raportType,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
-        createdAt = Value(createdAt);
+        createdAt = Value(createdAt),
+        raportType = Value(raportType);
   static Insertable<Raport> custom({
     Expression<String>? id,
     Expression<String>? hiveId,
     Expression<String>? apiaryId,
     Expression<DateTime>? createdAt,
+    Expression<int>? raportType,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -827,6 +847,7 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
       if (hiveId != null) 'hive_id': hiveId,
       if (apiaryId != null) 'apiary_id': apiaryId,
       if (createdAt != null) 'created_at': createdAt,
+      if (raportType != null) 'raport_type': raportType,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -836,12 +857,14 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
       Value<String?>? hiveId,
       Value<String?>? apiaryId,
       Value<DateTime>? createdAt,
+      Value<RaportType>? raportType,
       Value<int>? rowid}) {
     return RaportTableCompanion(
       id: id ?? this.id,
       hiveId: hiveId ?? this.hiveId,
       apiaryId: apiaryId ?? this.apiaryId,
       createdAt: createdAt ?? this.createdAt,
+      raportType: raportType ?? this.raportType,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -861,6 +884,10 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (raportType.present) {
+      map['raport_type'] = Variable<int>(
+          $RaportTableTable.$converterraportType.toSql(raportType.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -874,6 +901,7 @@ class RaportTableCompanion extends UpdateCompanion<Raport> {
           ..write('hiveId: $hiveId, ')
           ..write('apiaryId: $apiaryId, ')
           ..write('createdAt: $createdAt, ')
+          ..write('raportType: $raportType, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1134,8 +1162,8 @@ class $EntryTableTable extends EntryTable
       'raport_id', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES raport_table (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES raport_table (id) ON DELETE CASCADE'));
   static const VerificationMeta _entryMetadataIdMeta =
       const VerificationMeta('entryMetadataId');
   @override
@@ -1559,13 +1587,13 @@ class $HistoryLogTableTable extends HistoryLogTable
   late final GeneratedColumn<String> referenceId = GeneratedColumn<String>(
       'reference_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _tableTypeMeta =
-      const VerificationMeta('tableType');
+  static const VerificationMeta _logTypeMeta =
+      const VerificationMeta('logType');
   @override
-  late final GeneratedColumnWithTypeConverter<TableType, int> tableType =
-      GeneratedColumn<int>('table_type', aliasedName, false,
+  late final GeneratedColumnWithTypeConverter<LogType, int> logType =
+      GeneratedColumn<int>('log_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<TableType>($HistoryLogTableTable.$convertertableType);
+          .withConverter<LogType>($HistoryLogTableTable.$converterlogType);
   static const VerificationMeta _actionTypeMeta =
       const VerificationMeta('actionType');
   @override
@@ -1580,9 +1608,18 @@ class $HistoryLogTableTable extends HistoryLogTable
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _shadowLogMeta =
+      const VerificationMeta('shadowLog');
+  @override
+  late final GeneratedColumn<bool> shadowLog = GeneratedColumn<bool>(
+      'shadow_log', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("shadow_log" IN (0, 1))'));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, referenceId, tableType, actionType, createdAt];
+      [id, referenceId, logType, actionType, createdAt, shadowLog];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1606,13 +1643,19 @@ class $HistoryLogTableTable extends HistoryLogTable
     } else if (isInserting) {
       context.missing(_referenceIdMeta);
     }
-    context.handle(_tableTypeMeta, const VerificationResult.success());
+    context.handle(_logTypeMeta, const VerificationResult.success());
     context.handle(_actionTypeMeta, const VerificationResult.success());
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     } else if (isInserting) {
       context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('shadow_log')) {
+      context.handle(_shadowLogMeta,
+          shadowLog.isAcceptableOrUnknown(data['shadow_log']!, _shadowLogMeta));
+    } else if (isInserting) {
+      context.missing(_shadowLogMeta);
     }
     return context;
   }
@@ -1627,12 +1670,14 @@ class $HistoryLogTableTable extends HistoryLogTable
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       referenceId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}reference_id'])!,
-      tableType: $HistoryLogTableTable.$convertertableType.fromSql(
-          attachedDatabase.typeMapping
-              .read(DriftSqlType.int, data['${effectivePrefix}table_type'])!),
+      logType: $HistoryLogTableTable.$converterlogType.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}log_type'])!),
       actionType: $HistoryLogTableTable.$converteractionType.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}action_type'])!),
+      shadowLog: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}shadow_log'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -1643,8 +1688,8 @@ class $HistoryLogTableTable extends HistoryLogTable
     return $HistoryLogTableTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<TableType, int, int> $convertertableType =
-      const EnumIndexConverter<TableType>(TableType.values);
+  static JsonTypeConverter2<LogType, int, int> $converterlogType =
+      const EnumIndexConverter<LogType>(LogType.values);
   static JsonTypeConverter2<ActionType, int, int> $converteractionType =
       const EnumIndexConverter<ActionType>(ActionType.values);
 }
@@ -1652,44 +1697,50 @@ class $HistoryLogTableTable extends HistoryLogTable
 class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
   final Value<String> id;
   final Value<String> referenceId;
-  final Value<TableType> tableType;
+  final Value<LogType> logType;
   final Value<ActionType> actionType;
   final Value<DateTime> createdAt;
+  final Value<bool> shadowLog;
   final Value<int> rowid;
   const HistoryLogTableCompanion({
     this.id = const Value.absent(),
     this.referenceId = const Value.absent(),
-    this.tableType = const Value.absent(),
+    this.logType = const Value.absent(),
     this.actionType = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.shadowLog = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   HistoryLogTableCompanion.insert({
     required String id,
     required String referenceId,
-    required TableType tableType,
+    required LogType logType,
     required ActionType actionType,
     required DateTime createdAt,
+    required bool shadowLog,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         referenceId = Value(referenceId),
-        tableType = Value(tableType),
+        logType = Value(logType),
         actionType = Value(actionType),
-        createdAt = Value(createdAt);
+        createdAt = Value(createdAt),
+        shadowLog = Value(shadowLog);
   static Insertable<HistoryLog> custom({
     Expression<String>? id,
     Expression<String>? referenceId,
-    Expression<int>? tableType,
+    Expression<int>? logType,
     Expression<int>? actionType,
     Expression<DateTime>? createdAt,
+    Expression<bool>? shadowLog,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (referenceId != null) 'reference_id': referenceId,
-      if (tableType != null) 'table_type': tableType,
+      if (logType != null) 'log_type': logType,
       if (actionType != null) 'action_type': actionType,
       if (createdAt != null) 'created_at': createdAt,
+      if (shadowLog != null) 'shadow_log': shadowLog,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1697,16 +1748,18 @@ class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
   HistoryLogTableCompanion copyWith(
       {Value<String>? id,
       Value<String>? referenceId,
-      Value<TableType>? tableType,
+      Value<LogType>? logType,
       Value<ActionType>? actionType,
       Value<DateTime>? createdAt,
+      Value<bool>? shadowLog,
       Value<int>? rowid}) {
     return HistoryLogTableCompanion(
       id: id ?? this.id,
       referenceId: referenceId ?? this.referenceId,
-      tableType: tableType ?? this.tableType,
+      logType: logType ?? this.logType,
       actionType: actionType ?? this.actionType,
       createdAt: createdAt ?? this.createdAt,
+      shadowLog: shadowLog ?? this.shadowLog,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1720,9 +1773,9 @@ class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
     if (referenceId.present) {
       map['reference_id'] = Variable<String>(referenceId.value);
     }
-    if (tableType.present) {
-      map['table_type'] = Variable<int>(
-          $HistoryLogTableTable.$convertertableType.toSql(tableType.value));
+    if (logType.present) {
+      map['log_type'] = Variable<int>(
+          $HistoryLogTableTable.$converterlogType.toSql(logType.value));
     }
     if (actionType.present) {
       map['action_type'] = Variable<int>(
@@ -1730,6 +1783,9 @@ class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (shadowLog.present) {
+      map['shadow_log'] = Variable<bool>(shadowLog.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1742,9 +1798,10 @@ class HistoryLogTableCompanion extends UpdateCompanion<HistoryLog> {
     return (StringBuffer('HistoryLogTableCompanion(')
           ..write('id: $id, ')
           ..write('referenceId: $referenceId, ')
-          ..write('tableType: $tableType, ')
+          ..write('logType: $logType, ')
           ..write('actionType: $actionType, ')
           ..write('createdAt: $createdAt, ')
+          ..write('shadowLog: $shadowLog, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1802,6 +1859,13 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('queen_table', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('raport_table',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('entry_table', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -2624,6 +2688,7 @@ typedef $$RaportTableTableCreateCompanionBuilder = RaportTableCompanion
   Value<String?> hiveId,
   Value<String?> apiaryId,
   required DateTime createdAt,
+  required RaportType raportType,
   Value<int> rowid,
 });
 typedef $$RaportTableTableUpdateCompanionBuilder = RaportTableCompanion
@@ -2632,6 +2697,7 @@ typedef $$RaportTableTableUpdateCompanionBuilder = RaportTableCompanion
   Value<String?> hiveId,
   Value<String?> apiaryId,
   Value<DateTime> createdAt,
+  Value<RaportType> raportType,
   Value<int> rowid,
 });
 
@@ -2696,6 +2762,13 @@ class $$RaportTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnWithTypeConverterFilters<RaportType, RaportType, int> get raportType =>
+      $state.composableBuilder(
+          column: $state.table.raportType,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
   $$HiveTableTableFilterComposer get hiveId {
     final $$HiveTableTableFilterComposer composer = $state.composerBuilder(
         composer: this,
@@ -2744,6 +2817,11 @@ class $$RaportTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
       column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get raportType => $state.composableBuilder(
+      column: $state.table.raportType,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2796,6 +2874,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
             Value<String?> hiveId = const Value.absent(),
             Value<String?> apiaryId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
+            Value<RaportType> raportType = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               RaportTableCompanion(
@@ -2803,6 +2882,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
             hiveId: hiveId,
             apiaryId: apiaryId,
             createdAt: createdAt,
+            raportType: raportType,
             rowid: rowid,
           ),
           createCompanionCallback: ({
@@ -2810,6 +2890,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
             Value<String?> hiveId = const Value.absent(),
             Value<String?> apiaryId = const Value.absent(),
             required DateTime createdAt,
+            required RaportType raportType,
             Value<int> rowid = const Value.absent(),
           }) =>
               RaportTableCompanion.insert(
@@ -2817,6 +2898,7 @@ class $$RaportTableTableTableManager extends RootTableManager<
             hiveId: hiveId,
             apiaryId: apiaryId,
             createdAt: createdAt,
+            raportType: raportType,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
@@ -3535,18 +3617,20 @@ typedef $$HistoryLogTableTableCreateCompanionBuilder = HistoryLogTableCompanion
     Function({
   required String id,
   required String referenceId,
-  required TableType tableType,
+  required LogType logType,
   required ActionType actionType,
   required DateTime createdAt,
+  required bool shadowLog,
   Value<int> rowid,
 });
 typedef $$HistoryLogTableTableUpdateCompanionBuilder = HistoryLogTableCompanion
     Function({
   Value<String> id,
   Value<String> referenceId,
-  Value<TableType> tableType,
+  Value<LogType> logType,
   Value<ActionType> actionType,
   Value<DateTime> createdAt,
+  Value<bool> shadowLog,
   Value<int> rowid,
 });
 
@@ -3563,9 +3647,9 @@ class $$HistoryLogTableTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnWithTypeConverterFilters<TableType, TableType, int> get tableType =>
+  ColumnWithTypeConverterFilters<LogType, LogType, int> get logType =>
       $state.composableBuilder(
-          column: $state.table.tableType,
+          column: $state.table.logType,
           builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
               column,
               joinBuilders: joinBuilders));
@@ -3579,6 +3663,11 @@ class $$HistoryLogTableTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
       column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get shadowLog => $state.composableBuilder(
+      column: $state.table.shadowLog,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 }
@@ -3596,8 +3685,8 @@ class $$HistoryLogTableTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<int> get tableType => $state.composableBuilder(
-      column: $state.table.tableType,
+  ColumnOrderings<int> get logType => $state.composableBuilder(
+      column: $state.table.logType,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -3608,6 +3697,11 @@ class $$HistoryLogTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
       column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get shadowLog => $state.composableBuilder(
+      column: $state.table.shadowLog,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
@@ -3638,33 +3732,37 @@ class $$HistoryLogTableTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> referenceId = const Value.absent(),
-            Value<TableType> tableType = const Value.absent(),
+            Value<LogType> logType = const Value.absent(),
             Value<ActionType> actionType = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
+            Value<bool> shadowLog = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               HistoryLogTableCompanion(
             id: id,
             referenceId: referenceId,
-            tableType: tableType,
+            logType: logType,
             actionType: actionType,
             createdAt: createdAt,
+            shadowLog: shadowLog,
             rowid: rowid,
           ),
           createCompanionCallback: ({
             required String id,
             required String referenceId,
-            required TableType tableType,
+            required LogType logType,
             required ActionType actionType,
             required DateTime createdAt,
+            required bool shadowLog,
             Value<int> rowid = const Value.absent(),
           }) =>
               HistoryLogTableCompanion.insert(
             id: id,
             referenceId: referenceId,
-            tableType: tableType,
+            logType: logType,
             actionType: actionType,
             createdAt: createdAt,
+            shadowLog: shadowLog,
             rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0

@@ -10,6 +10,7 @@ class PreferencesState extends InitialState {
   final String apiaryDefaultColor;
   final Map<String, bool> isEditing;
   final int reportType;
+  final String hiveDefaultType;
 
   const PreferencesState({
     this.language = 'en',
@@ -21,6 +22,7 @@ class PreferencesState extends InitialState {
     this.apiaryDefaultColor = '',
     this.isEditing = const {},
     this.reportType = 0,
+    this.hiveDefaultType = '',
     super.status,
     super.errorMessage,
   });
@@ -36,6 +38,7 @@ class PreferencesState extends InitialState {
     String? apiaryDefaultColor,
     Map<String, bool>? isEditing,
     int? reportType,
+    String? hiveDefaultType,
     Status? status,
     String? errorMessage,
   }) {
@@ -49,6 +52,7 @@ class PreferencesState extends InitialState {
       apiaryDefaultColor: apiaryDefaultColor ?? this.apiaryDefaultColor,
       isEditing: isEditing ?? this.isEditing,
       reportType: reportType ?? this.reportType,
+      hiveDefaultType: hiveDefaultType ?? this.hiveDefaultType,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -65,6 +69,7 @@ class PreferencesState extends InitialState {
     apiaryDefaultColor,
     isEditing,
     reportType,
+    hiveDefaultType,
     ...super.props,
   ];
 }

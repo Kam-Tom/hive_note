@@ -16,6 +16,7 @@ class ManageQueensPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => ManageQueensBloc(
+          preferencesRepository: context.read<PreferencesRepository>(),
           queenRepository: context.read<QueenRepository>(),
         )..add(const Subscribe()),
         child: const ManageQueensView(),

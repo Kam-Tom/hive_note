@@ -10,8 +10,11 @@ part 'manage_queens_event.dart';
 part 'manage_queens_state.dart';
 
 class ManageQueensBloc extends Bloc<ManageQueensEvent, ManageQueensState> {
-  ManageQueensBloc({required QueenRepository queenRepository})
-      : _queenRepository = queenRepository,
+  ManageQueensBloc({
+    required QueenRepository queenRepository,
+    required PreferencesRepository preferencesRepository,
+  })  : _queenRepository = queenRepository,
+        _preferencesRepository = preferencesRepository,
         super(const ManageQueensState()) {
     on<Subscribe>(_onSubscribe, transformer: restartable());
     on<SelectApiary>(_onSelectApiary);
@@ -20,6 +23,7 @@ class ManageQueensBloc extends Bloc<ManageQueensEvent, ManageQueensState> {
   }
 
   final QueenRepository _queenRepository;
+  final PreferencesRepository _preferencesRepository;
 
   Future<void> _onSubscribe(
     Subscribe event,
@@ -62,8 +66,19 @@ class ManageQueensBloc extends Bloc<ManageQueensEvent, ManageQueensState> {
   FutureOr<void> _onInsertHive(
       InsertQueen event, Emitter<ManageQueensState> emit) async {
     var tmpQueens = List<QueenWithHive>.from(state.queens);
-    tmpQueens.add(QueenWithHive(queen: event.queen));
+    
+    final defaultBreed = await _preferencesRepository.getQueenDefaultBreed();
+    final defaultOrigin = await _preferencesRepository.getQueenDefaultOrigin();
+    
+    final queen = Queen(
+      breed: defaultBreed,
+      origin: defaultOrigin,
+      isAlive: true,
+      birthDate: DateTime.now(),
+    );
+    
+    tmpQueens.add(QueenWithHive(queen: queen));
     emit(state.copyWith(status: Status.updating, queens: tmpQueens));
-    await _queenRepository.insertQueen(event.queen);
+    await _queenRepository.insertQueen(queen);
   }
 }

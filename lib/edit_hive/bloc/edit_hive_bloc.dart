@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:hive_note/shared/bloc/helpers/initial_state.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:repositories/repositories.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'edit_hive_event.dart';
 part 'edit_hive_state.dart';
@@ -13,8 +12,10 @@ class EditHiveBloc extends Bloc<EditHiveEvent, EditHiveState> {
   EditHiveBloc({
     required HiveRepository hiveRepository,
     required QueenRepository queenRepository,
+    required PreferencesRepository preferencesRepository,
   })  : _hiveRepository = hiveRepository,
         _queenRepository = queenRepository,
+        _preferencesRepository = preferencesRepository,
         super(const EditHiveState()) {
     on<LoadHive>(_onLoadHive);
     on<LoadQueens>(_onLoadQueens);
@@ -27,6 +28,7 @@ class EditHiveBloc extends Bloc<EditHiveEvent, EditHiveState> {
 
   final HiveRepository _hiveRepository;
   final QueenRepository _queenRepository;
+  final PreferencesRepository _preferencesRepository;
 
   Future<void> _onLoadHive(LoadHive event, Emitter<EditHiveState> emit) async {
     if (state.status != Status.loading) {
@@ -115,9 +117,12 @@ class EditHiveBloc extends Bloc<EditHiveEvent, EditHiveState> {
 
   Future<void> _onCreateNewQueen(CreateNewQueen event, Emitter<EditHiveState> emit) async {
     try {
+      final defaultBreed = await _preferencesRepository.getQueenDefaultBreed();
+      final defaultOrigin = await _preferencesRepository.getQueenDefaultOrigin();
+      
       final queen = Queen(
-        breed: event.defaultBreed,
-        origin: event.defaultOrigin,
+        breed: defaultBreed,
+        origin: defaultOrigin,
         isAlive: true,
         birthDate: DateTime.now(),
         hiveId: state.hive!.id,

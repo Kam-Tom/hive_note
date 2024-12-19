@@ -78,10 +78,7 @@ class ManageHivesView extends StatelessWidget {
     return AddTile(
       key: const ValueKey('add_hive_tile'),
       onPressed: () {
-        context.read<ManageHivesBloc>().add(InsertHive(
-                  defaultType: "default_hive_type".tr(),
-                  defaultName: "new_hive".tr(),
-        ));
+        context.read<ManageHivesBloc>().add(const InsertHive());
       },
     );
   }

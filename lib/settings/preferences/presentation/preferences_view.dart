@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/settings/preferences/bloc/preferences_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:app_database/app_database.dart';
+import 'package:repositories/repositories.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PreferencesView extends StatelessWidget {
   const PreferencesView({super.key});
@@ -18,7 +19,7 @@ class PreferencesView extends StatelessWidget {
             children: [
               // Report type selection
               _buildDropdown<RaportType>(
-                label: 'Report Type',
+                label: 'report_type'.tr(),
                 value: RaportType.values[state.reportType],
                 items: RaportType.values.take(3).toList(),
                 onChanged: (newValue) {
@@ -28,7 +29,7 @@ class PreferencesView extends StatelessWidget {
               const SizedBox(height: 16.0),
               // Language selection
               _buildDropdown<String>(
-                label: 'Language',
+                label: 'language'.tr(),
                 value: state.language,
                 items: ['en', 'pl'],
                 onChanged: (newValue) {
@@ -36,20 +37,11 @@ class PreferencesView extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16.0),
-              // Notification toggle
-              _buildSwitch(
-                label: 'Enable Notifications',
-                value: state.notificationsEnabled,
-                onChanged: (newValue) {
-                  context.read<PreferencesBloc>().add(NotificationToggled(newValue));
-                },
-              ),
-              const SizedBox(height: 16.0),
               // Queen preferences
-              _buildCategoryLabel('Queen Preferences'),
+              _buildCategoryLabel('queen_preferences'.tr()),
               _buildToggleableTextField(
                 context: context,
-                label: 'Queen Default Breed',
+                label: 'queen_default_breed'.tr(),
                 value: state.queenDefaultBreed,
                 onSave: (newValue) {
                   context.read<PreferencesBloc>().add(QueenDefaultBreedChanged(newValue));
@@ -58,7 +50,7 @@ class PreferencesView extends StatelessWidget {
               const SizedBox(height: 16.0),
               _buildToggleableTextField(
                 context: context,
-                label: 'Queen Default Origin',
+                label: 'queen_default_origin'.tr(),
                 value: state.queenDefaultOrigin,
                 onSave: (newValue) {
                   context.read<PreferencesBloc>().add(QueenDefaultOriginChanged(newValue));
@@ -66,21 +58,30 @@ class PreferencesView extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               // Hive preferences
-              _buildCategoryLabel('Hive Preferences'),
+              _buildCategoryLabel('hive_preferences'.tr()),
               _buildToggleableTextField(
                 context: context,
-                label: 'Hive Default Name',
+                label: 'hive_default_name'.tr(),
                 value: state.hiveDefaultName,
                 onSave: (newValue) {
                   context.read<PreferencesBloc>().add(HiveDefaultNameChanged(newValue));
                 },
               ),
               const SizedBox(height: 16.0),
-              // Apiary preferences
-              _buildCategoryLabel('Apiary Preferences'),
               _buildToggleableTextField(
                 context: context,
-                label: 'Apiary Default Name',
+                label: 'hive_default_type'.tr(),
+                value: state.hiveDefaultType,
+                onSave: (newValue) {
+                  context.read<PreferencesBloc>().add(HiveDefaultTypeChanged(newValue));
+                },
+              ),
+              const SizedBox(height: 16.0),
+              // Apiary preferences
+              _buildCategoryLabel('apiary_preferences'.tr()),
+              _buildToggleableTextField(
+                context: context,
+                label: 'apiary_default_name'.tr(),
                 value: state.apiaryDefaultName,
                 onSave: (newValue) {
                   context.read<PreferencesBloc>().add(ApiaryDefaultNameChanged(newValue));
@@ -89,7 +90,7 @@ class PreferencesView extends StatelessWidget {
               const SizedBox(height: 16.0),
               _buildColorPicker(
                 context: context,
-                label: 'Apiary Default Color',
+                label: 'apiary_default_color'.tr(),
                 value: state.apiaryDefaultColor,
                 onSave: (newValue) {
                   context.read<PreferencesBloc>().add(ApiaryDefaultColorChanged(newValue));
@@ -118,7 +119,7 @@ class PreferencesView extends StatelessWidget {
           items: items.map((T value) {
             return DropdownMenuItem<T>(
               value: value,
-              child: Text(value.toString().split('.').last),
+              child: Text(value.toString().split('.').last.tr()),
             );
           }).toList(),
           onChanged: onChanged,
@@ -167,7 +168,7 @@ class PreferencesView extends StatelessWidget {
                       ? TextField(
                           controller: controller,
                           decoration: InputDecoration(
-                            hintText: 'Enter $label',
+                            hintText: 'enter'.tr(args: [label]),
                           ),
                         )
                       : Text(value),
@@ -220,7 +221,7 @@ class PreferencesView extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('Pick a color'),
+                                  title: Text('pick_a_color'.tr()),
                                   content: SingleChildScrollView(
                                     child: ColorPicker(
                                       pickerColor: currentColor,
@@ -231,7 +232,7 @@ class PreferencesView extends StatelessWidget {
                                   ),
                                   actions: [
                                     TextButton(
-                                      child: Text('Save'),
+                                      child: Text('save'.tr()),
                                       onPressed: () {
                                         onSave('#${currentColor.value.toRadixString(16).padLeft(8, '0')}');
                                         Navigator.of(context).pop();

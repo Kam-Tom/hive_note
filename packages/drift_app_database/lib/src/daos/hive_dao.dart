@@ -115,6 +115,8 @@ class HiveDao extends DatabaseAccessor<DriftAppDatabase> with _$HiveDaoMixin {
     }
     return (select(hiveTable)..where((h) => h.apiaryId.equals(apiary.id))).get();
   }
+
+  Future<Hive> getHive(String hiveId) => (select(hiveTable)..where((h) => h.id.equals(hiveId))).getSingle();
 }
 
 extension on Hive {

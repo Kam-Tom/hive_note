@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_note/core/configs/assets/app_vectors.dart';
@@ -17,40 +18,40 @@ class RecordsPage extends StatelessWidget {
         child: GridView(
           padding: const EdgeInsets.all(64.0),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Number of columns
-            crossAxisSpacing: 32.0, // Horizontal spacing between items
-            mainAxisSpacing: 32.0, // Vertical spacing between items
+            crossAxisCount: 2, 
+            crossAxisSpacing: 32.0, 
+            mainAxisSpacing: 32.0,
           ),
           children: [
             MenuButton(
               newPage: AppRouter.harvestPath,
               icon: SvgPicture.asset(AppVectors.harvest, width: 50),
-              text: const Text('Harvest'),
+              text: Text('harvest'.tr()),
             ),
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.financesPath,
               icon: SvgPicture.asset(AppVectors.finances, width: 50),
-              text: const Text('Finances'),
+              text: Text('finances'.tr()),
             ),
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.feedingPath,
               icon: SvgPicture.asset(AppVectors.feeding, width: 50),
-              text: const Text('Feeding'),
+              text: Text('feeding'.tr()),
             ),
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.treatmentPath,
               icon: SvgPicture.asset(AppVectors.treatment, width: 50),
-              text: const Text('Treatment'),
+              text: Text('treatment'.tr()),
             ),
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.historyPath,
               icon: SvgPicture.asset(AppVectors.history, width: 50),
-              text: const Text('History'),
+              text: Text('history'.tr()),
             ),
             MenuButton(
-              newPage: AppRouter.tmpPath,
+              newPage: AppRouter.notePath,
               icon: SvgPicture.asset(AppVectors.other, width: 50),
-              text: const Text('Other'),
+              text: Text('note'.tr()),
             ),
           ],
         ),

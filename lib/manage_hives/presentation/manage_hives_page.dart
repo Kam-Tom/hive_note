@@ -21,6 +21,7 @@ class ManageHivesPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => ManageHivesBloc(
           hiveRepository: context.read<HiveRepository>(),
+          preferencesRepository: context.read<PreferencesRepository>(),
         )..add(const Subscribe()),
         child: const ManageHivesView(),
       ),

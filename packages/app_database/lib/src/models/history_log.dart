@@ -6,30 +6,40 @@ import 'package:uuid/uuid.dart';
 class HistoryLog extends Equatable {
   final String id;
   final String referenceId; // id of the changed object
-  final TableType tableType;
+  final LogType logType;
   final ActionType actionType;
   final DateTime createdAt;
+  final bool shadowLog;
 
   HistoryLog({
     String? id,
     required this.referenceId,
-    required this.tableType,
+    required this.logType,
     required this.actionType,
-    required DateTime createdAt,
+    this.shadowLog = false,
+    DateTime? createdAt,
   }) : id = id ?? Uuid().v4(),
-  createdAt = createdAt.copyWith(millisecond: 0, microsecond: 0);
+  createdAt = (createdAt ?? DateTime.now()).copyWith(millisecond: 0, microsecond: 0);
   
   @override
-  List<Object?> get props => [id, referenceId, tableType, actionType, createdAt];
+  List<Object?> get props => [id, referenceId, logType, actionType, createdAt,shadowLog];
 }
 
-enum TableType {
+enum LogType {
   apiary,
   hive,
   queen,
   todo,
   entry_metadata,
-  raport,
+  entry,
+
+  inspection,
+  harvest,
+  treatment,
+  note,
+  finances,
+  feeding,
+
 }
 
 enum ActionType {

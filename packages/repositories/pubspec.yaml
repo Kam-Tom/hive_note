@@ -9,6 +9,8 @@ environment:
 dependencies:
   app_database:
     path: ../app_database
+  user_pref:
+    path: ../user_pref
 
 
 dev_dependencies:

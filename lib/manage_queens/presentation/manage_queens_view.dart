@@ -78,11 +78,7 @@ class ManageQueensView extends StatelessWidget {
     return AddTile(
       key: const ValueKey('add_hive_tile'),
       onPressed: () {
-        context.read<ManageQueensBloc>().add(InsertQueen(
-              queen: Queen(breed: 'default_breed'.tr(), 
-              origin: 'default_origin'.tr(), 
-              isAlive: true, 
-              birthDate: DateTime.now())));
+        context.read<ManageQueensBloc>().add(const InsertQueen());
       },
     );
   }

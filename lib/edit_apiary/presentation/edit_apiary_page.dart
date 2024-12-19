@@ -18,9 +18,10 @@ class EditApiaryPage extends StatelessWidget {
       appBar: const CustomAppBar(),
       body: BlocProvider(
         create: (context) => EditApiaryBloc(
-               apiaryRepository: context.read<ApiaryRepository>(),
-               hiveRepository: context.read<HiveRepository>()
-            )..add(LoadApiary(apiaryId: apiaryId)),
+          apiaryRepository: context.read<ApiaryRepository>(),
+          hiveRepository: context.read<HiveRepository>(),
+          preferencesRepository: context.read<PreferencesRepository>(),
+        )..add(LoadApiary(apiaryId: apiaryId)),
         child: const EditApiaryView(),
       ),
       bottomNavigationBar: CustomAppFooter(),

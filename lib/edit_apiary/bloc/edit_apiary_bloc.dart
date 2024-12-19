@@ -12,8 +12,10 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
   EditApiaryBloc({
     required ApiaryRepository apiaryRepository,
     required HiveRepository hiveRepository,
+    required PreferencesRepository preferencesRepository,
   })  : _apiaryRepository = apiaryRepository,
         _hiveRepository = hiveRepository,
+        _preferencesRepository = preferencesRepository,
         super(const EditApiaryState()) {
     on<LoadApiary>(_onLoadApiary);
     on<UpdateApiaryName>(_onUpdateApiaryName);
@@ -27,6 +29,7 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
 
   final ApiaryRepository _apiaryRepository;
   final HiveRepository _hiveRepository;
+  final PreferencesRepository _preferencesRepository;
 
   Future<void> _onLoadApiary(LoadApiary event, Emitter<EditApiaryState> emit) async {
     emit(state.copyWith(status: Status.loading));
@@ -86,10 +89,12 @@ class EditApiaryBloc extends Bloc<EditApiaryEvent, EditApiaryState> {
 
   Future<void> _onAddHive(AddHive event, Emitter<EditApiaryState> emit) async {
     try {
+      final defaultName = await _preferencesRepository.getHiveDefaultName();
+      final defaultType = await _preferencesRepository.getHiveDefaultType();
       final newHive = Hive(
         apiaryId: state.apiary!.id,
-        name: '${event.defaultPrefix} ${state.hives.length + 1}',
-        type: event.defaultType,
+        name: '$defaultName ${state.hives.length + 1}',
+        type: defaultType,
         order: state.hives.length,
         createdAt: DateTime.now(),
       );

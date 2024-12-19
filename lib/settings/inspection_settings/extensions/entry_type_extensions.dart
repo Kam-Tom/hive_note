@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:repositories/repositories.dart';
 
 extension EntryTypeExtensions on EntryType {
@@ -32,29 +32,29 @@ extension EntryTypeExtensions on EntryType {
   String get description {
     switch (this) {
       case EntryType.slider0to5:
-        return 'Slider (0-5)';
+        return 'slider_0_5'.tr();
       case EntryType.slider0to3:
-        return 'Slider (0-3)';
+        return 'slider_0_3'.tr();
       case EntryType.slider0to7:
-        return 'Slider (0-7)';
+        return 'slider_0_7'.tr();
       case EntryType.slider0to11:
-        return 'Slider (0-11)';
+        return 'slider_0_11'.tr();
       case EntryType.text:
-        return 'Text Input';
+        return 'text_input'.tr();
       case EntryType.number:
-        return 'Number Input';
+        return 'number_input'.tr();
       case EntryType.checkbox:
-        return 'Checkbox';
+        return 'checkbox_input'.tr();
       case EntryType.decimal:
-        return 'Decimal Input';
+        return 'decimal_input'.tr();
       case EntryType.intNeg:
-        return 'Integer Input (Negatives)';
+        return 'integer_neg_input'.tr();
       case EntryType.decNeg:
-        return 'Decimal Input (Negatives)';
+        return 'decimal_neg_input'.tr();
       case EntryType.toggle:
-        return 'Toggle Switch';
+        return 'toggle_switch'.tr();
       default:
-        return 'Unknown Type';
+        return 'unknown_type'.tr();
     }
   }
 }

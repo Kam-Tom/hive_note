@@ -30,10 +30,8 @@ final class DeleteQueen extends ManageQueensEvent {
 }
 
 final class InsertQueen extends ManageQueensEvent {
-  const InsertQueen({required this.queen});
-
-  final Queen queen;
+  const InsertQueen();
 
   @override
-  List<Object> get props => [queen];
+  List<Object> get props => [];
 }

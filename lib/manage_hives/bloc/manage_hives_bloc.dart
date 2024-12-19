@@ -10,8 +10,11 @@ part 'manage_hives_event.dart';
 part 'manage_hives_state.dart';
 
 class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
-  ManageHivesBloc({required HiveRepository hiveRepository})
-      : _hiveRepository = hiveRepository,
+  ManageHivesBloc({
+    required HiveRepository hiveRepository,
+    required PreferencesRepository preferencesRepository,
+  })  : _hiveRepository = hiveRepository,
+        _preferencesRepository = preferencesRepository,
         super(const ManageHivesState()) {
     on<Subscribe>(_onSubscribe, transformer: restartable());
     on<SelectApiary>(_onSelectApiary);
@@ -21,6 +24,7 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
   }
 
   final HiveRepository _hiveRepository;
+  final PreferencesRepository _preferencesRepository;
 
   Future<void> _onSubscribe(
     Subscribe event,
@@ -80,9 +84,11 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
   FutureOr<void> _onInsertHive(
       InsertHive event, Emitter<ManageHivesState> emit) async {
     var tmpHives = List<HiveWithQueen>.from(state.hives);
+    final defaultName = await _preferencesRepository.getHiveDefaultName();
+    final defaultType = await _preferencesRepository.getHiveDefaultType();
     final newHive = Hive(
-      name: event.defaultName,
-      type: event.defaultType,
+      name: defaultName,
+      type: defaultType,
       apiaryId: state.selectedApiary?.id,
       order: tmpHives.length,
       createdAt: DateTime.now(),

@@ -6,6 +6,7 @@ final class ManageTodosState extends InitialState {
   final Todo todoForm;
   final bool isEditing;
   final Todo? editingTodo;
+  final DateTime focusedDate;
 
   const ManageTodosState({
     super.status,
@@ -15,10 +16,11 @@ final class ManageTodosState extends InitialState {
     required this.todoForm,
     required this.isEditing,
     required this.editingTodo,
+    required this.focusedDate,
   });
 
   @override
-  List<Object?> get props => [todos, selectedDate, todoForm, isEditing, editingTodo, ...super.props];
+  List<Object?> get props => [todos, selectedDate, todoForm, isEditing, editingTodo, focusedDate, ...super.props];
 
   @override
   ManageTodosState copyWith({
@@ -29,6 +31,7 @@ final class ManageTodosState extends InitialState {
     bool? isEditing,
     Todo? Function()? editingTodo,
     Todo? todoForm,
+    DateTime? focusedDate,
   }) {
     return ManageTodosState(
       status: status ?? super.status,
@@ -38,6 +41,7 @@ final class ManageTodosState extends InitialState {
       todoForm: todoForm ?? this.todoForm,
       isEditing: isEditing ?? this.isEditing,
       editingTodo: editingTodo != null ? editingTodo() : this.editingTodo,
+      focusedDate: focusedDate ?? this.focusedDate,
     );
   }
 }

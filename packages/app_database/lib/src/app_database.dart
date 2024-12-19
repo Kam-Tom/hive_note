@@ -65,4 +65,23 @@ abstract class AppDatabase {
 
   Future<List<Hive>> getHivesByApiary(Apiary? apiaryId);
 
+  Future<List<HistoryLog>> getHistoryLogs(DateTime startDate, DateTime endDate, bool showShadow);
+  Future<void> insertHistoryLog(HistoryLog historyLog);
+
+  Future<Hive> getHive(String hiveId);
+
+  Future<Queen?> getQueenForHive(Hive hive);
+
+  Future<Queen> getQueen(String queenId);
+
+  Future<Raport> getRaport(String raportId);
+
+  Future<List<Entry>> getEntries(Raport raport);
+
+  Future<Todo> getTodo(String todoId);
+
+  Future<Map<String,List<String>>> getHints(RaportType raportType, bool withCount);
+
+  Future<List<Raport>> getRaports(RaportType raportType, DateTime? startDate, DateTime? endDate, List<Apiary>? apiaries, List<Hive>? hives);
+
 }

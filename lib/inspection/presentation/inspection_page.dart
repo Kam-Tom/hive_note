@@ -6,6 +6,8 @@ import 'package:hive_note/inspection/presentation/inspection_view.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
 import 'package:repositories/repositories.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InspectionPage extends StatelessWidget {
   const InspectionPage({required this.apiaryId, super.key});
@@ -18,6 +20,7 @@ class InspectionPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => InspectionBloc(
+            preferencesRepository: context.read<PreferencesRepository>(),
             apiaryRepository: context.read<ApiaryRepository>(),
             hiveRepository: context.read<HiveRepository>(),
             raportRepository: context.read<RaportRepository>(),
@@ -25,7 +28,7 @@ class InspectionPage extends StatelessWidget {
           )..add(LoadApiary(apiaryId: apiaryId)),
         ),
         BlocProvider(
-          create: (_) => EntryFieldCubit(), // We'll initialize this properly in EntryFieldsList
+          create: (_) => EntryFieldCubit(),
         ),
       ],
       child: Scaffold(
@@ -38,6 +41,23 @@ class InspectionPage extends StatelessWidget {
               onPressed: () {
                 final entries = context.read<EntryFieldCubit>().getValues();
                 context.read<InspectionBloc>().add(CreateRaport(entries: entries));
+
+                if (state.selectedHiveInspection?.inspected ?? false) {
+                  Fluttertoast.showToast(
+                    msg: 'inspection_updated'.tr(),
+                    backgroundColor: Colors.blue,
+                  );
+                } else if (state.isLastHive) {
+                  Fluttertoast.showToast(
+                    msg: 'inspection_completed'.tr(),
+                    backgroundColor: Colors.green,
+                  );
+                } else {
+                  Fluttertoast.showToast(
+                    msg: 'inspection_created'.tr(),
+                    backgroundColor: Colors.green,
+                  );
+                }
               },
               child: Icon(
                 state.isLastHive ? Icons.send : Icons.navigate_next,

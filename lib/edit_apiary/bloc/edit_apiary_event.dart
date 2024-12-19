@@ -27,12 +27,10 @@ final class UpdateApiaryName extends EditApiaryEvent {
 }
 
 final class AddHive extends EditApiaryEvent {
-  const AddHive({required this.defaultType, required this.defaultPrefix});
-  final String defaultType;
-  final String defaultPrefix;
+  const AddHive();
 
   @override
-  List<Object> get props => [defaultType];
+  List<Object> get props => [];
 }
 
 final class RearrangeHives extends EditApiaryEvent {

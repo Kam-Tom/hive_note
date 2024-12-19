@@ -23,16 +23,18 @@ class MenuButton extends StatelessWidget {
         backgroundColor: AppColors.secondary,
         foregroundColor: AppColors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(12), // Reduced border radius
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       ),
       child: SizedBox(
-        width: 75,
-        height: 125,
+        width: 115, // Middle ground between 100 and 130
+        height: 100, // Middle ground between 90 and 110
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon,
+            const SizedBox(height: 8), // Slightly increased spacing
             text,
           ],
         ),

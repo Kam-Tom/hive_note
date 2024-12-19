@@ -6,6 +6,8 @@ import 'package:hive_note/shared/features/entry_field.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';
 import 'package:repositories/repositories.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HarvestPage extends StatelessWidget {
   const HarvestPage({super.key});
@@ -35,9 +37,26 @@ class HarvestPage extends StatelessWidget {
             return FloatingActionButton(
               onPressed: () {
                 final entries = context.read<EntryFieldCubit>().getValues();
+                if (entries.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: 'harvest_no_data'.tr(),
+                    backgroundColor: Colors.red,
+                  );
+                  return;
+                }
+                if (state.selectedHives.isEmpty && state.selectedApiaries.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: 'harvest_no_selection'.tr(),
+                    backgroundColor: Colors.red,
+                  );
+                  return;
+                }
                 context.read<HarvestBloc>().add(CreateRaport(entries: entries));
                 context.read<EntryFieldCubit>().clear();
-              
+                Fluttertoast.showToast(
+                  msg: 'harvest_created'.tr(),
+                  backgroundColor: Colors.green,
+                );
               },
               child: const Icon(Icons.send),
             );

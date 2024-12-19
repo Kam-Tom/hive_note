@@ -65,6 +65,12 @@ class QueenDao extends DatabaseAccessor<DriftAppDatabase> with _$QueenDaoMixin {
   Stream<Queen> watchQueen(String queenId) {
     return (select(queenTable)..where((q) => q.id.equals(queenId))).watchSingle();
   }
+
+  Future<Queen?> getQueenForHive(Hive hive) {
+    return (select(queenTable)..where((q) => q.hiveId.equals(hive.id))).getSingleOrNull();
+  }
+
+  Future<Queen> getQueen(String queenId) => (select(queenTable)..where((q) => q.id.equals(queenId))).getSingle();
 }
 
 extension on Queen {

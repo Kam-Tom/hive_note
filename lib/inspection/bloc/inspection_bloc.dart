@@ -14,15 +14,20 @@ class InspectionBloc extends Bloc<InspectionEvent, InspectionState> {
   final ApiaryRepository _apiaryRepository;
   final HiveRepository _hiveRepository;
   final EntryMetadataRepository _entryMetadataRepository;
+  final PreferencesRepository _preferencesRepository;
 
-  InspectionBloc({required RaportRepository raportRepository,
-  required ApiaryRepository apiaryRepository,
-  required HiveRepository hiveRepository,
-  required EntryMetadataRepository entryMetadataRepository}) : 
+  InspectionBloc({
+    required RaportRepository raportRepository,
+    required ApiaryRepository apiaryRepository,
+    required HiveRepository hiveRepository,
+    required EntryMetadataRepository entryMetadataRepository,
+    required PreferencesRepository preferencesRepository,
+  }) : 
   _hiveRepository = hiveRepository,
   _apiaryRepository = apiaryRepository,
   _raportRepository = raportRepository,
   _entryMetadataRepository = entryMetadataRepository,
+  _preferencesRepository = preferencesRepository,
   super(const InspectionState())
   {
     on<LoadApiary>(_onLoadApiary);
@@ -49,7 +54,11 @@ class InspectionBloc extends Bloc<InspectionEvent, InspectionState> {
       selectedHiveInspection = hiveInspections[0];
     }
 
-    final List<EntryMetadata> entryMetadatas = await _entryMetadataRepository.getEntryMetadatas(RaportType.simple);
+    // Get preferred report type from preferences
+    final int? preferredReportType = await _preferencesRepository.getReportType();
+    final raportType = preferredReportType != null ? RaportType.values[preferredReportType] : RaportType.simple;
+
+    final List<EntryMetadata> entryMetadatas = await _entryMetadataRepository.getEntryMetadatas(raportType);
 
     emit(state.copyWith(
       apiary: apiary,
@@ -64,6 +73,7 @@ class InspectionBloc extends Bloc<InspectionEvent, InspectionState> {
   FutureOr<void> _onCreateRaport(CreateRaport event, Emitter<InspectionState> emit) async {
     final currentInspection = state.selectedHiveInspection!;
     final raport = Raport(
+      raportType: RaportType.simple,
       id: currentInspection.raport?.id,
       apiaryId: state.apiary!.id,
       hiveId: currentInspection.hive.id,

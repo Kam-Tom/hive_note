@@ -80,6 +80,7 @@ Stream<List<ApiaryWithHiveCount>> watchApiariesWithHiveCount(onlyActive) {
   Future<List<Apiary>> getApiaries() {
     return select(apiaryTable).get();
   }
+
 }
 
 extension on Apiary {

@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:hive_note/apiary_details/presentation/apiary_details_page.dart';
 import 'package:hive_note/dashboard/presentation/dashboard_page.dart';
 import 'package:hive_note/edit_apiary/presentation/edit_apiary_page.dart';
 import 'package:hive_note/edit_hive/presentation/edit_hive_page.dart';
 import 'package:hive_note/edit_queen/presentation/edit_queen_page.dart';
+import 'package:hive_note/feeding/presentation/feeding_page.dart';
+import 'package:hive_note/finances/presentation/finances_page.dart';
 import 'package:hive_note/harves/presentation/harvest_page.dart';
+import 'package:hive_note/history/presentation/history_page.dart';
+import 'package:hive_note/hive_details/presentation/hive_details_page.dart';
 import 'package:hive_note/inspection/presentation/inspection_page.dart';
 import 'package:hive_note/manage_apiaries/presentation/manage_apiaries_page.dart';
 import 'package:hive_note/manage_hives/presentation/manage_hives_page.dart';
 import 'package:hive_note/manage_queens/presentation/manage_queens_page.dart';
 import 'package:hive_note/manage_todos/presentation/manage_todos_page.dart';
 import 'package:hive_note/navigation/presentation/pages/records.dart';
+import 'package:hive_note/note/presentation/note_page.dart';
+import 'package:hive_note/queen_details/presentation/queen_details_page.dart';
+import 'package:hive_note/raport_details/presentation/raport_details_page.dart';
 import 'package:hive_note/shared/presentation/pages/tmp_page.dart';
+import 'package:hive_note/statistics/presentation/statistics_page.dart';
+import 'package:hive_note/todo_details/presentation/todo_details_page.dart';
+import 'package:hive_note/treatment/presentation/treatment_page.dart';
 
 class AppRouter {
   static const String emptyPath = '/';
@@ -26,66 +37,85 @@ class AppRouter {
   static const String editQueenPath = '/edit_queen';
   static const String inspectionPath = '/inspection_path';
   static const String harvestPath = '/harvest_path';
+  static const String financesPath = '/finances_path';
+  static const String feedingPath = '/feeding_path';
+  static const String treatmentPath = '/treatment_path';
+  static const String historyPath = '/history_path';
+  static const String notePath = '/note_path';
+  static const String statisticsPath = '/statistics_path';
+  static const String apiaryDetailsPath = '/apiary_details';
+  static const String hiveDetailsPath = '/hive_details';
+  static const String queenDetailsPath = '/queen_details';
+  static const String raportDetailsPath = '/raport_details';
+  static const String todoDetailsPath = '/todo_details';
 
+  static Route<dynamic> onGeneratedRoute(RouteSettings settings) {
+    final args = settings.arguments;
 
-  static Route onGeneratedRoute(RouteSettings settings) {
+    // Routes without parameters
+    final routes = <String, WidgetBuilder>{
+      emptyPath: (_) => const DashboardPage(),
+      dashboardPath: (_) => const DashboardPage(),
+      tmpPath: (_) => const TMPPage(),
+      manageTodosPath: (_) => const ManageTodosPage(),
+      recordsPath: (_) => const RecordsPage(),
+      manageApiariesPath: (_) => const ManageApiariesPage(),
+      manageHivesPath: (_) => const ManageHivesPage(),
+      manageQueensPath: (_) => const ManageQueensPage(),
+      harvestPath: (_) => const HarvestPage(),
+      financesPath: (_) => const FinancesPage(),
+      feedingPath: (_) => const FeedingPage(),
+      treatmentPath: (_) => const TreatmentPage(),
+      historyPath: (_) => const HistoryPage(),
+      notePath: (_) => const NotePage(),
+      statisticsPath: (_) => const StatisticsPage(),
+    };
+
+    final builder = routes[settings.name];
+    if (builder != null) {
+      return MaterialPageRoute(builder: builder);
+    }
+
+    // Routes with parameters
     switch (settings.name) {
-      case AppRouter.emptyPath :
+      case editApiaryPath:
         return MaterialPageRoute(
-          builder:  (_) => const DashboardPage()
+          builder: (_) => EditApiaryPage(apiaryId: args as String),
         );
-      case AppRouter.tmpPath :
+      case editHivePath:
         return MaterialPageRoute(
-          builder:  (_) => const TMPPage()
-        );         
-      case AppRouter.manageTodosPath:
-        return MaterialPageRoute(
-          builder:  (_) => const ManageTodosPage()
-        );      
-      case AppRouter.recordsPath :
-        return MaterialPageRoute(
-          builder:  (_) => const RecordsPage()
+          builder: (_) => EditHivePage(hiveId: args as String),
         );
-      case AppRouter.dashboardPath :
+      case editQueenPath:
         return MaterialPageRoute(
-          builder:  (_) => const ManageApiariesPage()
+          builder: (_) => EditQueenPage(queenId: args as String),
         );
-      case AppRouter.manageApiariesPath:
+      case inspectionPath:
         return MaterialPageRoute(
-          builder: (_) => const ManageApiariesPage()
-        );      
-      case AppRouter.editApiaryPath:
+          builder: (_) => InspectionPage(apiaryId: args as String),
+        );
+      case apiaryDetailsPath:
         return MaterialPageRoute(
-          builder: (_) => EditApiaryPage(apiaryId: settings.arguments as String)
-        );      
-      case AppRouter.manageHivesPath:
+          builder: (_) => ApiaryDetailsPage(apiaryId: args as String),
+        );
+      case hiveDetailsPath:
         return MaterialPageRoute(
-          builder: (_) => const ManageHivesPage()
-        );     
-      case AppRouter.editHivePath:
+          builder: (_) => HiveDetailsPage(hiveId: args as String),
+        );
+      case queenDetailsPath:
         return MaterialPageRoute(
-          builder: (_) => EditHivePage(hiveId: settings.arguments as String)
-        );      
-      case AppRouter.manageQueensPath:
+          builder: (_) => QueenDetailsPage(queenId: args as String),
+        );
+      case raportDetailsPath:
         return MaterialPageRoute(
-          builder: (_) => const ManageQueensPage()
-        );     
-      case AppRouter.editQueenPath:
+          builder: (_) => RaportDetailsPage(raportId: args as String),
+        );
+      case todoDetailsPath:
         return MaterialPageRoute(
-          builder: (_) => EditQueenPage(queenId: settings.arguments as String)
-        );      
-      case AppRouter.inspectionPath:
-        return MaterialPageRoute(
-          builder: (_) => InspectionPage(apiaryId: settings.arguments as String)
-        );      
-      case AppRouter.harvestPath:
-        return MaterialPageRoute(
-          builder: (_) => const HarvestPage()
+          builder: (_) => TodoDetailsPage(todoId: args as String),
         );
       default:
-        return MaterialPageRoute(
-          builder: (_) => const DashboardPage()
-        );
+        return MaterialPageRoute(builder: (_) => const DashboardPage());
     }
   }
 }

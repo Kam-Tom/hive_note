@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/core/configs/icon_mappers/todo_category_icons.dart';
+import 'package:hive_note/core/configs/setup/flutter_notifications.dart';
 import 'package:hive_note/core/configs/theme/app_colors.dart';
 import 'package:hive_note/manage_todos/bloc/manage_todos_bloc.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:hive_note/shared/presentation/dialogs/delete_confirmation_dialog.dart';
 import 'package:repositories/repositories.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:intl/intl.dart';
 
 class ManageTodosView extends StatelessWidget {
   const ManageTodosView({super.key});
@@ -17,17 +20,24 @@ class ManageTodosView extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<ManageTodosBloc>().state;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildTodoForm(context, state),
-        SizedBox(
-          height: 100,
-          child: _buildTodoList(context, state),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        _buildCalendar(context, state),
-      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildTodoForm(context, state),
+            SizedBox(
+              height: 100,
+              child: _buildTodoList(context, state),
+            ),
+            _buildCalendar(context, state),
+          ],
+        ),
+      ),
     );
   }
 
@@ -42,11 +52,11 @@ class ManageTodosView extends StatelessWidget {
   }
 
   Widget _buildEmptyCard() {
-    return const Card(
-      margin: EdgeInsets.all(16),
+    return Card(
+      margin: const EdgeInsets.all(16),
       child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Text('No todo selected.'),
+        padding: const EdgeInsets.all(16),
+        child: Text('no_todo_selected'.tr()),
       ),
     );
   }
@@ -66,10 +76,10 @@ class ManageTodosView extends StatelessWidget {
                   flex: 3,
                   child: DropdownButtonFormField<CategoryType>(
                     value: state.todoForm.categoryType,
-                    decoration: const InputDecoration(
-                      labelText: 'Category',
+                    decoration: InputDecoration(
+                      labelText: 'category'.tr(),
                       isDense: true,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
                     items: CategoryType.values.map((category) {
                       return DropdownMenuItem(
@@ -99,10 +109,10 @@ class ManageTodosView extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Location',
+                    decoration: InputDecoration(
+                      labelText: 'location'.tr(),
                       isDense: true,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
                     onChanged: (value) {
                       context.read<ManageTodosBloc>().add(
@@ -120,12 +130,71 @@ class ManageTodosView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            DropdownButtonFormField<int?>(
+              value: null,
+              decoration: InputDecoration(
+                labelText: 'reminder'.tr(),
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: null, 
+                  child: Text(
+                    'no_reminder'.tr(),
+                    style: const TextStyle(fontSize: 13),
+                  )
+                ),
+                DropdownMenuItem(
+                  value: 1, 
+                  child: Text(
+                    'day_before_1'.tr(),
+                    style: const TextStyle(fontSize: 13),
+                  )
+                ),
+                DropdownMenuItem(
+                  value: 2, 
+                  child: Text(
+                    'day_before_2'.tr(),
+                    style: const TextStyle(fontSize: 13),
+                  )
+                ),
+                DropdownMenuItem(
+                  value: 3, 
+                  child: Text(
+                    'day_before_3'.tr(),
+                    style: const TextStyle(fontSize: 13),
+                  )
+                ),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  final notificationDay = state.selectedDate.subtract(Duration(days: value));
+                  final notificationDate = DateTime(
+                    notificationDay.year,
+                    notificationDay.month,
+                    notificationDay.day,
+                    8,
+                    0,
+                  );
+                  NotificationService.scheduleNotification(
+                    'todo_reminder'.tr(),
+                    'todo_reminder_description'.tr(args: [
+                      state.todoForm.description,
+                      state.todoForm.location,
+                    ]),
+                    notificationDate,
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 16),
             TextField(
               maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: 'Description',
+              decoration: InputDecoration(
+                labelText: 'description'.tr(),
                 alignLabelWithHint: true,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 context.read<ManageTodosBloc>().add(
@@ -141,9 +210,9 @@ class ManageTodosView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             if (state.todoForm.isCompleted)
-              const Text(
-                'This todo is completed.',
-                style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              Text(
+                'todo_completed_message'.tr(),
+                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
               ),
             const SizedBox(height: 16),
             Row(
@@ -178,7 +247,7 @@ class ManageTodosView extends StatelessWidget {
                           );
                     }
                   },
-                  child: Text(state.isEditing ? 'Update' : 'Save'),
+                  child: Text(state.isEditing ? 'update'.tr() : 'save'.tr()),
                 ),
               ],
             ),
@@ -208,9 +277,9 @@ class ManageTodosView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Location:',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      Text(
+                        'location_label'.tr(),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -253,9 +322,9 @@ class ManageTodosView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Description:',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              Text(
+                'description_label'.tr(),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Container(
@@ -269,14 +338,14 @@ class ManageTodosView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               if (todo.isCompleted)
-                const Text(
-                  'This todo is completed.',
-                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                Text(
+                  'todo_completed_message'.tr(),
+                  style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                 ),
               if (isOverdue)
-                const Text(
-                  'This todo is overdue.',
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                Text(
+                  'todo_overdue_message'.tr(),
+                  style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
               Align(
                 alignment: Alignment.bottomRight,
@@ -298,7 +367,8 @@ class ManageTodosView extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.month}/${date.day}/${date.year}';
+    // Use DateFormat for consistent date formatting
+    return DateFormat('MM/dd/yyyy').format(date);
   }
 
   Widget _buildTodoList(BuildContext context, ManageTodosState state) {
@@ -385,14 +455,14 @@ class ManageTodosView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const SizedBox(
+                  SizedBox(
                     width: 60,
                     child: Text(
-                      'Add',
+                      'add_todo'.tr(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
@@ -406,10 +476,16 @@ class ManageTodosView extends StatelessWidget {
   }
 
   Widget _buildCalendar(BuildContext context, ManageTodosState state) {
+
     return TableCalendar(
       firstDay: DateTime.utc(2000, 1, 1),
       lastDay: DateTime.utc(2100, 12, 31),
-      focusedDay: DateTime.now(),
+      focusedDay: state.focusedDate,
+      calendarFormat: CalendarFormat.month, // Add this line
+      onFormatChanged: (format) {
+        // Add this callback
+        // You can handle format changes here if needed
+      },
       selectedDayPredicate: (day) {
         return isSameDay(state.selectedDate, day);
       },
@@ -464,7 +540,13 @@ class ManageTodosView extends StatelessWidget {
         },
       ),
       onDaySelected: (selectedDay, focusedDay) {
-        context.read<ManageTodosBloc>().add(SelectDate(selectedDate: selectedDay));
+        // Ensure consistent date format by converting to UTC
+        final normalizedDay = DateTime.utc(
+          selectedDay.year,
+          selectedDay.month,
+          selectedDay.day,
+        );
+        context.read<ManageTodosBloc>().add(SelectDate(selectedDate: normalizedDay));
       },
     );
   }

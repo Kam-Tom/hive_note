@@ -24,6 +24,7 @@ class ManageTodosBloc extends Bloc<ManageTodosEvent, ManageTodosState> {
             categoryType: CategoryType.other,
             dueTo: DateTime.now(),
           ),
+          focusedDate: DateTime.now(),
         )) {
     on<LoadTodos>(_onLoadTodos);
     on<CreateTodo>(_onCreateTodo);
@@ -77,7 +78,18 @@ class ManageTodosBloc extends Bloc<ManageTodosEvent, ManageTodosState> {
   }
 
   void _onSelectDate(SelectDate event, Emitter<ManageTodosState> emit) {
-    emit(state.copyWith(selectedDate: event.selectedDate));
+    emit(state.copyWith(
+      selectedDate: event.selectedDate,
+      focusedDate: event.selectedDate,
+      editingTodo: () => null,
+      isEditing: false,
+      todoForm: Todo(
+        description: '',
+        location: '',
+        categoryType: CategoryType.other,
+        dueTo: event.selectedDate,
+      ),
+    ));
   }
 
   void _onEditTodo(EditTodoEvent event, Emitter<ManageTodosState> emit) {

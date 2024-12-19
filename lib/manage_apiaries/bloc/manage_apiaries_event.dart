@@ -16,15 +16,13 @@ final class ManageApiariesSubscriptionRequest extends ManageApiariesEvent {
 }
 
 final class InsertApiary extends ManageApiariesEvent {
-  const InsertApiary({required this.createdAt, required this.color, required this.name, required this.isActive});
+  const InsertApiary({required this.createdAt, required this.isActive});
 
   final DateTime createdAt;
-  final Color color;
-  final String name;
   final bool isActive;
 
   @override
-  List<Object> get props => [name, color, createdAt, isActive];
+  List<Object> get props => [createdAt, isActive];
 }
 
 final class RearrangeApiaries extends ManageApiariesEvent {

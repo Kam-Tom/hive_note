@@ -52,12 +52,16 @@ dependencies:
   table_calendar: ^3.1.2
   flutter_local_notifications: ^18.0.1 
   timezone: ^0.10.0
-  multi_select_flutter: ^4.1.3 
+  multi_select_flutter: ^4.1.3
+  flutter_speed_dial: ^7.0.0
+  fl_chart: ^0.69.2
 
   drift_app_database:
     path: packages/drift_app_database  
   repositories:
     path: packages/repositories
+  sp_user_pref:
+    path: packages/sp_user_pref
 
 dev_dependencies:
   flutter_test:

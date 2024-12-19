@@ -10,16 +10,54 @@ class HiveRepository {
 
   Future<List<HiveWithQueen>> getHivesWithQueenByApiary(Apiary? apiary) => _database.getHivesWithQueenByApiary(apiary);
 
-  Future insertHive(Hive hive) => _database.insertHive(hive);
+  Future insertHive(Hive hive) async {
+    await _database.insertHive(hive);
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: hive.id,
+      logType: LogType.hive,
+      actionType: ActionType.create,
+    ));
+  }
 
-  Future deleteHive(Hive hive) => _database.deleteHive(hive);
+  Future deleteHive(Hive hive) async {
+    _database.deleteHive(hive);
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: hive.id,
+      logType: LogType.hive,
+      actionType: ActionType.delete,
+    ));
+  } 
 
-  Future<void> updateHive(Hive hive) =>
-      _database.updateHive(hive);
+  Future<void> updateHive(Hive hive) async {
+    await _database.updateHive(hive);
 
-  Future<void> updateHives(List<Hive> hivesToUpdate) =>
-      _database.updateHives(hivesToUpdate);
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: hive.id,
+      logType: LogType.hive,
+      actionType: ActionType.update,
+    ));
+  }
+
+  Future<void> updateHives(List<Hive> hivesToUpdate) async {
+    await _database.updateHives(hivesToUpdate);
+
+    await _database.insertHistoryLog(HistoryLog(
+      referenceId: hivesToUpdate.first.id,
+      logType: LogType.hive,
+      actionType: ActionType.update,
+      shadowLog: true,
+    ));
+  }
 
   Future<List<Hive>> getHivesByApiary(Apiary? apiary) => _database.getHivesByApiary(apiary);
+
+  Future<Hive> getHive(String hiveId) => _database.getHive(hiveId);
+
+  Future<Hive?> getHiveForQueen(Queen queen) {
+    if (queen.hiveId == null) {
+      return Future.value(null);
+    }
+    return _database.getHive(queen.hiveId!);
+  }
 
 }

@@ -14,8 +14,7 @@ class EditHiveView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditHiveBloc, EditHiveState>(
-      listenWhen: (previous, current) => 
+    return BlocListener<EditHiveBloc, EditHiveState>(      listenWhen: (previous, current) => 
         previous.insertedQueenId != current.insertedQueenId && 
         current.insertedQueenId != null,
       listener: (context, state) {
@@ -64,7 +63,7 @@ class EditHiveView extends StatelessWidget {
                 children: [
                   _buildToggleableTextField(
                     context: context,
-                    label: 'Hive Name',
+                    label: 'hive_name'.tr(),
                     value: hive.name,
                     onSave: (newValue) {
                       context.read<EditHiveBloc>().add(UpdateHiveDetails(name: newValue));
@@ -73,7 +72,7 @@ class EditHiveView extends StatelessWidget {
                   const SizedBox(height: 16.0),
                   _buildToggleableTextField(
                     context: context,
-                    label: 'Hive Type',
+                    label: 'hive_type'.tr(),
                     value: hive.type,
                     onSave: (newValue) {
                       context.read<EditHiveBloc>().add(UpdateHiveDetails(type: newValue));
@@ -93,27 +92,33 @@ class EditHiveView extends StatelessWidget {
                     isExpanded: true,
                     selectedItemBuilder: (BuildContext context) {
                       return [
-                        DropdownMenuItem(
+                        DropdownMenuItem<String?>(
                           value: null,
-                          child: Text('no_queen_selected'.tr()),
+                          child: Text(
+                            'no_queen_selected'.tr(),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
+                          ),
                         ),
-                        if (queen != null &&
-                            !availableQueens.any((q) => q.id == queen.id))
+                        if (queen != null)
                           _buildSelectedQueenItem(context, queen, isCurrent: true),
-                        ...availableQueens.map((q) =>
-                            _buildSelectedQueenItem(context, q)).toList(),
+                        ...availableQueens
+                            .where((q) => q.id != queen?.id)
+                            .map((q) => _buildSelectedQueenItem(context, q)),
                       ];
                     },
                     items: [
-                      DropdownMenuItem(
+                      DropdownMenuItem<String?>(
                         value: null,
-                        child: Text('no_queen_selected'.tr()),
+                        child: Text(
+                          'no_queen_selected'.tr(),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
+                        ),
                       ),
-                      if (queen != null &&
-                          !availableQueens.any((q) => q.id == queen.id))
+                      if (queen != null)
                         _buildQueenDropdownItem(context, queen, isCurrent: true),
-                      ...availableQueens.map((q) =>
-                          _buildQueenDropdownItem(context, q)).toList(),
+                      ...availableQueens
+                          .where((q) => q.id != queen?.id)
+                          .map((q) => _buildQueenDropdownItem(context, q)),
                     ],
                     onChanged: (value) => context.read<EditHiveBloc>().add(
                           UpdateHiveQueen(queenId: value),
@@ -122,12 +127,7 @@ class EditHiveView extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.read<EditHiveBloc>().add(
-                            CreateNewQueen(
-                              defaultBreed: 'default_breed'.tr(),
-                              defaultOrigin: 'Unknown',
-                            ),
-                          );
+                      context.read<EditHiveBloc>().add(const CreateNewQueen());
                     },
                     icon: const Icon(Icons.add),
                     label: Text('create_new_queen'.tr()),
@@ -148,8 +148,7 @@ class EditHiveView extends StatelessWidget {
     required ValueChanged<String> onSave,
   }) {
     TextEditingController controller = TextEditingController(text: value);
-    return BlocBuilder<EditHiveBloc, EditHiveState>(
-      builder: (context, state) {
+    return BlocBuilder<EditHiveBloc, EditHiveState>(      builder: (context, state) {
         bool isEditing = state.isEditing[label] ?? false;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +161,7 @@ class EditHiveView extends StatelessWidget {
                       ? TextField(
                           controller: controller,
                           decoration: InputDecoration(
-                            hintText: 'Enter $label',
+                            hintText: '${'enter'.tr()} $label',
                           ),
                         )
                       : Text(value),
@@ -204,14 +203,18 @@ class EditHiveView extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  isCurrent ? '${queen.breed} (Current)' : queen.breed,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  isCurrent ? '${queen.breed} ${'current_queen'.tr()}' : queen.breed,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
                 ),
                 Text(
                   '${queen.origin} • ${DateFormat('yyyy-MM-dd').format(queen.birthDate)}',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.grey,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -237,7 +240,8 @@ class EditHiveView extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            isCurrent ? '${queen.breed} (Current)' : queen.breed,
+            isCurrent ? '${queen.breed} ${'current_queen'.tr()}' : queen.breed,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
             overflow: TextOverflow.ellipsis,
           ),
         ),

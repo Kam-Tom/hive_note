@@ -55,12 +55,17 @@ class ApiaryDropdownView extends StatelessWidget {
         items: [
           DropdownMenuItem(
               value: null,
-              child: Text("unassigned".tr()),
+              child: Text(
+                "unassigned".tr(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
+              ),
           ),
           ...apiaries.map((apiary) => DropdownMenuItem(
                 value: apiary,
-
-                child: Text(apiary.name),
+                child: Text(
+                  apiary.name,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13),
+                ),
               ))
         ],
         

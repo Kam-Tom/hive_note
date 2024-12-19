@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:logger/logger.dart';
 import 'package:repositories/repositories.dart';
 
 part 'dashboard_todos_event.dart';
@@ -49,9 +47,10 @@ class DashboardTodosBloc
       await _todoRepository.updateTodo(todo);
     }
 
-  FutureOr<void> _onRetryRequest(
+  Future<void> _onRetryRequest(
     DashboardTodosRetryRequest event,
-    Emitter<DashboardTodosState> emit) {
-      throw UnimplementedError();
+    Emitter<DashboardTodosState> emit,
+  ) async {
+    add(const DashboardTodosSubscriptionRequest());
   }
 }

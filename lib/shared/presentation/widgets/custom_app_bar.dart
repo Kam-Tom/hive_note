@@ -39,7 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       MaterialPageRoute(
                           builder: (context) => const SettingsPage()),
                     )),
-          _buildCustomButton(Icons.mic_none, () {}),
+          //_buildCustomButton(Icons.mic_none, () {}),
         ],
       ),
     );
