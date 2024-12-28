@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_note/feeding/bloc/feeding_bloc.dart';
-import 'package:hive_note/feeding/presentation/feeding_view.dart';
 import 'package:hive_note/finances/bloc/finances_bloc.dart';
 import 'package:hive_note/finances/presentation/finances_view.dart';
-import 'package:hive_note/harves/bloc/harvest_bloc.dart';
 import 'package:hive_note/shared/features/entry_field.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:hive_note/shared/presentation/widgets/custom_app_footer.dart';

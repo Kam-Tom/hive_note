@@ -14,7 +14,6 @@ class EditApiaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = context.watch<EditApiaryBloc>().state;
     return BlocBuilder<EditApiaryBloc, EditApiaryState>(      builder: (context, state) {
         switch (state.status) {
           case Status.loading || Status.initial:

@@ -206,8 +206,8 @@ class StatisticsView extends StatelessWidget {
                                 final jarData = state.detailedGraphData[honeyType];
                                 if (jarData == null) return null;
                                 
-                                final sortedJarTypes = jarData.keys.where((key) => jarData[key]! > 0).toList()..sort();
-                                final total = jarData.values.reduce((a, b) => a + b);
+                                // final sortedJarTypes = jarData.keys.where((key) => jarData[key]! > 0).toList()..sort();
+                                // final total = jarData.values.reduce((a, b) => a + b);
                                 
                                 return BarTooltipItem(
                                   '${jarData.entries.where((e) => e.value > 0).map((e) {

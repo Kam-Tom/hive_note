@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:repositories/repositories.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../statistics/bloc/statistics_bloc.dart';
 import 'base_statistics_dialog.dart';

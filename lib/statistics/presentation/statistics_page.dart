@@ -10,7 +10,6 @@ import 'package:repositories/repositories.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dialogs/feeding_statistics_dialog.dart';
 import 'dialogs/finances_statistics_dialog.dart';
-import 'dialogs/treatment_statistics_dialog.dart';
 import 'dialogs/harvest_statistics_dialog.dart';
 
 class StatisticsPage extends StatelessWidget {

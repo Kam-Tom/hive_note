@@ -16,10 +16,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     required HiveRepository hiveRepository,
     required TodoRepository todoRepository,
   })  : _raportRepository = raportRepository,
-        _entryMetadataRepository = entryMetadataRepository,
+        // _entryMetadataRepository = entryMetadataRepository,
         _apiaryRepository = apiaryRepository,
         _hiveRepository = hiveRepository,
-        _todoRepository = todoRepository,
+        // _todoRepository = todoRepository,
         super(const EmptyStatisticsState()) {
     on<LoadFeedingData>(_onLoadFeedingData);
     on<LoadHarvestData>(_onLoadHarvestData);
@@ -36,10 +36,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   final RaportRepository _raportRepository;
-  final EntryMetadataRepository _entryMetadataRepository;
+  // final EntryMetadataRepository _entryMetadataRepository;
   final ApiaryRepository _apiaryRepository;
   final HiveRepository _hiveRepository;
-  final TodoRepository _todoRepository;
+  // final TodoRepository _todoRepository;
 
   Future<void> _onLoadFeedingData(
     LoadFeedingData event,
