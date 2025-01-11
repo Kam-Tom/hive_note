@@ -1,16 +1,9 @@
-# hive_note
+# Hive Note
 
-A new Flutter project.
+A mobile application built using Flutter and BLoC.
 
-## Getting Started
+![preview](https://github.com/user-attachments/assets/c8cbaaeb-6a80-4cf8-8106-c69f8b6afc84)
 
-This project is a starting point for a Flutter application.
+## Description
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This mobile app is designed for hive management. It allows users to create and manage apiaries, hives, and queens, track to-dos, generate reports, and perform inspections. Users can also customize inspections by adding, modifying, or removing fields (e.g., removing a WasQueenSeen Boolean) to tailor the inspection forms. The app supports both Polish and English languages, and also features a history of operations and statistical graphs
