@@ -9,7 +9,6 @@ import 'package:hive_note/shared/presentation/dialogs/delete_confirmation_dialog
 import 'package:repositories/repositories.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:intl/intl.dart';
 
 class ManageTodosView extends StatelessWidget {
   const ManageTodosView({super.key});
@@ -177,7 +176,11 @@ class ManageTodosView extends StatelessWidget {
                     8,
                     0,
                   );
+                  NotificationService.unscheduleNotification(
+                    state.todoForm.id.hashCode,
+                  );
                   NotificationService.scheduleNotification(
+                    state.todoForm.id.hashCode,
                     'todo_reminder'.tr(),
                     'todo_reminder_description'.tr(args: [
                       state.todoForm.description,

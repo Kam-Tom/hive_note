@@ -33,6 +33,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<ShowHarvestGraph>(_onShowHarvestGraph);
     on<ShowFinancesGraph>(_onShowFinancesGraph);
     on<ChangeDateRange>(_onChangeDateRange);
+    on<SelectTransactionItems>(_onSelectTransactionItems);
+    on<SelectHarvestTypes>(_onSelectHarvestTypes);
   }
 
   final RaportRepository _raportRepository;
@@ -181,8 +183,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     try {
       final data = await _raportRepository.getData(
         RaportType.feeding,
-        state.startDate,
-        state.endDate,
+        state.startDate?.subtract(const Duration(days: 1)),
+        state.endDate?.add(const Duration(days: 1)),
         event.filters,
         state.selectedHives,
         state.selectedApiaries,
@@ -204,7 +206,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           }
         }
 
-        if (feedType != null && feedQuantity != null && feedQuantity > 0) { // Exclude zero values
+        if (feedType != null && feedQuantity != null && feedQuantity > 0 &&
+        event.filters['feed_type']!.contains(feedType)) { // Exclude zero values
           preparedGraphData[feedType] = (preparedGraphData[feedType] ?? 0) + feedQuantity;
         }
       }
@@ -238,8 +241,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     try {
       final data = await _raportRepository.getData(
         RaportType.harvest,
-        state.startDate,
-        state.endDate,
+        state.startDate?.subtract(const Duration(days: 1)),
+        state.endDate?.add(const Duration(days: 1)),
         event.filters,
         state.selectedHives,
         state.selectedApiaries,
@@ -262,6 +265,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         }
 
         if (honeyType == null) continue;
+        if (!event.filters['honey_type']!.contains(honeyType)) {
+          continue;
+        }
 
         // Then process all jar types and custom amounts
         for (final entry in entries) {
@@ -284,6 +290,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         
         // Sum up the amounts for each jar type
         for (var type in amounts.keys) {
+          if(!event.filters['jar_type']!.contains(type)) {
+            continue;
+          }
           detailedHarvestData[honeyType]![type] = 
             (detailedHarvestData[honeyType]![type] ?? 0.0) + amounts[type]!;
         }
@@ -324,12 +333,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     try {
       final data = await _raportRepository.getData(
         RaportType.finances,
-        state.startDate,
-        state.endDate,
+        state.startDate?.subtract(const Duration(days: 1)),
+        state.endDate?.add(const Duration(days: 1)),
         event.filters,
         null,
         null,
       );
+
       
       final Map<String, Map<String, double>> detailedData = {};
       final Map<String, double> totalData = {};
@@ -354,7 +364,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           }
         }
 
-        if (transactionItem != null && transactionType != null && transactionCost != null) {
+        if (transactionItem != null && transactionType != null && transactionCost != null
+        && event.filters['transaction_item']!.contains(transactionItem)) {
           if (transactionCost != 0) { // Only include if cost is not zero
             detailedData[transactionItem] ??= {};
             detailedData[transactionItem]![transactionType] = 
@@ -392,4 +403,22 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     ));
   }
 
+
+  FutureOr<void> _onSelectTransactionItems(SelectTransactionItems event, Emitter<StatisticsState> emit) {
+    if (state is FinancesStatisticsState) {
+      final updatedState = (state as FinancesStatisticsState).copyWith(
+        selectedTransactionItems: event.transactionItems,
+      );
+      emit(updatedState);
+    }
+  }
+
+  FutureOr<void> _onSelectHarvestTypes(SelectHarvestTypes event, Emitter<StatisticsState> emit) {
+    if(state is HarvestStatisticsState) {
+      final updatedState = (state as HarvestStatisticsState).copyWith(
+        selectedHarvestTypes: event.harvestTypes,
+      );
+      emit(updatedState);
+    }
+  }
 }

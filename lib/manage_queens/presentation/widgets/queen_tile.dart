@@ -54,7 +54,7 @@ class QueenTile extends StatelessWidget {
                   _buildHiveLabel(context),
                 ],
               ),
-              const Icon(Icons.drag_indicator)
+              // const Icon(Icons.drag_indicator)
             ],
           ),
         ),

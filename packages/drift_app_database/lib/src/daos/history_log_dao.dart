@@ -14,7 +14,8 @@ class HistoryLogDao extends DatabaseAccessor<DriftAppDatabase>
   {
     final query = select(historyLogTable)
       ..where((tbl) => tbl.createdAt.isSmallerOrEqualValue(endDate))
-      ..where((tbl) => tbl.createdAt.isBiggerOrEqualValue(startDate));
+      ..where((tbl) => tbl.createdAt.isBiggerOrEqualValue(startDate))
+      ..orderBy([(tbl) => OrderingTerm(expression: tbl.createdAt, mode: OrderingMode.desc)]);
     if(!showShadow){
       query.where((tbl) => tbl.shadowLog.equals(false));
     }

@@ -6,6 +6,8 @@ import 'package:hive_note/harves/bloc/models/jar_size.dart';
 import 'package:hive_note/shared/features/entry_field.dart';
 import 'package:repositories/repositories.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:hive_note/core/configs/theme/app_colors.dart';
+import 'package:hive_note/shared/presentation/widgets/multi_select_field.dart';
 
 class HarvestView extends StatelessWidget {
 
@@ -13,8 +15,11 @@ class HarvestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<HarvestBloc, HarvestState>(
       builder: (context, state) {
+        final defaultValues = context.read<EntryFieldCubit>().getValues();
+        context.read<EntryFieldCubit>().setDefaultValues(defaultValues);
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -23,58 +28,34 @@ class HarvestView extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: MultiSelectDialogField<Apiary>(
+                    child: MultiSelectField<Apiary>(
                       initialValue: state.selectedApiaries,
                       items: state.apiaries
                           .map((e) => MultiSelectItem<Apiary>(e, e.name))
                           .toList(),
-                      title: Text('select_apiaries'.tr()),
-                        buttonText: Text(
-                          state.selectedApiaries.isEmpty && state.selectedHives.isEmpty
-                              ? 'select_apiaries'.tr()
-                              : '${'selected_apiaries'.tr()} ${state.selectedApiaries.length}',
-                        ),
-                      buttonIcon: const Icon(Icons.arrow_drop_down),
-                      selectedItemsTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      title: 'select_apiaries'.tr(),
+                      buttonText: state.selectedApiaries.isEmpty
+                          ? 'select_apiaries'.tr()
+                          : '${'selected_apiaries'.tr()} ${state.selectedApiaries.length}',
                       onConfirm: (values) {
                         context.read<HarvestBloc>().add(SelectApiaries(values));
                       },
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      chipDisplay: MultiSelectChipDisplay.none(),
-                      dialogHeight: 200,
-                      dialogWidth: 200,
-                      searchable: false,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: MultiSelectDialogField<Hive>(
+                    child: MultiSelectField<Hive>(
                       initialValue: state.selectedHives,
                       items: state.hives
                           .map((e) => MultiSelectItem<Hive>(e, e.name))
                           .toList(),
-                      title: Text('select_hives'.tr()),
-                        buttonText: Text(
-                          state.selectedHives.isEmpty
-                              ? 'select_hives'.tr()
-                              : '${'selected_hives'.tr()} ${state.selectedHives.length}',
-                        ),
-                      buttonIcon: const Icon(Icons.arrow_drop_down),
-                      selectedItemsTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      title: 'select_hives'.tr(),
+                      buttonText: state.selectedHives.isEmpty
+                          ? 'select_hives'.tr()
+                          : '${'selected_hives'.tr()} ${state.selectedHives.length}',
                       onConfirm: (values) {
                         context.read<HarvestBloc>().add(SelectHives(values));
                       },
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      chipDisplay: MultiSelectChipDisplay.none(),
-                      dialogHeight: 200,
-                      dialogWidth: 200,
-                      searchable: false,
                     ),
                   ),
                 ],
@@ -122,7 +103,6 @@ class HarvestView extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Entry fields section
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -134,7 +114,7 @@ class HarvestView extends StatelessWidget {
                           ),
                           const Divider(),
                         ],
-                      )).toList(),
+                      )),
                     ],
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive_note/core/configs/setup/flutter_notifications.dart';
 import 'package:repositories/repositories.dart';
 
 part 'dashboard_todos_event.dart';
@@ -45,6 +46,7 @@ class DashboardTodosBloc
     ) async {
       final todo = event.todo.copyWith(isCompleted: event.isCompleted);
       await _todoRepository.updateTodo(todo);
+      NotificationService.unscheduleNotification(todo.id.hashCode);
     }
 
   Future<void> _onRetryRequest(

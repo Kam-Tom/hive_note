@@ -127,6 +127,15 @@ class StatisticsView extends StatelessWidget {
       usedJarTypes.addAll(jarData.keys.where((key) => jarData[key]! > 0));
     });
 
+    // Add a map from jar keys to translation keys
+    final jarTranslationMap = {
+      'jar_0.7l': 'jar_small_name',
+      'jar_1.0l': 'jar_standard_name',
+      'jar_1.5l': 'jar_large_name',
+      'jar_2.0l': 'jar_xl_name',
+      'custom_liters': 'undefined_jar',
+    };
+
     final jarColors = {
       'jar_0.7l': Colors.blue[200],
       'jar_1.0l': Colors.blue[400],
@@ -211,12 +220,17 @@ class StatisticsView extends StatelessWidget {
                                 
                                 return BarTooltipItem(
                                   '${jarData.entries.where((e) => e.value > 0).map((e) {
-                                    if (e.key == 'custom_liters') {
-                                      return '${e.key}: ${e.value.toStringAsFixed(1)}L';
+                                    final jarKey = e.key;
+                                    final jarLabelKey = jarTranslationMap[jarKey] ?? jarKey;
+                                    final jarLabel = jarLabelKey.tr();
+
+                                    if (jarKey == 'custom_liters') {
+                                      return '$jarLabel: '
+                                          '${e.value.toStringAsFixed(1)}L';
                                     }
                                     final jarVolume = double.tryParse(e.key.substring(4, e.key.length - 1)) ?? 1.0;
                                     final jarCount = (e.value / jarVolume).round();
-                                    return '${e.key}: $jarCount × ${jarVolume}L';
+                                    return '$jarLabel: $jarCount × ${jarVolume}L';
                                   }).join('\n')}',
                                   const TextStyle(color: Colors.white),
                                 );
@@ -231,6 +245,8 @@ class StatisticsView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: usedJarTypes.map((jarType) {
+                        final jarLabelKey = jarTranslationMap[jarType] ?? jarType;
+                        final jarLabel = jarLabelKey.tr();
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
@@ -241,7 +257,7 @@ class StatisticsView extends StatelessWidget {
                                 color: jarColors[jarType],
                               ),
                               const SizedBox(width: 4),
-                              Text(jarType),
+                              Text(jarLabel),
                             ],
                           ),
                         );

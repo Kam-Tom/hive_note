@@ -58,7 +58,7 @@ class ManageApiariesBloc
     final defaultColor = Color(int.parse(defaultColorString.replaceAll('#', '0x')));
     
     final newApiary = Apiary(
-      name: "$defaultName #${state.apiaries.length}",
+      name: "$defaultName ${state.apiaries.length + 1}",
       color: defaultColor,
       createdAt: event.createdAt,
       order: state.apiaries.length,
@@ -83,9 +83,9 @@ class ManageApiariesBloc
 
     emit(state.copyWith(
         apiaries: tmpApiaries, status: ManageApiariesStatus.pending));
+    await _apiaryRepository.deleteApiary(event.apiary.apiary);
     await _apiaryRepository
         .updateApiaries(tmpApiaries.map((a) => a.apiary).toList());
-    await _apiaryRepository.deleteApiary(event.apiary.apiary);
   }
 
   Future<void> _onRearangeApiaries(

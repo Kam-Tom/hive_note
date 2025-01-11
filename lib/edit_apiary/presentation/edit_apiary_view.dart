@@ -135,6 +135,9 @@ class EditApiaryView extends StatelessWidget {
                           controller: controller,
                           decoration: InputDecoration(
                             hintText: 'Enter $label',
+                            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey,
+                            ),
                           ),
                         )
                       : Text(value),

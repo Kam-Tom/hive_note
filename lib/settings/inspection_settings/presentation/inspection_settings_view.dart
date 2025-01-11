@@ -78,7 +78,7 @@ class InspectionSettingsView extends StatelessWidget {
 
   Widget _buildAddEntryTile(BuildContext context) {
     return AddTile(
-      key: const ValueKey("add_entry_tile"),
+      key: const ValueKey('add_entry_tile'),
       onPressed: () {
         showDialog(
           context: context,
@@ -96,12 +96,12 @@ class InspectionSettingsView extends StatelessWidget {
   Widget _buildEntryTile(BuildContext context, EntryMetadata entry, int index) {
     return ListTile(
       key: ValueKey(entry),
-      title: Text(entry.label),
+      title: Text(entry.label).tr(),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildEntryTypeRow(entry.valueType),
-          if (entry.hint.isNotEmpty) Text(entry.hint, style: const TextStyle(color: Colors.grey)),
+          if (entry.hint.isNotEmpty) Text(entry.hint, style: const TextStyle(color: Colors.grey)).tr(),
         ],
       ),
       trailing: const Icon(Icons.drag_indicator),

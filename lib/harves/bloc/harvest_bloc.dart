@@ -186,7 +186,7 @@ FutureOr<void> _onCreateRaport(CreateRaport event, Emitter<HarvestState> emit) a
           value = totalValue;
         } else {
           // Distribute value evenly
-          value = totalValue / hivesCount;
+          value = totalValue / (hivesCount - processedHives);
           if (entry.valueType == EntryType.number) {
             value = value.round();
           }

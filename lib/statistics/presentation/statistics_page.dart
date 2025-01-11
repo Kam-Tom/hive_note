@@ -41,8 +41,9 @@ class StatisticsPage extends StatelessWidget {
                   onTap: () async {
                     final picked = await showDateRangePicker(
                       context: context,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
+                      firstDate: DateTime(1900), // CHANGED
+                      lastDate: DateTime(2100), // CHANGED
+                      initialEntryMode: DatePickerEntryMode.input, // CHANGED
                       initialDateRange: DateTimeRange(
                         start: state.startDate ?? DateTime.now().subtract(const Duration(days: 30)),
                         end: state.endDate ?? DateTime.now(),
@@ -176,8 +177,9 @@ class StatisticsOptionsDialog extends StatelessWidget {
                   onTap: () async {
                     final picked = await showDateRangePicker(
                       context: context,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
+                      firstDate: DateTime(1900), // CHANGED
+                      lastDate: DateTime(2100), // CHANGED
+                      initialEntryMode: DatePickerEntryMode.input, // CHANGED
                       initialDateRange: DateTimeRange(
                         start: state.startDate ?? DateTime.now().subtract(const Duration(days: 30)),
                         end: state.endDate ?? DateTime.now(),

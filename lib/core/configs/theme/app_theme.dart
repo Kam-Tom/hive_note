@@ -29,6 +29,19 @@ class AppTheme {
     dialogTheme: _dialogTheme,
     datePickerTheme: _datePickerTheme,
     dropdownMenuTheme: _dropdownMenuTheme,
+    checkboxTheme: _checkboxTheme,
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.secondary,
+      inactiveTrackColor: AppColors.backgroundDark,
+      thumbColor: AppColors.secondary,
+      overlayColor: AppColors.secondary.withOpacity(0.2),
+      valueIndicatorColor: AppColors.secondary,
+      valueIndicatorTextStyle: const TextStyle(
+        color: AppColors.white,
+      ),
+      activeTickMarkColor: AppColors.secondary,
+      inactiveTickMarkColor: AppColors.backgroundDark,
+    ),
   );
 
   // Input and Form Themes
@@ -97,6 +110,11 @@ class AppTheme {
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
+    // Add these properties for consistent dialog styling
+    surfaceTintColor: AppColors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+    ),
   );
 
   static final DatePickerThemeData _datePickerTheme = DatePickerThemeData(
@@ -124,5 +142,16 @@ class AppTheme {
       backgroundColor: WidgetStatePropertyAll(AppColors.background),
       alignment: Alignment.bottomCenter,
     ),
+  );
+
+  static final CheckboxThemeData _checkboxTheme = CheckboxThemeData(
+    fillColor: WidgetStateProperty.resolveWith((states) {
+      return states.contains(WidgetState.selected) 
+          ? AppColors.secondary 
+          : AppColors.secondary.withOpacity(0.1);
+    }),
+    overlayColor: WidgetStateProperty.all(AppColors.secondary.withOpacity(0.1)),
+    checkColor: WidgetStateProperty.all(AppColors.white),
+    side: BorderSide(color: AppColors.secondary),
   );
 }

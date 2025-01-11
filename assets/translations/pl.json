@@ -19,6 +19,7 @@
     "todo_not_found": "Nie znaleziono zadania",
     "todo_might_be_deleted": "Zadanie mogło zostać usunięte",
     "due_to": "Termin: {}",
+    "due_date": "Termin",
     "no_todo_selected": "Nie wybrano zadania",
     "location": "Lokalizacja",
     "location_label": "Lokalizacja:",
@@ -106,10 +107,10 @@
     "select_jar_size": "Wybierz rozmiar słoików",
     "select_honey_type": "Wybierz typ miodu",
     "undefined_jar": "Własna ilość",
-    "jar_small_name": "Mały słoik",
-    "jar_standard_name": "Standardowy słoik",
-    "jar_large_name": "Duży słoik",
-    "jar_xl_name": "Słoik XL",
+    "jar_small_name": "Słoik 0.7l",
+    "jar_standard_name": "Słoik 1.0l",
+    "jar_large_name": "Słoik 1.5l",
+    "jar_xl_name": "Słoik 2.0l",
     "preferences": "Preferencje",
     "report_type": "Typ raportu",
     "language": "Język",
@@ -118,6 +119,7 @@
     "queen_default_origin": "Domyślne pochodzenie",
     "hive_preferences": "Preferencje ula",
     "hive_default_name": "Domyślna nazwa",
+    "hive_default_type": "Domyślny typ",
     "apiary_preferences": "Preferencje pasieki",
     "apiary_default_name": "Domyślna nazwa",
     "apiary_default_color": "Domyślny kolor",
@@ -205,6 +207,9 @@
     "todo_reminder": "Przypomnienie o zadaniu",
     "todo_reminder_description": "Masz zadanie \"{}\" w {}",
     "colony_strength": "Siła rodziny",
+    "transaction_amount" : "Ilość",
+    "transaction_type" : "Typ transakcji",
+    "transaction_cost" : "Koszt całkowita", 
     "colony_strength_hint": "Oceń ogólną siłę rodziny",
     "queen_seen": "Królowa widziana",
     "queen_seen_hint": "Czy królowa była widoczna podczas przeglądu?",
@@ -244,6 +249,4 @@
     "note": "Notatki",
     "history": "Historia",
     "finances": "Finanse"
-
-
 }

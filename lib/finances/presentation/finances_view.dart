@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_note/finances/bloc/finances_bloc.dart';
 import 'package:hive_note/shared/features/entry_field.dart';
+import 'package:flutter/services.dart';  // Add this import
 
 class FinancesView extends StatelessWidget {
   static const List<String> transactionTypes = ['Buy', 'Sell'];
@@ -13,6 +14,9 @@ class FinancesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FinancesBloc, FinancesState>(
       builder: (context, state) {
+        final defaultValues = context.read<EntryFieldCubit>().getValues();
+        context.read<EntryFieldCubit>().setDefaultValues(defaultValues);
+        
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -86,9 +90,17 @@ class FinancesView extends StatelessWidget {
                           ),
                           prefixIcon: const Icon(Icons.shopping_basket),
                         ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => context.read<FinancesBloc>()
-                            .add(UpdateAmount(double.tryParse(value) ?? 0)),
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                        ],
+                        onChanged: (value) {
+                          final amount = double.tryParse(value);
+                          if (amount != null && amount > 0) {
+                            context.read<FinancesBloc>()
+                                .add(UpdateAmount(amount));
+                          }
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextField(
@@ -103,9 +115,17 @@ class FinancesView extends StatelessWidget {
                           ),
                           prefixIcon: const Icon(Icons.attach_money),
                         ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => context.read<FinancesBloc>()
-                            .add(UpdateCost(double.tryParse(value) ?? 0)),
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                        ],
+                        onChanged: (value) {
+                          final cost = double.tryParse(value);
+                          if (cost != null && cost > 0) {
+                            context.read<FinancesBloc>()
+                                .add(UpdateCost(cost));
+                          }
+                        },
                       ),
                       if (state.amount > 0 && state.cost > 0)
                         Padding(

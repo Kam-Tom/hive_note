@@ -20,7 +20,7 @@ class HiveRepository {
   }
 
   Future deleteHive(Hive hive) async {
-    _database.deleteHive(hive);
+    await _database.deleteHive(hive);
     await _database.insertHistoryLog(HistoryLog(
       referenceId: hive.id,
       logType: LogType.hive,

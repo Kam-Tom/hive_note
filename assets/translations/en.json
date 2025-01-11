@@ -29,7 +29,7 @@
     "update": "Update",
     "category": "Category",
     "add_todo": "Add",
-
+    "due_date": "Due date",
     "feeding": "Feeding",
     "inspection": "Inspection",
     "treatment": "Treatment",
@@ -39,41 +39,33 @@
     "buy": "Buy",
     "queen": "Queen",
     "other": "Other",
-
     "feeding_no_data": "Please add some feeding data",
     "feeding_no_selection": "Please select at least one hive or apiary",
     "feeding_created": "Feeding report created successfully",
-
     "treatment_no_data": "Please add some treatment data",
     "treatment_no_selection": "Please select at least one hive or apiary",
     "treatment_created": "Treatment report created successfully",
-
     "harvest_no_data": "Please add harvest data",
     "harvest_no_selection": "Please select at least one hive or apiary",
     "harvest_created": "Harvest report created successfully",
     "undefined_jar": "Custom Amount",
-    "jar_small_name": "Small Jar",
-    "jar_standard_name": "Standard Jar",
-    "jar_large_name": "Large Jar",
-    "jar_xl_name": "XL Jar",
-
+    "jar_small_name": "Jar 0.7L",
+    "jar_standard_name": "Jar 1.0L",
+    "jar_large_name": "Jar 1.5L",
+    "jar_xl_name": "Jar 2.0L",
     "note_no_data": "Please add some note data",
     "note_created": "Note created successfully",
-
     "new_apiary": "Apiary",
     "confirm_deletion": "Confirm Deletion",
     "apiary_has_hives": "Remove all hives from this apiary before deleting",
     "cancel": "Cancel",
     "delete": "Delete",
-
     "back": "Back",
     "something_went_wrong": "Something went wrong!",
     "please_try_again_later": "Please try again later.",
-
     "unassigned": "Unassigned",
     "no_queen": "No queen",
     "new_hive": "Hive",
-
     "no_hive": "No hive",
     "default_breed": "Italian",
     "default_origin": "Unknown",
@@ -121,6 +113,7 @@
     "queen_default_origin": "Default Origin",
     "hive_preferences": "Hive Preferences",
     "hive_default_name": "Default Name",
+    "hive_default_type": "Default type",
     "apiary_preferences": "Apiary Preferences",
     "apiary_default_name": "Default Name",
     "apiary_default_color": "Default Color",
@@ -205,34 +198,32 @@
     "created_label": "Created: {}",
     "entries_label": "Entries ({})",
     "no_entries_available": "No entries available",
-    
     "colony_strength": "Colony Strength",
     "colony_strength_hint": "Rate the overall strength of the colony",
     "queen_seen": "Queen Seen",
     "queen_seen_hint": "Was the queen spotted during inspection?",
     "honey_frames": "Honey Frames",
     "honey_frames_hint": "Number of frames with honey",
-    
     "feed_type_label": "Feed Type",
     "feed_type_hint": "Type of feed given",
     "feed_quantity_label": "Feed Quantity",
     "feed_quantity_hint": "Amount of feed in liters",
-    
     "treatment_medicine": "Medicine",
     "treatment_medicine_hint": "Name of medicine used",
     "treatment_dosage": "Dosage",
     "treatment_dosage_hint": "Amount of medicine used",
     "treatment_notes": "Treatment Notes",
     "treatment_notes_hint": "Additional notes about the treatment",
-    
     "other_note": "Note",
     "other_note_hint": "Additional information or observations",
     "transaction_type_hint": "Select type of transaction",
     "transaction_amount_hint": "Enter amount",
+    "transaction_amount" : "Amount",
+    "transaction_type" : "Transaction type",
+    "transaction_cost" : "Total cost",
     "transaction_cost_hint": "Enter cost",
     "transaction_item_hint": "Enter item name",
     "transaction_note_hint": "Additional notes about transaction",
-    
     "slider_bad": "Bad",
     "slider_normal": "Normal",
     "slider_good": "Good",
@@ -250,8 +241,7 @@
     "inspection_created": "Inspection report created successfully",
     "inspection_updated": "Inspection report updated successfully",
     "inspection_completed": "All inspections completed successfully",
-
-    "note": "Notatki",
-    "history": "Historia",
-    "finances": "Finanse"
+    "note": "Note",
+    "history": "History",
+    "finances": "Finances"
 }

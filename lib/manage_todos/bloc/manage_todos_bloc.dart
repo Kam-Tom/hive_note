@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive_note/core/configs/setup/flutter_notifications.dart';
 import 'package:hive_note/shared/bloc/helpers/initial_state.dart';
 import 'package:hive_note/shared/bloc/helpers/status.dart';
 import 'package:repositories/repositories.dart';
@@ -72,6 +73,8 @@ class ManageTodosBloc extends Bloc<ManageTodosEvent, ManageTodosState> {
           dueTo: DateTime.now(),
         ),
       ));
+      NotificationService.unscheduleNotification(event.todo.id.hashCode);
+
     } catch (_) {
       emit(state.copyWith(status: Status.failure, errorMessage: 'Failed to delete todo'));
     }
@@ -98,6 +101,7 @@ class ManageTodosBloc extends Bloc<ManageTodosEvent, ManageTodosState> {
       isEditing: false,
       todoForm: event.todo,
     ));
+
   }
 
   void _onStartEditTodo(StartEditTodoEvent event, Emitter<ManageTodosState> emit) {

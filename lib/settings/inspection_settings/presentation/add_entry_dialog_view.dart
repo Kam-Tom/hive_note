@@ -77,12 +77,17 @@ class AddEntryDialogView extends StatelessWidget {
   }
 
   Widget _buildEntryTypeRow(EntryType type) {
-    return Row(
-      children: [
-        type.icon,
-        const SizedBox(width: 10),
-        Text(type.description),
-      ],
+    return Builder(
+      builder: (context) {
+        return Row(
+          children: [
+            type.icon,
+            const SizedBox(width: 10),
+            Text(type.description,
+            style: Theme.of(context).textTheme.bodyMedium ,),
+          ],
+        );
+      }
     );
   }
 }

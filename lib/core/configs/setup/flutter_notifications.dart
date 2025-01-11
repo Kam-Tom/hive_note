@@ -1,13 +1,11 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:logger/logger.dart';
-import 'package:uuid/uuid.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static late Logger _logger;
-  static const Uuid _uuid = Uuid();
 
   static void setLogger(Logger logger) {
     _logger = logger;
@@ -53,7 +51,7 @@ class NotificationService {
       );
   }
 
-  static Future<void> showInstantNotification(String title, String body) async {
+  static Future<void> showInstantNotification(int id, String title, String body) async {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         "hive_note_reminders", // channel_Id
@@ -66,14 +64,14 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.show(
-      _uuid.v4().hashCode, // Use a unique ID
+      id,
       title,
       body,
       platformChannelSpecifics,
     );
   }
 
-  static Future<void> scheduleNotification(String title, String body, DateTime scheduledDate) async {
+  static Future<void> scheduleNotification(int id, String title, String body, DateTime scheduledDate) async {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: AndroidNotificationDetails(
         "hive_note_reminders", // channel_Id
@@ -85,14 +83,22 @@ class NotificationService {
       iOS: DarwinNotificationDetails(),
     );
 
+
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      _uuid.v4().hashCode, // Use a unique ID
+      id, // Use the mapped ID
       title,
       body,
-      tz.TZDateTime.from(scheduledDate,tz.local),
+      tz.TZDateTime.from(scheduledDate, tz.local),
       platformChannelSpecifics,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  /// Unschedules a notification with the given ID.
+  /// 
+  /// If the ID does not exist, this method will do nothing and will not throw an error.
+  static Future<void> unscheduleNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

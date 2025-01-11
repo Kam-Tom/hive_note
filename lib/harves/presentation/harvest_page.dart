@@ -51,6 +51,7 @@ class HarvestPage extends StatelessWidget {
                   );
                   return;
                 }
+                
                 context.read<HarvestBloc>().add(CreateRaport(entries: entries));
                 context.read<EntryFieldCubit>().clear();
                 Fluttertoast.showToast(

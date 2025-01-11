@@ -70,7 +70,7 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
       DeleteHive event, Emitter<ManageHivesState> emit) async {
     var tmpHives = List<HiveWithQueen>.from(state.hives);
 
-    tmpHives.removeAt(event.hive.hive.order);
+    tmpHives.removeWhere((h) => h.hive.id == event.hive.hive.id);
     for (int i = 0; i < tmpHives.length; i++) {
       final updatedHive = tmpHives[i].hive.copyWith(order: i);
       tmpHives[i] = tmpHives[i].copyWith(hive: updatedHive);
@@ -78,13 +78,15 @@ class ManageHivesBloc extends Bloc<ManageHivesEvent, ManageHivesState> {
 
     emit(state.copyWith(status: Status.updating, hives: tmpHives));
     await _hiveRepository.deleteHive(event.hive.hive);
-    await _hiveRepository.updateHives(tmpHives.map((h) => h.hive).toList());
+    if(tmpHives.isNotEmpty) {
+      await _hiveRepository.updateHives(tmpHives.map((h) => h.hive).toList());
+    }
   }
 
   FutureOr<void> _onInsertHive(
       InsertHive event, Emitter<ManageHivesState> emit) async {
     var tmpHives = List<HiveWithQueen>.from(state.hives);
-    final defaultName = await _preferencesRepository.getHiveDefaultName();
+    final defaultName = '${await _preferencesRepository.getHiveDefaultName()} ${tmpHives.length+1}';
     final defaultType = await _preferencesRepository.getHiveDefaultType();
     final newHive = Hive(
       name: defaultName,
