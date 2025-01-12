@@ -2,7 +2,9 @@
 
 A mobile application built using Flutter and BLoC.
 
-![preview](https://github.com/user-attachments/assets/c8cbaaeb-6a80-4cf8-8106-c69f8b6afc84)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/c8cbaaeb-6a80-4cf8-8106-c69f8b6afc84" alt="preview" height="400">
+</div>
 
 ## Description
 
