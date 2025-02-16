@@ -23,7 +23,7 @@ abstract class UserPref {
   Future<bool> isFirstLaunch();
   Future<void> setFirstLaunchComplete();
 
-  Future<void> setDefaultsForLanguage(String language);
+  Future<void> setDefaultsForLanguage(String language, {bool overwrite = false});
 
   Future<String> getHiveDefaultType();
 

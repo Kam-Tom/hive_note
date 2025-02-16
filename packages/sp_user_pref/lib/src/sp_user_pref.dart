@@ -1,7 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_pref/user_pref.dart';
-import 'package:user_pref/src/default_values.dart';
-import 'package:user_pref/src/language_defaults.dart';
 
 class SpUserPref implements UserPref {
   final SharedPreferences _prefs;
@@ -34,24 +32,24 @@ class SpUserPref implements UserPref {
   }
 
   @override
-  Future<void> setDefaultsForLanguage(String language) async {
-    if (!_prefs.containsKey(_keyQueenOrigin)) {
+  Future<void> setDefaultsForLanguage(String language, {bool overwrite = false}) async {
+    if (overwrite || !_prefs.containsKey(_keyQueenOrigin)) {
       await saveQueenDefaultOrigin(LanguageDefaults.getValue(language, 'queen_origin'));
     }
     
-    if (!_prefs.containsKey(_keyQueenBreed)) {
+    if (overwrite || !_prefs.containsKey(_keyQueenBreed)) {
       await saveQueenDefaultBreed(LanguageDefaults.getValue(language, 'queen_breed'));
     }
     
-    if (!_prefs.containsKey(_keyHiveName)) {
+    if (overwrite || !_prefs.containsKey(_keyHiveName)) {
       await saveHiveDefaultName(LanguageDefaults.getValue(language, 'hive_name'));
     }    
     
-    if (!_prefs.containsKey(_keyHiveType)) {
+    if (overwrite || !_prefs.containsKey(_keyHiveType)) {
       await saveHiveDefaultType(LanguageDefaults.getValue(language, 'hive_type'));
     }
     
-    if (!_prefs.containsKey(_keyApiaryName)) {
+    if (overwrite || !_prefs.containsKey(_keyApiaryName)) {
       await saveApiaryDefaultName(LanguageDefaults.getValue(language, 'apiary_name'));
     }
   }

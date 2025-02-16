@@ -210,6 +210,9 @@ class StatisticsView extends StatelessWidget {
                           barTouchData: BarTouchData(
                             enabled: true,
                             touchTooltipData: BarTouchTooltipData(
+                              fitInsideVertically: true,
+                              fitInsideHorizontally: true,
+                              
                               getTooltipItem: (group, groupIndex, rod, rodIndex) {
                                 final honeyType = state.graphData!.keys.elementAt(group.x.toInt());
                                 final jarData = state.detailedGraphData[honeyType];

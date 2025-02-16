@@ -220,6 +220,6 @@ class _Buttons extends StatelessWidget {
       MenuButton(
         newPage: newPage,
         icon: SvgPicture.asset(asset, width: 50),
-        text: Text(label),
+        text: Text(label).tr(),
       );
 }

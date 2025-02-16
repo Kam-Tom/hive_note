@@ -95,7 +95,9 @@ class FinancesBloc extends Bloc<FinancesEvent, FinancesState> {
       ]);
 
       await _raportRepository.insertRaport(raport, entries);
-      emit(state.copyWith(status: Status.success));
+      emit(state.copyWith(status: Status.success,
+        amount: 0,
+        cost: 0,));
     } catch (e) {
       emit(state.copyWith(
         status: Status.failure,

@@ -32,6 +32,6 @@ class PreferencesRepository {
   Future<bool> isFirstLaunch() => _userPref.isFirstLaunch();
   Future<void> setFirstLaunchComplete() => _userPref.setFirstLaunchComplete();
 
-  Future<void> setDefaultsForLanguage(String language) => _userPref.setDefaultsForLanguage(language);
+  Future<void> setDefaultsForLanguage(String language, {bool overwrite = false}) => _userPref.setDefaultsForLanguage(language, overwrite: overwrite);
 
 }

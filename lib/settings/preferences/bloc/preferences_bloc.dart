@@ -60,7 +60,16 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
 
     on<LanguageChanged>((event, emit) async {
       await _preferencesRepository.saveLanguage(event.language);  // Remove setDefaultsForLanguage here
-      emit(state.copyWith(language: event.language));
+      await _preferencesRepository.setDefaultsForLanguage(event.language, overwrite: true); // Set defaults on language change
+      emit(state.copyWith(language: event.language,
+        queenDefaultBreed: await _preferencesRepository.getQueenDefaultBreed(),
+        queenDefaultOrigin: await _preferencesRepository.getQueenDefaultOrigin(),
+        hiveDefaultName: await _preferencesRepository.getHiveDefaultName(),
+        hiveDefaultType:  await _preferencesRepository.getHiveDefaultType(),
+        apiaryDefaultName: await _preferencesRepository.getApiaryDefaultName(),
+        apiaryDefaultColor: await _preferencesRepository.getApiaryDefaultColor(),
+        reportType: await _preferencesRepository.getReportType(),
+      ));
     });
 
     on<QueenDefaultBreedChanged>((event, emit) async {

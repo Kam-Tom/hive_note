@@ -209,6 +209,7 @@ FutureOr<void> _onCreateRaport(CreateRaport event, Emitter<HarvestState> emit) a
     await _raportRepository.insertRaport(raport, entries);
     processedHives++;
   }
+
 }
 
 }
